@@ -5,7 +5,7 @@
 	let selectionStart: number | null = inputText.length;
 	let selectionEnd: number | null = inputText.length;
 
-	export const generateStyledText: (text: string) => string = (text: string) => text;
+	export let generateStyledText: (text: string) => string = (text: string) => text;
 
 	$: styledText = generateStyledText(inputText) || '&ZeroWidthSpace;';
 
@@ -36,7 +36,7 @@
 				t.setSelectionRange(selectionStart, selectionEnd);
 			}
 		}}
-		placeholder="Enter a callsign"
+		placeholder="..."
 	/>
 	<div class="styled-text shared" contenteditable="false" bind:innerHTML={styledText} />
 </div>
@@ -49,17 +49,17 @@
 		font-size: 32px;
 		padding: 8px 12px;
 		text-align: center;
+		border-radius: 12px;
 	}
 
 	.input {
 		border: 1px solid #ccc;
-		border-radius: 10px;
 		position: absolute;
 		top: 0;
 		left: 0;
 		background: transparent;
 		color: transparent;
-		caret-color: black;
+		caret-color: white;
 	}
 
 	.input::placeholder {
@@ -68,6 +68,7 @@
 	}
 
 	.styled-text {
+		background: #424242;
 		border: 1px solid transparent;
 		white-space: pre;
 		word-wrap: break-word;

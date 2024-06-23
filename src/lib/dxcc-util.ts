@@ -1,4 +1,5 @@
 import dxccTreeFile from '../assets/dxcc-tree.txt?raw';
+import dxccEntitiesFile from '../assets/dxcc-entities.json';
 import { TrieNode } from './models/trie';
 
 export const dxccTree = TrieNode.decodeFromString(dxccTreeFile);
@@ -38,3 +39,5 @@ export function findDxcc(prefix: string, startingNode: TrieNode = dxccTree): Dxc
 	if (!entity) return null;
 	return { entity, withSuffix: false, prefixLength };
 }
+
+export const dxccEntities = new Map([...dxccEntitiesFile].map((e) => [e.entity, e]));

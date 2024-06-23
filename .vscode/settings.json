@@ -1,3 +1,4 @@
 {
+	"vite.autoStart": false,
 	"cSpell.words": ["callsign", "dxcc", "adif", "graphviz", "clublog"]
 }

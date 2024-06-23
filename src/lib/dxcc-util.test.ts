@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { dxccTree, findDxcc } from './dxcc-util';
+import { dxccEntities, dxccTree, findDxcc } from './dxcc-util';
 
 describe('dxccTree', () => {
 	test('dxccTree is not null', () => {
@@ -98,5 +98,19 @@ describe('findDxcc', () => {
 	test('incomplete string', () => {
 		const result = findDxcc('S');
 		expect(result).toBe(null);
+	});
+});
+
+describe('dxccEntities', () => {
+	test('dxccEntities is not null', () => {
+		expect(dxccEntities).not.toBe(null);
+	});
+
+	test('499', () => {
+		const entity = dxccEntities.get(499);
+		expect(entity).not.toBe(undefined);
+		expect(entity?.name).toBe('Slovenia');
+		expect(entity?.cont).toBe('EU');
+		expect(entity?.cqz).toBe(15);
 	});
 });

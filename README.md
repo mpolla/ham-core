@@ -1,38 +1,18 @@
-# create-svelte
+# Callsign Tester
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+An app for checking the format of a callsign and finding the country it belongs to.
 
-## Creating a project
+## Obtaining the Clublog prefix database
 
-If you're seeing this, you've probably already done this step. Congrats!
+Read how to obtain the Clublog prefix file [here](https://clublog.freshdesk.com/support/solutions/articles/54902-downloading-the-prefixes-and-exceptions-as-xml)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Deploying the app
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The app can be deployed using the following command:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+yarn install
+yarn build
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Deploy the contents of the `build` directory to your server.

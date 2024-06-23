@@ -1,12 +1,6 @@
 export const capitalize = (s: string) => {
 	s = s.toLowerCase();
-	const re = /\b\w+/g;
-	while (true) {
-		const result = re.exec(s);
-		if (!result) break;
-		s = s.replace(result[0], result[0][0].toUpperCase() + result[0].slice(1));
-	}
-	return s;
+	return s.replace(/\b\w+/g, (word) => word[0].toUpperCase() + word.slice(1));
 };
 
 export const rangeToString = (start: string, end: string): string => {

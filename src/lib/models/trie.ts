@@ -55,6 +55,10 @@ export class TrieNode {
 	}
 
 	encodeToString(): string {
+		return [...this.getAllNodes()].map((n) => n._encodeToString()).join('\n');
+	}
+
+	_encodeToString(): string {
 		const s = [];
 		if (this.entity) {
 			s.push(`${this.id}=${this.entity}`);
