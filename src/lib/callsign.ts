@@ -8,8 +8,6 @@ type CallsignData = {
 	baseSuffix: string | null;
 	base: string;
 	secondarySuffix: string | null;
-	suffixPartOf: 'base' | 'prefix' | null;
-	suffixDescription?: string;
 	baseDxcc: number | null;
 	prefixDxcc: number | null;
 };
@@ -24,17 +22,13 @@ export function parseCallsign(callsign: string): CallsignData | null {
 	const secondaryPrefix = match[1]?.slice(0, -1) ?? null;
 	const base = match[2];
 	const secondarySuffix = match[3]?.slice(1) ?? null;
-	const baseDxcc = findDxcc(base + '/' + secondarySuffix);
+
+	const baseWithSuffix = base + (secondarySuffix ? '/' + secondarySuffix : '');
+	const baseDxcc = findDxcc(baseWithSuffix);
 	const prefixDxcc = secondaryPrefix ? findDxcc(callsign) : null;
 
-	const basePrefix = baseDxcc ? base.slice(0, baseDxcc.prefixLength) : null;
-	const baseSuffix = baseDxcc ? base.slice(baseDxcc.prefixLength) : null;
-
-	const suffixPartOf = prefixDxcc?.withSuffix
-		? 'prefix'
-		: !prefixDxcc && baseDxcc?.withSuffix
-			? 'base'
-			: null;
+	const basePrefix = baseDxcc ? baseWithSuffix.slice(0, baseDxcc.matchLength) : null;
+	const baseSuffix = baseDxcc ? baseWithSuffix.slice(baseDxcc.matchLength).split('/')[0] : null;
 
 	return {
 		secondaryPrefix,
@@ -42,26 +36,13 @@ export function parseCallsign(callsign: string): CallsignData | null {
 		baseSuffix,
 		base,
 		secondarySuffix,
-		suffixPartOf,
-		baseDxcc: baseDxcc?.entity || null,
-		prefixDxcc: prefixDxcc?.entity || null
+		baseDxcc: baseDxcc?.entityId || null,
+		prefixDxcc: prefixDxcc?.entityId || null
 	};
 }
 
-export function getSecondarySuffixDescription(callsign: CallsignData): string | null {
-	if (!callsign.secondarySuffix) {
-		return null;
-	}
-
-	if (callsign.suffixPartOf === 'base') {
-		return 'Part of prefix';
-	}
-
-	if (callsign.suffixPartOf === 'prefix') {
-		return 'Part of secondary prefix';
-	}
-
-	switch (callsign.secondarySuffix) {
+export function getSecondarySuffixDescription(suffix: string): string | null {
+	switch (suffix) {
 		case 'P':
 			return 'Portable';
 		case 'M':
@@ -70,6 +51,7 @@ export function getSecondarySuffixDescription(callsign: CallsignData): string | 
 			return 'Aeronautical mobile';
 		case 'MM':
 			return 'Maritime mobile';
+		default:
+			return null;
 	}
-	return null;
 }

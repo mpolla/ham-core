@@ -17,10 +17,10 @@
 	<footer class="bg-[#444] py-3">
 		<div class="c flex justify-between gap-4">
 			<div>
-				By <a href="https://jkob.cc">S52KJ</a>
+				Website by <a href="https://jkob.cc/">S52KJ</a>
 			</div>
 			<div>
-				Data from <a href="https://clublog.org">ClubLog</a>
+				Data by <a href="https://www.country-files.com/">AD1C</a>
 			</div>
 			<div>
 				Source code on <a href="https://github.com/jakobkordez/call-tester">GitHub</a>

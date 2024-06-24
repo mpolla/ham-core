@@ -4,10 +4,14 @@ import { TrieNode } from './trie';
 describe('parseString', () => {
 	test('Basic test', () => {
 		const encoded = `
-            31-YAP-4
-            3=401
-            31-X-3
-            4=400
+            31
+			-YAP-4
+            -X-3
+            3
+			=401
+            4
+			=400
+			!404
         `;
 
 		const root = TrieNode.decodeFromString(encoded);
@@ -29,6 +33,7 @@ describe('parseString', () => {
 
 		expect(y!.id).toBe(4);
 		expect(y!.entity).toBe(400);
+		expect(y!.exactEntity).toBe(404);
 		expect(y!.children.size).toBe(0);
 
 		const x = root.children.get('X');

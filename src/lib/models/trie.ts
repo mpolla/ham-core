@@ -2,24 +2,42 @@ let nodeCounter = 0;
 
 export class TrieNode {
 	public id: number;
+	public entity: number | null;
+	public exactEntity: number | null;
+	public children: Map<string, TrieNode>;
 
-	constructor(
-		public children: Map<string, TrieNode> = new Map(),
-		public entity: number | null = null,
-		id: number | null = null
-	) {
+	constructor({
+		id,
+		entity,
+		exactEntity,
+		children
+	}: {
+		id?: number | null;
+		entity?: number | null;
+		exactEntity?: number | null;
+		children?: Map<string, TrieNode>;
+	} = {}) {
 		if (id) this.id = id;
 		else this.id = ++nodeCounter;
+		this.entity = entity ?? null;
+		this.exactEntity = exactEntity ?? null;
+		this.children = children ?? new Map();
 	}
 
 	/**
 	 * Insert a prefix into the trie.
 	 */
-	insert(prefix: string, entity: number): void {
+	insert(prefix: string, entity: number, isExact: boolean = false): void {
 		if (!prefix) {
-			if (this.entity && this.entity !== entity)
-				throw new Error(`Prefix conflict: ${this.entity} vs ${entity}`);
-			this.entity = entity;
+			if (isExact) {
+				if (this.exactEntity && this.exactEntity !== entity)
+					throw new Error(`Exact prefix conflict: ${this.exactEntity} vs ${entity}`);
+				this.exactEntity = entity;
+			} else {
+				if (this.entity && this.entity !== entity)
+					throw new Error(`Prefix conflict: ${this.entity} vs ${entity}`);
+				this.entity = entity;
+			}
 			return;
 		}
 		let next = this.children.get(prefix[0]);
@@ -27,7 +45,7 @@ export class TrieNode {
 			next = new TrieNode();
 			this.children.set(prefix[0], next);
 		}
-		next.insert(prefix.slice(1), entity);
+		next.insert(prefix.slice(1), entity, isExact);
 	}
 
 	/**
@@ -51,10 +69,39 @@ export class TrieNode {
 	}
 
 	/**
+	 * Collapse nodes that do not cause changes.
+	 * Returns true if node can be deleted, false otherwise.
+	 */
+	collapseNodes(currentEntity: number | null = null): boolean {
+		for (const [k, child] of this.children.entries()) {
+			if (child.collapseNodes(this.entity ?? currentEntity)) {
+				this.children.delete(k);
+			}
+		}
+		return (
+			this.children.size == 0 &&
+			(!this.entity || this.entity === currentEntity) &&
+			(!this.exactEntity || this.exactEntity === currentEntity)
+		);
+	}
+
+	/**
+	 * Generate a hash for merging nodes.
+	 */
+	hash(): string {
+		const children = [...this.children.entries()]
+			.map(([k, v]) => `${k}:${v.id}`)
+			.sort()
+			.join(',');
+		return `${this.entity ?? ''}_${this.exactEntity ?? ''}_${children}`;
+	}
+
+	/**
 	 * Checks if this node can be merged with another node.
 	 */
 	canMerge(other: TrieNode): boolean {
 		if (this === other) return false;
+		if (this.exactEntity !== other.exactEntity) return false;
 		if (this.entity !== other.entity) return false;
 		// Union set of all children keys
 		const l = new Set([...this.children.keys(), ...other.children.keys()]);
@@ -74,9 +121,12 @@ export class TrieNode {
 	}
 
 	_encodeToString(): string {
-		const s = [];
+		const s = [`${this.id}`];
 		if (this.entity) {
-			s.push(`${this.id}=${this.entity}`);
+			s.push(`=${this.entity}`);
+		}
+		if (this.exactEntity) {
+			s.push(`!${this.exactEntity}`);
 		}
 		for (const c of new Set(this.children.values())) {
 			const chars = [];
@@ -84,7 +134,7 @@ export class TrieNode {
 				if (v === c) chars.push(k);
 			}
 			chars.sort();
-			s.push(`${this.id}-${chars.join('')}-${c.id}`);
+			s.push(`-${chars.join('')}-${c.id}`);
 		}
 		return s.join('\n');
 	}
@@ -98,7 +148,7 @@ export class TrieNode {
 		function getNode(id: number): TrieNode {
 			let node = nodes.get(id);
 			if (!node) {
-				node = new TrieNode(undefined, undefined, id);
+				node = new TrieNode({ id });
 				nodes.set(id, node);
 				// Assert root is the first node
 				root ??= node;
@@ -106,21 +156,24 @@ export class TrieNode {
 			return node;
 		}
 
+		let currentNode: TrieNode | null = null;
 		for (let line of s.trim().split('\n')) {
 			line = line.trim();
 			if (!line) continue;
-			const parts = line.split('=');
-			if (parts.length === 2) {
-				const [id, entity] = parts;
-				const node = getNode(parseInt(id));
-				node.entity = parseInt(entity);
-			} else {
-				const [id, chars, child] = line.split('-');
-				const parent = getNode(parseInt(id));
+			if (line.startsWith('=')) {
+				const entity = line.slice(1);
+				currentNode!.entity = parseInt(entity);
+			} else if (line.includes('!')) {
+				const entity = line.slice(1);
+				currentNode!.exactEntity = parseInt(entity);
+			} else if (line.startsWith('-')) {
+				const [, chars, child] = line.split('-');
 				const childNode = getNode(parseInt(child));
 				for (const char of chars) {
-					parent.children.set(char, childNode);
+					currentNode!.children.set(char, childNode);
 				}
+			} else {
+				currentNode = getNode(parseInt(line));
 			}
 		}
 

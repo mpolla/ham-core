@@ -102,7 +102,7 @@ for (const entity of doc.clublog.entities[0].entity) {
 	const end = entity.end?.[0];
 	if (end && new Date(end) < now) continue;
 	entities.push({
-		entity: id,
+		id,
 		name,
 		cqz: cqz ? parseInt(cqz) : undefined,
 		cont: cont ? cont : undefined

@@ -1,43 +1,50 @@
 import dxccTreeFile from '../assets/dxcc-tree.txt?raw';
 import dxccEntitiesFile from '../assets/dxcc-entities.json';
 import { TrieNode } from './models/trie';
+import type { DxccEntity } from './models/dxcc-entity';
 
 export const dxccTree = TrieNode.decodeFromString(dxccTreeFile);
 
 interface DxccResult {
-	entity: number;
-	prefixLength: number;
-	withSuffix: boolean;
+	entityId: number;
+	matchLength: number;
+	isExact: boolean;
 }
 
 export function findDxcc(prefix: string, startingNode: TrieNode = dxccTree): DxccResult | null {
 	prefix = prefix.toUpperCase();
 	let node = startingNode;
-	let entity: number | null = null;
-	let prefixLength = 0;
+	let entityId: number | null = null;
+	let tempPrefixLength = 0;
+	let matchLength = 0;
 
 	while (prefix) {
 		const next = node.children.get(prefix[0]);
-
-		if (prefix[0] === '/' || !next) {
-			const slashPos = prefix.lastIndexOf('/');
-			if (node.children.has('/') && slashPos > 0) {
-				const suffix = prefix.slice(slashPos + 1);
-				const res = findDxcc(suffix, node.children.get('/'));
-				if (res && res.prefixLength == suffix.length)
-					return { entity: res.entity, prefixLength, withSuffix: true };
-			}
+		if (!next) {
 			break;
 		}
 
 		node = next;
-		if (node.entity) entity = node.entity;
 		prefix = prefix.slice(1);
-		prefixLength++;
+		tempPrefixLength++;
+		if (node.entity) {
+			entityId = node.entity;
+			matchLength = tempPrefixLength;
+		}
 	}
 
-	if (!entity) return null;
-	return { entity, withSuffix: false, prefixLength };
+	if (node.exactEntity && !prefix) {
+		return {
+			entityId: node.exactEntity,
+			matchLength: tempPrefixLength,
+			isExact: true
+		};
+	}
+
+	if (!entityId) return null;
+	return { entityId, matchLength, isExact: false };
 }
 
-export const dxccEntities = new Map([...dxccEntitiesFile].map((e) => [e.entity, e]));
+export const dxccEntities: Map<number, DxccEntity> = new Map(
+	[...dxccEntitiesFile].map((e) => [e.id, e])
+);

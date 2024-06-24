@@ -1,29 +1,42 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { getSecondarySuffixDescription, parseCallsign } from '$lib/callsign';
 	import { dxccEntities, findDxcc } from '$lib/dxcc-util';
 	import CallsignInput from '../components/callsign-input.svelte';
 
-	let callsign = '9a/s52kj/p';
+	let query = new URLSearchParams($page.url.searchParams.toString());
+
+	let callsign = query.get('c') ?? '';
 
 	$: callsignData = parseCallsign(callsign);
 	$: rawDxcc = findDxcc(callsign);
 
-	$: suffixPartOf = [null, 'base', 'prefix'].indexOf(callsignData?.suffixPartOf ?? null);
+	$: updateUrl(callsign);
+
+	function updateUrl(callsign: string) {
+		if (!callsign) goto('.', { keepFocus: true });
+		else goto(`?c=${callsign}`, { keepFocus: true });
+	}
 
 	function styleText(): string {
-		const baseClass = 'text-red-400';
+		const baseClass = 'text-cyan-300';
 		const prefixClass = 'text-blue-400';
+		const suffixClass = 'text-green-400';
 
 		if (!callsignData) {
 			const dxcc = findDxcc(callsign);
 			if (!dxcc) return callsign;
-			return `<span class="${baseClass}">${callsign.slice(0, dxcc.prefixLength)}</span>${callsign.slice(dxcc.prefixLength)}`;
+			return `<span class="text-cyan-300">${callsign.slice(0, dxcc.matchLength)}</span>${callsign.slice(dxcc.matchLength)}`;
+		}
+
+		if (rawDxcc?.isExact) {
+			return `<span class="text-amber-400">${callsign}</span>`;
 		}
 
 		const { base, basePrefix, baseSuffix, secondaryPrefix, secondarySuffix } = callsignData;
 
 		// TODO Check if base and prefix same dxcc
-		const suffixClass = ['text-green-400', baseClass, prefixClass][suffixPartOf];
 		return [
 			secondaryPrefix ? `<span class="${prefixClass}">${secondaryPrefix}/</span>` : '',
 			basePrefix ? `<span class="${baseClass}">${basePrefix}</span>${baseSuffix}` : base,
@@ -40,7 +53,13 @@
 		<CallsignInput bind:inputText={callsign} generateStyledText={styleText} />
 	</div>
 
-	{#if callsignData}
+	{#if rawDxcc?.isExact}
+		<div class="data-box full">
+			<h2>Full match</h2>
+			<div class="font-mono text-2xl font-medium">{callsign}</div>
+			<div>{dxccEntities.get(rawDxcc.entityId)?.name ?? '?'}</div>
+		</div>
+	{:else if callsignData}
 		<div class="flex flex-col gap-4 md:flex-row">
 			{#if callsignData.prefixDxcc}
 				<div class="data-box prefix">
@@ -57,34 +76,37 @@
 				</div>
 			{/if}
 			{#if callsignData.secondarySuffix}
-				<div class={`data-box ${['suffix', 'base', 'prefix'][suffixPartOf]}`}>
+				<div class="data-box suffix">
 					<h2>Secondary suffix</h2>
 					<div class="font-mono text-2xl font-medium">{callsignData.secondarySuffix}</div>
-					<div>{getSecondarySuffixDescription(callsignData) ?? ''}</div>
+					<div>{getSecondarySuffixDescription(callsignData.secondarySuffix) ?? ''}</div>
 				</div>
 			{/if}
 		</div>
 	{:else if rawDxcc}
 		<div class="data-box base">
 			<h2>Prefix</h2>
-			<div class="font-mono text-2xl font-medium">{callsign.slice(0, rawDxcc.prefixLength)}</div>
-			<div>{dxccEntities.get(rawDxcc.entity)?.name ?? '?'}</div>
+			<div class="font-mono text-2xl font-medium">{callsign.slice(0, rawDxcc.matchLength)}</div>
+			<div>{dxccEntities.get(rawDxcc.entityId)?.name ?? '?'}</div>
 		</div>
 	{/if}
 </div>
 
 <style lang="postcss">
 	.data-box {
-		@apply flex-1 rounded-xl p-4 text-center;
+		@apply mx-auto w-full max-w-[50%] flex-1 rounded-xl p-4 text-center;
 	}
 	.data-box > h2 {
 		@apply text-sm;
+	}
+	.data-box.full {
+		@apply bg-amber-600/40;
 	}
 	.data-box.prefix {
 		@apply bg-blue-600/40;
 	}
 	.data-box.base {
-		@apply bg-red-600/40;
+		@apply bg-cyan-600/40;
 	}
 	.data-box.suffix {
 		@apply bg-green-600/40;

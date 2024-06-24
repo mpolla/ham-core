@@ -8,81 +8,86 @@ describe('dxccTree', () => {
 });
 
 describe('findDxcc', () => {
+	const s5ID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5')?.id;
+	const svID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV')?.id;
+	const svaID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV/a')?.id;
+	const sv9ID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV9')?.id;
+
 	test('S52KJ', () => {
 		const result = findDxcc('S52KJ');
-		expect(result?.entity).toBe(499);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(s5ID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('s52kj', () => {
 		const result = findDxcc('s52kj');
-		expect(result?.entity).toBe(499);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(s5ID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('S52KJ/P', () => {
 		const result = findDxcc('S52KJ/P');
-		expect(result?.entity).toBe(499);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(s5ID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV2AAA', () => {
 		const result = findDxcc('SV2AAA');
-		expect(result?.entity).toBe(236);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
-	test('SV2AAA/A', () => {
-		const result = findDxcc('SV2AAA/A');
-		expect(result?.entity).toBe(180);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(true);
+	test('SV2RSG/A', () => {
+		const result = findDxcc('SV2RSG/A');
+		expect(result?.entityId).toBe(svaID);
+		expect(result?.matchLength).toBe(8);
+		expect(result?.isExact).toBe(true);
 	});
 
 	test('SV2AAA/AP', () => {
 		const result = findDxcc('SV2AAA/AP');
-		expect(result?.entity).toBe(236);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV2AAA/P', () => {
 		const result = findDxcc('SV2AAA/P');
-		expect(result?.entity).toBe(236);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV/S52KJ', () => {
 		const result = findDxcc('SV/S52KJ');
-		expect(result?.entity).toBe(236);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV/S52KJ/A', () => {
 		const result = findDxcc('SV/S52KJ/A');
-		expect(result?.entity).toBe(180);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(true);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV/S52KJ/P', () => {
 		const result = findDxcc('SV/S52KJ/P');
-		expect(result?.entity).toBe(236);
-		expect(result?.prefixLength).toBe(2);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(svID);
+		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('SV9/S52KJ/A', () => {
 		const result = findDxcc('SV9/S52KJ/A');
-		expect(result?.entity).toBe(40);
-		expect(result?.prefixLength).toBe(3);
-		expect(result?.withSuffix).toBe(false);
+		expect(result?.entityId).toBe(sv9ID);
+		expect(result?.matchLength).toBe(3);
+		expect(result?.isExact).toBe(false);
 	});
 
 	test('empty string', () => {
@@ -106,8 +111,10 @@ describe('dxccEntities', () => {
 		expect(dxccEntities).not.toBe(null);
 	});
 
-	test('499', () => {
-		const entity = dxccEntities.get(499);
+	test('S5', () => {
+		const s5Id = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5')!.id;
+
+		const entity = dxccEntities.get(s5Id);
 		expect(entity).not.toBe(undefined);
 		expect(entity?.name).toBe('Slovenia');
 		expect(entity?.cont).toBe('EU');
