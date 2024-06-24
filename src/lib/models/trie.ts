@@ -12,6 +12,9 @@ export class TrieNode {
 		else this.id = ++nodeCounter;
 	}
 
+	/**
+	 * Insert a prefix into the trie.
+	 */
 	insert(prefix: string, entity: number): void {
 		if (!prefix) {
 			if (this.entity && this.entity !== entity)
@@ -27,12 +30,18 @@ export class TrieNode {
 		next.insert(prefix.slice(1), entity);
 	}
 
+	/**
+	 * Traverse the trie to find the node that matches the prefix.
+	 */
 	findRaw(prefix: string): TrieNode | null {
 		if (!prefix) return this;
 		const next = this.children.get(prefix[0]);
 		return next ? next.findRaw(prefix.slice(1)) : null;
 	}
 
+	/**
+	 * Returns all the nodes in the trie.
+	 */
 	getAllNodes(): Set<TrieNode> {
 		const nodes: TrieNode[] = [this];
 		for (const child of this.children.values()) {
@@ -41,6 +50,9 @@ export class TrieNode {
 		return new Set(nodes);
 	}
 
+	/**
+	 * Checks if this node can be merged with another node.
+	 */
 	canMerge(other: TrieNode): boolean {
 		if (this === other) return false;
 		if (this.entity !== other.entity) return false;
@@ -54,6 +66,9 @@ export class TrieNode {
 		return true;
 	}
 
+	/**
+	 * Returns an encoded string of the whole trie.
+	 */
 	encodeToString(): string {
 		return [...this.getAllNodes()].map((n) => n._encodeToString()).join('\n');
 	}
@@ -74,6 +89,9 @@ export class TrieNode {
 		return s.join('\n');
 	}
 
+	/**
+	 * Decodes a trie from an encoded string.
+	 */
 	static decodeFromString(s: string): TrieNode {
 		let root: TrieNode | null = null;
 		const nodes: Map<number, TrieNode> = new Map();
