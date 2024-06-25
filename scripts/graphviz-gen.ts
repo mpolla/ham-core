@@ -1,10 +1,11 @@
-const graphPath = process.argv[2];
-if (!graphPath) {
-	console.error('Please provide a graph path as the first argument');
-	process.exit(1);
-}
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const prefix = process.argv[3] || '';
+const prefix = process.argv[2] || '';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const defaultGraphPath = path.resolve(__dirname, '../src/assets/dxcc-tree.txt');
+const graphPath = process.argv[3] || defaultGraphPath;
 
 import fs from 'fs';
 import { TrieNode } from '../src/lib/models/trie';
@@ -25,7 +26,7 @@ function printNode(node: TrieNode) {
 	handled.add(node.id);
 
 	const label = node.entity ?? '';
-	const shape = node.entity ? 'box' : 'circle';
+	const shape = node.overrides.toString() !== '' ? 'hexagon' : node.entity ? 'box' : 'circle';
 	console.log(`${node.id} [label="${label}" shape="${shape}"];`);
 
 	const dd = new Map<number, string[]>();
