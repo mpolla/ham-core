@@ -7,11 +7,10 @@ describe('parseString', () => {
             31
 			-YAP-4
             -X-3
-            3
+            3(32)
 			=401
             4
 			=400
-			!404
         `;
 
 		const root = TrieNode.decodeFromString(encoded);
@@ -33,8 +32,8 @@ describe('parseString', () => {
 
 		expect(y!.id).toBe(4);
 		expect(y!.entity).toBe(400);
-		expect(y!.exactEntity).toBe(404);
 		expect(y!.children.size).toBe(0);
+		expect(y?.overrides).toEqual({});
 
 		const x = root.children.get('X');
 		expect(x).not.toBe(null);
@@ -43,5 +42,6 @@ describe('parseString', () => {
 		expect(x!.id).toBe(3);
 		expect(x!.entity).toBe(401);
 		expect(x!.children.size).toBe(0);
+		expect(x?.overrides).toEqual({ cqz: 32 });
 	});
 });

@@ -33,9 +33,10 @@ export function findDxcc(prefix: string, startingNode: TrieNode = dxccTree): Dxc
 		}
 	}
 
-	if (node.exactEntity && !prefix) {
+	if (!prefix && node?.children.has('')) {
+		node = node.children.get('')!;
 		return {
-			entityId: node.exactEntity,
+			entityId: node.entity!,
 			matchLength: tempPrefixLength,
 			isExact: true
 		};
