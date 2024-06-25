@@ -12,6 +12,7 @@ describe('findDxcc', () => {
 	const svID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV')?.id;
 	const svaID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV/a')?.id;
 	const sv9ID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV9')?.id;
+	const ituID = [...dxccEntities.values()].find((e) => e.primaryPrefix === '4U1I')?.id;
 
 	test('S52KJ', () => {
 		const result = findDxcc('S52KJ');
@@ -45,6 +46,13 @@ describe('findDxcc', () => {
 		const result = findDxcc('SV2RSG/A');
 		expect(result?.entityId).toBe(svaID);
 		expect(result?.matchLength).toBe(8);
+		expect(result?.isExact).toBe(true);
+	});
+
+	test('4U1ITU', () => {
+		const result = findDxcc('4U1ITU');
+		expect(result?.entityId).toBe(ituID);
+		expect(result?.matchLength).toBe(6);
 		expect(result?.isExact).toBe(true);
 	});
 

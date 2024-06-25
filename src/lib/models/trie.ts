@@ -186,6 +186,7 @@ export class TrieNode {
 			} else if (line.startsWith('-')) {
 				const [, chars, child] = line.split('-');
 				const childNode = getNode(parseInt(child));
+				if (chars === '') currentNode!.children.set('', childNode);
 				for (const char of chars) {
 					currentNode!.children.set(char, childNode);
 				}
