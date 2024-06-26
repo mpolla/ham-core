@@ -9,10 +9,9 @@ Data about countries can be downloaded from either [Amateur Radio Country Files 
 ### Obtaining the AD1C country database
 
 Download any `cty.dat` file from the [Country Files](https://www.country-files.com/) website. I recommend using the [Big CTY](https://www.country-files.com/big-cty/) file.
+Instead of `cty.dat` you can also use the `cty.csv` file.
 
-Parsing can be done with the script [`cty-dat-parser.ts`](./scripts/cty-dat-parser.ts).
-
-Instead of `cty.dat` you can also use the `cty.csv` file. Parsing can be done with the script [`cty-csv-parser.ts`](./scripts/cty-csv-parser.ts).
+Parsing of `cty.dat` or `cty.csv` can be done with the script [`cty-parser.ts`](./scripts/cty-dat-parser.ts).
 
 `Note:` The `cty.dat` does not contain the `adif` DXCC number.
 

@@ -8,7 +8,7 @@ export type DxccEntity = {
 	cont?: string;
 	long?: number;
 	lat?: number;
-	timezone?: number;
+	timez?: number;
 	start?: string;
 	end?: string;
 };

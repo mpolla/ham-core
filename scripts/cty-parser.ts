@@ -12,10 +12,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(__dirname, OUT_DIR);
 console.log('Outputting to', outDir);
 
+const type = filePath.split('.').pop();
+if (type !== 'dat' && type !== 'csv') {
+	console.error('Invalid file type', type);
+	process.exit(1);
+}
+
 import fs from 'fs';
 import { DxccEntity } from '../src/lib/models/dxcc-entity';
+import { fullBuildTrie, parseCsv, parseDat } from './parser-helper';
 
-// Parse the cty.dat file
+// Parse the cty file
 const file = fs.readFileSync(filePath, 'utf8');
 
 const entities: DxccEntity[] = [];
@@ -23,27 +30,25 @@ const prefixes: Map<string, number> = new Map();
 
 console.log('Parsing', filePath);
 
-for (const entity of file.split(';')) {
-	if (!entity.trim()) continue;
-	const [name, cqz, ituz, cont, lat, long, timez, primaryPrefixRaw, otherPrefixesRaw] = entity
-		.split(':')
-		.map((s) => s.trim());
+const parser = type === 'dat' ? parseDat : parseCsv;
+for (const entity of parser(file)) {
+	const { primaryPrefixRaw, name, dxcc, cont, cqz, ituz, lat, long, timez, otherPrefixes } = entity;
 
 	const hasStar = primaryPrefixRaw.startsWith('*');
 	const primaryPrefix = primaryPrefixRaw.replace('*', '');
-	const otherPrefixes = otherPrefixesRaw.split(',').map((s) => s.trim());
 	const entityId = entities.length + 1;
 
 	entities.push({
 		id: entityId,
+		dxcc: dxcc,
 		primaryPrefix,
 		name,
-		cqz: parseInt(cqz),
-		ituz: parseInt(ituz),
+		cqz: cqz,
+		ituz: ituz,
 		cont,
-		lat: parseFloat(lat),
-		long: parseFloat(long),
-		timezone: parseFloat(timez)
+		lat: lat,
+		long: long,
+		timez: timez
 	});
 
 	for (const prefix of otherPrefixes) {
@@ -58,26 +63,30 @@ for (const entity of file.split(';')) {
 }
 console.log('Parsed', prefixes.size, 'prefixes');
 
-import { buildTrie, collapseNodes, mergeNodes, minimizeIds, validateTrie } from './trie-helper';
+// Check for invalid callsigns
+const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)((?:\/[A-Z\d]+)*)$/i;
 
-// Build the initial trie
-const root = buildTrie([...prefixes.entries()]);
+const calls: string[] = [];
+for (const callRaw of prefixes.keys()) {
+	if (!callRaw.startsWith('=')) continue;
+	const [, call] = callRaw.match(/^=?((?:[A-Z\d/])+)(.*)/)!;
+	if (call.match(/^VER(SION|\d{8})$/)) continue;
+	const result = call.match(callsignPattern);
+	if (!result) {
+		calls.push(call);
+	}
+}
+console.log('Invalid callsigns:', calls.join(', '));
 
-// Collapse nodes that do not cause changes
-collapseNodes(root);
-
-// Merge as many nodes as possible
-mergeNodes(root);
-
-// Validate the trie
-validateTrie(root, [...prefixes.entries()]);
-
-// Minimize node IDs
-minimizeIds(root);
+const root = fullBuildTrie([...prefixes.entries()]);
 
 // Output the trie
 const out = root.encodeToString();
 fs.writeFileSync(path.join(outDir, 'dxcc-tree.txt'), out);
 
 // Output the entities
-fs.writeFileSync(path.join(outDir, 'dxcc-entities.json'), JSON.stringify(entities, null, '\t'));
+entities.sort((a, b) => a.id - b.id);
+fs.writeFileSync(
+	path.join(outDir, 'dxcc-entities.json'),
+	JSON.stringify(entities, null, '\t') + '\n'
+);

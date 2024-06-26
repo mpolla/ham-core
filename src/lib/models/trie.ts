@@ -92,18 +92,29 @@ export class TrieNode {
 		currentEntity: number | null = null,
 		currentOverrides: DxccOverrides = new DxccOverrides()
 	): boolean {
+		if (currentEntity && currentEntity === this.entity) this.entity = null;
+		if (currentOverrides.cqz && currentOverrides.cqz === this.overrides.cqz)
+			this.overrides.cqz = undefined;
+		if (currentOverrides.ituz && currentOverrides.ituz === this.overrides.ituz)
+			this.overrides.ituz = undefined;
+		if (currentOverrides.cont && currentOverrides.cont === this.overrides.cont)
+			this.overrides.cont = undefined;
+		if (currentOverrides.lat && currentOverrides.lat === this.overrides.lat)
+			this.overrides.lat = undefined;
+		if (currentOverrides.long && currentOverrides.long === this.overrides.long)
+			this.overrides.long = undefined;
+		if (currentOverrides.timez && currentOverrides.timez === this.overrides.timez)
+			this.overrides.timez = undefined;
+
+		const newEntity = this.entity ?? currentEntity;
+		const newOverrides = currentOverrides.merge(this.overrides);
 		for (const [k, child] of this.children.entries()) {
-			const newEntity = this.entity ?? currentEntity;
-			const newOverrides = currentOverrides.merge(this.overrides);
 			if (child.collapseNodes(newEntity, newOverrides)) {
 				this.children.delete(k);
 			}
 		}
-		return (
-			this.children.size == 0 &&
-			(!this.entity || this.entity === currentEntity) &&
-			(!this.overrides || this.overrides.isSubsetOf(currentOverrides))
-		);
+
+		return this.children.size == 0 && !this.entity && !this.overrides.toString();
 	}
 
 	/**

@@ -1,15 +1,16 @@
 import { findDxcc } from './dxcc-util';
+import type { DxccEntity } from './models/dxcc-entity';
 
-export const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)(\/[A-Z\d]+)?$/i;
+export const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)((?:\/[A-Z\d]+)*)$/i;
 
 type CallsignData = {
 	secondaryPrefix: string | null;
 	basePrefix: string | null;
 	baseSuffix: string | null;
 	base: string;
-	secondarySuffix: string | null;
-	baseDxcc: number | null;
-	prefixDxcc: number | null;
+	secondarySuffixes: string[];
+	baseDxcc: DxccEntity | null;
+	fullDxcc: DxccEntity | null;
 };
 
 export function parseCallsign(callsign: string): CallsignData | null {
@@ -21,27 +22,26 @@ export function parseCallsign(callsign: string): CallsignData | null {
 
 	const secondaryPrefix = match[1]?.slice(0, -1) ?? null;
 	const base = match[2];
-	const secondarySuffix = match[3]?.slice(1) ?? null;
+	const secondarySuffixes = match[3]?.slice(1).split('/').filter(Boolean) ?? [];
 
-	const baseWithSuffix = base + (secondarySuffix ? '/' + secondarySuffix : '');
-	const baseDxcc = findDxcc(baseWithSuffix);
-	const prefixDxcc = secondaryPrefix ? findDxcc(callsign) : null;
+	const baseDxccResult = findDxcc(base);
+	const fullDxccResult = findDxcc(callsign);
 
-	const basePrefix = baseDxcc ? baseWithSuffix.slice(0, baseDxcc.matchLength) : null;
-	const baseSuffix = baseDxcc ? baseWithSuffix.slice(baseDxcc.matchLength).split('/')[0] : null;
+	const basePrefix = baseDxccResult ? base.slice(0, baseDxccResult.matchLength) : null;
+	const baseSuffix = baseDxccResult ? base.slice(baseDxccResult.matchLength).split('/')[0] : null;
 
 	return {
 		secondaryPrefix,
 		basePrefix,
 		baseSuffix,
 		base,
-		secondarySuffix,
-		baseDxcc: baseDxcc?.entityId || null,
-		prefixDxcc: prefixDxcc?.entityId || null
+		secondarySuffixes,
+		baseDxcc: baseDxccResult?.entity ?? null,
+		fullDxcc: fullDxccResult?.entity ?? null
 	};
 }
 
-export function getSecondarySuffixDescription(suffix: string): string | null {
+export function getSecondarySuffixDescription(suffix: string): string {
 	switch (suffix) {
 		case 'P':
 			return 'Portable';
@@ -51,7 +51,9 @@ export function getSecondarySuffixDescription(suffix: string): string | null {
 			return 'Aeronautical mobile';
 		case 'MM':
 			return 'Maritime mobile';
+		case 'QRP':
+			return 'Low power';
 		default:
-			return null;
+			return 'Alternative location';
 	}
 }

@@ -1,6 +1,15 @@
 import { DxccOverrides } from '../src/lib/models/dxcc-overrides';
 import { TrieNode } from '../src/lib/models/trie';
 
+export function fullBuildTrie(prefixes: [string, number][]): TrieNode {
+	const root = buildTrie(prefixes);
+	collapseNodes(root);
+	mergeNodes(root);
+	minimizeIds(root);
+	validateTrie(root, prefixes);
+	return root;
+}
+
 export function buildTrie(prefixes: [string, number][]): TrieNode {
 	const root = new TrieNode();
 	for (const [callRaw, entity] of prefixes) {
@@ -107,3 +116,72 @@ export function minimizeIds(root: TrieNode): void {
 		node.id = i++;
 	}
 }
+
+interface IEntity {
+	name: string;
+	dxcc?: number;
+	primaryPrefixRaw: string;
+	cont: string;
+	cqz: number;
+	ituz: number;
+	lat: number;
+	long: number;
+	timez: number;
+	otherPrefixes: string[];
+}
+
+export const parseCsv = (file: string): IEntity[] =>
+	file
+		.trim()
+		.split(';')
+		.map<IEntity | null>((entity) => {
+			entity = entity.trim();
+			if (!entity) return null;
+
+			const [primaryPrefixRaw, name, dxcc, cont, cqz, ituz, lat, long, timez, otherPrefixesRaw] =
+				entity.split(',').map((s) => s.trim());
+
+			const otherPrefixes = otherPrefixesRaw.split(' ').map((s) => s.trim());
+
+			return {
+				name,
+				dxcc: parseInt(dxcc),
+				primaryPrefixRaw,
+				cont,
+				cqz: parseInt(cqz),
+				ituz: parseInt(ituz),
+				lat: parseFloat(lat),
+				long: parseFloat(long),
+				timez: parseFloat(timez),
+				otherPrefixes
+			};
+		})
+		.filter(Boolean) as IEntity[];
+
+export const parseDat = (file: string): IEntity[] =>
+	file
+		.trim()
+		.split(';')
+		.map<IEntity | null>((entity) => {
+			entity = entity.trim();
+			if (!entity) return null;
+
+			const [name, cqz, ituz, cont, lat, long, timez, primaryPrefixRaw, otherPrefixesRaw] = entity
+				.split(':')
+				.map((s) => s.trim());
+
+			const otherPrefixes = otherPrefixesRaw.split(',').map((s) => s.trim());
+
+			return {
+				name,
+				primaryPrefixRaw,
+				cont,
+				cqz: parseInt(cqz),
+				ituz: parseInt(ituz),
+				lat: parseFloat(lat),
+				long: parseFloat(long),
+				timez: parseFloat(timez),
+				otherPrefixes
+			};
+		})
+		.filter(Boolean) as IEntity[];

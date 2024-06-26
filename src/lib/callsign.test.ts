@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 import { parseCallsign } from './callsign';
 import { dxccEntities } from './dxcc-util';
 
-const s5ID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5')?.id;
-const svID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV')?.id;
-const svaID = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV/a')?.id;
+const s5 = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5');
+const sv = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV');
+const sva = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV/a');
 
 describe('parseCallsign', () => {
 	test('S52KJ', () => {
@@ -14,9 +14,9 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe(null);
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(null);
+		expect(data?.secondarySuffixes).toEqual([]);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(s5);
 	});
 
 	test('s52kj', () => {
@@ -26,9 +26,9 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe(null);
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(null);
+		expect(data?.secondarySuffixes).toEqual([]);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(s5);
 	});
 
 	test('S52KJ/P', () => {
@@ -38,9 +38,9 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe('P');
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(null);
+		expect(data?.secondarySuffixes).toEqual(['P']);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(s5);
 	});
 
 	test('SV/S52KJ', () => {
@@ -50,9 +50,9 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe(null);
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(svID);
+		expect(data?.secondarySuffixes).toEqual([]);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(sv);
 	});
 
 	test('SV/S52KJ/P', () => {
@@ -62,9 +62,9 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe('P');
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(svID);
+		expect(data?.secondarySuffixes).toEqual(['P']);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(sv);
 	});
 
 	test('S52KJ/A', () => {
@@ -74,21 +74,33 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe('A');
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(null);
+		expect(data?.secondarySuffixes).toEqual(['A']);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(s5);
+	});
+
+	test('S52KJ/A/P', () => {
+		const data = parseCallsign('S52KJ/A/P');
+		expect(data).not.toBe(null);
+		expect(data?.secondaryPrefix).toBe(null);
+		expect(data?.basePrefix).toBe('S5');
+		expect(data?.baseSuffix).toBe('2KJ');
+		expect(data?.base).toBe('S52KJ');
+		expect(data?.secondarySuffixes).toEqual(['A', 'P']);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(s5);
 	});
 
 	test('SV2RSG/A', () => {
 		const data = parseCallsign('SV2RSG/A');
 		expect(data).not.toBe(null);
 		expect(data?.secondaryPrefix).toBe(null);
-		expect(data?.basePrefix).toBe('SV2RSG/A');
-		expect(data?.baseSuffix).toBe('');
+		expect(data?.basePrefix).toBe('SV');
+		expect(data?.baseSuffix).toBe('2RSG');
 		expect(data?.base).toBe('SV2RSG');
-		expect(data?.secondarySuffix).toBe('A');
-		expect(data?.baseDxcc).toBe(svaID);
-		expect(data?.prefixDxcc).toBe(null);
+		expect(data?.secondarySuffixes).toEqual(['A']);
+		expect(data?.baseDxcc).toEqual(sv);
+		expect(data?.fullDxcc).toEqual(sva);
 	});
 
 	test('SV/S52KJ/A', () => {
@@ -98,8 +110,8 @@ describe('parseCallsign', () => {
 		expect(data?.basePrefix).toBe('S5');
 		expect(data?.baseSuffix).toBe('2KJ');
 		expect(data?.base).toBe('S52KJ');
-		expect(data?.secondarySuffix).toBe('A');
-		expect(data?.baseDxcc).toBe(s5ID);
-		expect(data?.prefixDxcc).toBe(svID);
+		expect(data?.secondarySuffixes).toEqual(['A']);
+		expect(data?.baseDxcc).toEqual(s5);
+		expect(data?.fullDxcc).toEqual(sv);
 	});
 });

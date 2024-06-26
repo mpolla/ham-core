@@ -9,7 +9,7 @@
 		"cont": "EU",
 		"lat": 41.9,
 		"long": -12.43,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 2,
@@ -21,7 +21,7 @@
 		"cont": "AS",
 		"lat": 9.88,
 		"long": -114.23,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 3,
@@ -33,7 +33,7 @@
 		"cont": "EU",
 		"lat": 43.73,
 		"long": -7.4,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 4,
@@ -45,7 +45,7 @@
 		"cont": "AF",
 		"lat": -10.45,
 		"long": -56.67,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 5,
@@ -57,7 +57,7 @@
 		"cont": "AF",
 		"lat": -20.35,
 		"long": -57.5,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 6,
@@ -69,7 +69,7 @@
 		"cont": "AF",
 		"lat": -19.7,
 		"long": -63.42,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 7,
@@ -81,7 +81,7 @@
 		"cont": "AF",
 		"lat": 1.7,
 		"long": -10.33,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 8,
@@ -93,7 +93,7 @@
 		"cont": "AF",
 		"lat": -1.43,
 		"long": -5.62,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 9,
@@ -105,7 +105,7 @@
 		"cont": "OC",
 		"lat": -17.78,
 		"long": -177.92,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 10,
@@ -117,7 +117,7 @@
 		"cont": "OC",
 		"lat": -22,
 		"long": -175,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 11,
@@ -129,7 +129,7 @@
 		"cont": "OC",
 		"lat": -12.48,
 		"long": -177.08,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 12,
@@ -141,7 +141,7 @@
 		"cont": "AF",
 		"lat": -26.65,
 		"long": -31.48,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 13,
@@ -153,7 +153,7 @@
 		"cont": "AF",
 		"lat": 35.4,
 		"long": -9.32,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 14,
@@ -165,7 +165,7 @@
 		"cont": "AS",
 		"lat": 15.8,
 		"long": -107.9,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 15,
@@ -177,7 +177,7 @@
 		"cont": "AF",
 		"lat": 11,
 		"long": 10.68,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 16,
@@ -189,7 +189,7 @@
 		"cont": "AF",
 		"lat": -54.42,
 		"long": -3.38,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 17,
@@ -201,7 +201,7 @@
 		"cont": "SA",
 		"lat": -68.77,
 		"long": 90.58,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 18,
@@ -213,7 +213,7 @@
 		"cont": "AS",
 		"lat": 40.45,
 		"long": -47.37,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 19,
@@ -225,7 +225,7 @@
 		"cont": "AS",
 		"lat": 42,
 		"long": -45,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 20,
@@ -237,7 +237,7 @@
 		"cont": "EU",
 		"lat": 42.5,
 		"long": -19.28,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 21,
@@ -249,7 +249,7 @@
 		"cont": "AS",
 		"lat": 7.6,
 		"long": -80.7,
-		"timezone": -5.5
+		"timez": -5.5
 	},
 	{
 		"id": 22,
@@ -261,7 +261,7 @@
 		"cont": "EU",
 		"lat": 46.17,
 		"long": -6.05,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 23,
@@ -273,7 +273,7 @@
 		"cont": "NA",
 		"lat": 40.75,
 		"long": 73.97,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 24,
@@ -285,7 +285,7 @@
 		"cont": "EU",
 		"lat": 48.2,
 		"long": -16.3,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 25,
@@ -297,7 +297,7 @@
 		"cont": "OC",
 		"lat": -8.8,
 		"long": -126.05,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 26,
@@ -309,7 +309,7 @@
 		"cont": "AS",
 		"lat": 31.32,
 		"long": -34.82,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 27,
@@ -321,7 +321,7 @@
 		"cont": "AF",
 		"lat": 27.2,
 		"long": -16.6,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 28,
@@ -333,7 +333,7 @@
 		"cont": "AS",
 		"lat": 35,
 		"long": -33,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 29,
@@ -345,7 +345,7 @@
 		"cont": "AF",
 		"lat": -5.75,
 		"long": -33.92,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 30,
@@ -357,7 +357,7 @@
 		"cont": "AF",
 		"lat": 9.87,
 		"long": -7.55,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 31,
@@ -369,7 +369,7 @@
 		"cont": "AF",
 		"lat": -19,
 		"long": -46.58,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 32,
@@ -381,7 +381,7 @@
 		"cont": "AF",
 		"lat": 20.6,
 		"long": 10.5,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 33,
@@ -393,7 +393,7 @@
 		"cont": "AF",
 		"lat": 17.63,
 		"long": -9.43,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 34,
@@ -405,7 +405,7 @@
 		"cont": "AF",
 		"lat": 8.4,
 		"long": -1.28,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 35,
@@ -417,7 +417,7 @@
 		"cont": "OC",
 		"lat": -13.93,
 		"long": 171.7,
-		"timezone": -13
+		"timez": -13
 	},
 	{
 		"id": 36,
@@ -429,7 +429,7 @@
 		"cont": "AF",
 		"lat": 1.92,
 		"long": -32.6,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 37,
@@ -441,7 +441,7 @@
 		"cont": "AF",
 		"lat": 0.32,
 		"long": -38.15,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 38,
@@ -453,7 +453,7 @@
 		"cont": "AF",
 		"lat": 15.2,
 		"long": 14.63,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 39,
@@ -465,7 +465,7 @@
 		"cont": "NA",
 		"lat": 18.2,
 		"long": 77.47,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 40,
@@ -477,7 +477,7 @@
 		"cont": "AS",
 		"lat": 15.65,
 		"long": -48.12,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 41,
@@ -489,7 +489,7 @@
 		"cont": "AF",
 		"lat": -29.22,
 		"long": -27.88,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 42,
@@ -501,7 +501,7 @@
 		"cont": "AF",
 		"lat": -14,
 		"long": -34,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 43,
@@ -513,7 +513,7 @@
 		"cont": "AF",
 		"lat": 28,
 		"long": -2,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 44,
@@ -525,7 +525,7 @@
 		"cont": "NA",
 		"lat": 13.18,
 		"long": 59.53,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 45,
@@ -537,7 +537,7 @@
 		"cont": "AS",
 		"lat": 4.15,
 		"long": -73.45,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 46,
@@ -549,7 +549,7 @@
 		"cont": "SA",
 		"lat": 6.02,
 		"long": 59.45,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 47,
@@ -561,7 +561,7 @@
 		"cont": "EU",
 		"lat": 45.18,
 		"long": -15.3,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 48,
@@ -573,7 +573,7 @@
 		"cont": "AF",
 		"lat": 7.7,
 		"long": 1.57,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 49,
@@ -585,7 +585,7 @@
 		"cont": "EU",
 		"lat": 35.88,
 		"long": -14.42,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 50,
@@ -597,7 +597,7 @@
 		"cont": "AF",
 		"lat": -14.22,
 		"long": -26.73,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 51,
@@ -609,7 +609,7 @@
 		"cont": "AS",
 		"lat": 29.38,
 		"long": -47.38,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 52,
@@ -621,7 +621,7 @@
 		"cont": "AF",
 		"lat": 8.5,
 		"long": 13.25,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 53,
@@ -633,7 +633,7 @@
 		"cont": "AS",
 		"lat": 3.95,
 		"long": -102.23,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 54,
@@ -645,7 +645,7 @@
 		"cont": "OC",
 		"lat": 2.68,
 		"long": -113.32,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 55,
@@ -657,7 +657,7 @@
 		"cont": "AS",
 		"lat": 27.7,
 		"long": -85.33,
-		"timezone": -5.75
+		"timez": -5.75
 	},
 	{
 		"id": 56,
@@ -669,7 +669,7 @@
 		"cont": "AF",
 		"lat": -3.12,
 		"long": -23.03,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 57,
@@ -681,7 +681,7 @@
 		"cont": "AF",
 		"lat": -3.17,
 		"long": -29.78,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 58,
@@ -693,7 +693,7 @@
 		"cont": "AS",
 		"lat": 1.37,
 		"long": -103.78,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 59,
@@ -705,7 +705,7 @@
 		"cont": "AF",
 		"lat": -1.75,
 		"long": -29.82,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 60,
@@ -717,7 +717,7 @@
 		"cont": "SA",
 		"lat": 10.38,
 		"long": 61.28,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 61,
@@ -729,7 +729,7 @@
 		"cont": "AF",
 		"lat": -22,
 		"long": -24,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 62,
@@ -741,7 +741,7 @@
 		"cont": "OC",
 		"lat": -21.22,
 		"long": 175.13,
-		"timezone": -13
+		"timez": -13
 	},
 	{
 		"id": 63,
@@ -753,7 +753,7 @@
 		"cont": "AS",
 		"lat": 23.6,
 		"long": -58.55,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 64,
@@ -765,7 +765,7 @@
 		"cont": "AS",
 		"lat": 27.4,
 		"long": -90.18,
-		"timezone": -6
+		"timez": -6
 	},
 	{
 		"id": 65,
@@ -777,7 +777,7 @@
 		"cont": "AS",
 		"lat": 24,
 		"long": -54,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 66,
@@ -789,7 +789,7 @@
 		"cont": "AS",
 		"lat": 25.25,
 		"long": -51.13,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 67,
@@ -801,7 +801,7 @@
 		"cont": "AS",
 		"lat": 26.03,
 		"long": -50.53,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 68,
@@ -813,7 +813,7 @@
 		"cont": "AS",
 		"lat": 30,
 		"long": -70,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 69,
@@ -825,7 +825,7 @@
 		"cont": "AS",
 		"lat": 15.08,
 		"long": -117.72,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 70,
@@ -837,7 +837,7 @@
 		"cont": "AS",
 		"lat": 23.72,
 		"long": -120.88,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 71,
@@ -849,7 +849,7 @@
 		"cont": "AS",
 		"lat": 20.7,
 		"long": -116.7,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 72,
@@ -861,7 +861,7 @@
 		"cont": "AS",
 		"lat": 36,
 		"long": -102,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 73,
@@ -873,7 +873,7 @@
 		"cont": "OC",
 		"lat": -0.52,
 		"long": -166.92,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 74,
@@ -885,7 +885,7 @@
 		"cont": "EU",
 		"lat": 42.58,
 		"long": -1.62,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 75,
@@ -897,7 +897,7 @@
 		"cont": "AF",
 		"lat": 13.4,
 		"long": 16.38,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 76,
@@ -909,7 +909,7 @@
 		"cont": "NA",
 		"lat": 24.25,
 		"long": 76,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 77,
@@ -921,7 +921,7 @@
 		"cont": "AF",
 		"lat": -18.25,
 		"long": -35,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 78,
@@ -933,7 +933,7 @@
 		"cont": "SA",
 		"lat": -30,
 		"long": 71,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 79,
@@ -945,7 +945,7 @@
 		"cont": "SA",
 		"lat": -26.28,
 		"long": 80.07,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 80,
@@ -957,7 +957,7 @@
 		"cont": "SA",
 		"lat": -27.1,
 		"long": 109.37,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 81,
@@ -969,7 +969,7 @@
 		"cont": "SA",
 		"lat": -33.6,
 		"long": 78.85,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 82,
@@ -981,7 +981,7 @@
 		"cont": "SA",
 		"lat": -90,
 		"long": 0,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 83,
@@ -993,7 +993,7 @@
 		"cont": "NA",
 		"lat": 21.5,
 		"long": 80,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 84,
@@ -1005,7 +1005,7 @@
 		"cont": "AF",
 		"lat": 32,
 		"long": 5,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 85,
@@ -1017,7 +1017,7 @@
 		"cont": "SA",
 		"lat": -17,
 		"long": 65,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 86,
@@ -1029,7 +1029,7 @@
 		"cont": "EU",
 		"lat": 39.5,
 		"long": 8,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 87,
@@ -1041,7 +1041,7 @@
 		"cont": "AF",
 		"lat": 32.75,
 		"long": 16.95,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 88,
@@ -1053,7 +1053,7 @@
 		"cont": "EU",
 		"lat": 38.7,
 		"long": 27.23,
-		"timezone": 1
+		"timez": 1
 	},
 	{
 		"id": 89,
@@ -1065,7 +1065,7 @@
 		"cont": "SA",
 		"lat": -33,
 		"long": 56,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 90,
@@ -1077,7 +1077,7 @@
 		"cont": "NA",
 		"lat": 43.93,
 		"long": 59.9,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 91,
@@ -1089,7 +1089,7 @@
 		"cont": "NA",
 		"lat": 47,
 		"long": 60,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 92,
@@ -1101,7 +1101,7 @@
 		"cont": "AF",
 		"lat": -12.5,
 		"long": -18.5,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 93,
@@ -1113,7 +1113,7 @@
 		"cont": "AF",
 		"lat": 16,
 		"long": 24,
-		"timezone": 1
+		"timez": 1
 	},
 	{
 		"id": 94,
@@ -1125,7 +1125,7 @@
 		"cont": "AF",
 		"lat": -11.63,
 		"long": -43.3,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 95,
@@ -1137,7 +1137,7 @@
 		"cont": "EU",
 		"lat": 51,
 		"long": -10,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 96,
@@ -1149,7 +1149,7 @@
 		"cont": "OC",
 		"lat": 13,
 		"long": -122,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 97,
@@ -1161,7 +1161,7 @@
 		"cont": "AF",
 		"lat": 15,
 		"long": -39,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 98,
@@ -1173,7 +1173,7 @@
 		"cont": "AS",
 		"lat": 31.28,
 		"long": -34.27,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 99,
@@ -1185,7 +1185,7 @@
 		"cont": "OC",
 		"lat": -10.02,
 		"long": 161.08,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 100,
@@ -1197,7 +1197,7 @@
 		"cont": "OC",
 		"lat": -21.9,
 		"long": 157.93,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 101,
@@ -1209,7 +1209,7 @@
 		"cont": "OC",
 		"lat": -19.03,
 		"long": 169.85,
-		"timezone": 11
+		"timez": 11
 	},
 	{
 		"id": 102,
@@ -1221,7 +1221,7 @@
 		"cont": "EU",
 		"lat": 44.32,
 		"long": -17.57,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 103,
@@ -1233,7 +1233,7 @@
 		"cont": "EU",
 		"lat": 40.32,
 		"long": 3.43,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 104,
@@ -1245,7 +1245,7 @@
 		"cont": "EU",
 		"lat": 39.6,
 		"long": -2.95,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 105,
@@ -1257,7 +1257,7 @@
 		"cont": "AF",
 		"lat": 28.32,
 		"long": 15.85,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 106,
@@ -1269,7 +1269,7 @@
 		"cont": "AF",
 		"lat": 35.9,
 		"long": 5.27,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 107,
@@ -1281,7 +1281,7 @@
 		"cont": "EU",
 		"lat": 53.13,
 		"long": 8.02,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 108,
@@ -1293,7 +1293,7 @@
 		"cont": "AS",
 		"lat": 40.4,
 		"long": -44.9,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 109,
@@ -1305,7 +1305,7 @@
 		"cont": "AF",
 		"lat": 6.5,
 		"long": 9.5,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 110,
@@ -1317,7 +1317,7 @@
 		"cont": "AS",
 		"lat": 32,
 		"long": -53,
-		"timezone": -3.5
+		"timez": -3.5
 	},
 	{
 		"id": 111,
@@ -1329,7 +1329,7 @@
 		"cont": "EU",
 		"lat": 47,
 		"long": -29,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 112,
@@ -1341,7 +1341,7 @@
 		"cont": "EU",
 		"lat": 59,
 		"long": -25,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 113,
@@ -1353,7 +1353,7 @@
 		"cont": "AF",
 		"lat": 9,
 		"long": -39,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 114,
@@ -1365,7 +1365,7 @@
 		"cont": "EU",
 		"lat": 54,
 		"long": -28,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 115,
@@ -1377,7 +1377,7 @@
 		"cont": "AS",
 		"lat": 41.7,
 		"long": -74.13,
-		"timezone": -6
+		"timez": -6
 	},
 	{
 		"id": 116,
@@ -1389,7 +1389,7 @@
 		"cont": "AS",
 		"lat": 38.82,
 		"long": -71.22,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 117,
@@ -1401,7 +1401,7 @@
 		"cont": "AS",
 		"lat": 38,
 		"long": -58,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 118,
@@ -1413,7 +1413,7 @@
 		"cont": "EU",
 		"lat": 46,
 		"long": -2,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 119,
@@ -1425,7 +1425,7 @@
 		"cont": "NA",
 		"lat": 16.13,
 		"long": 61.67,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 120,
@@ -1437,7 +1437,7 @@
 		"cont": "AF",
 		"lat": -12.88,
 		"long": -45.15,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 121,
@@ -1449,7 +1449,7 @@
 		"cont": "NA",
 		"lat": 17.9,
 		"long": 62.83,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 122,
@@ -1461,7 +1461,7 @@
 		"cont": "OC",
 		"lat": -21.5,
 		"long": -165.5,
-		"timezone": -11
+		"timez": -11
 	},
 	{
 		"id": 123,
@@ -1473,7 +1473,7 @@
 		"cont": "OC",
 		"lat": -19.87,
 		"long": -158.32,
-		"timezone": -11
+		"timez": -11
 	},
 	{
 		"id": 124,
@@ -1485,7 +1485,7 @@
 		"cont": "NA",
 		"lat": 14.7,
 		"long": 61.03,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 125,
@@ -1497,7 +1497,7 @@
 		"cont": "OC",
 		"lat": -17.65,
 		"long": 149.4,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 126,
@@ -1509,7 +1509,7 @@
 		"cont": "OC",
 		"lat": -23.37,
 		"long": 149.48,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 127,
@@ -1521,7 +1521,7 @@
 		"cont": "NA",
 		"lat": 10.28,
 		"long": 109.22,
-		"timezone": 8
+		"timez": 8
 	},
 	{
 		"id": 128,
@@ -1533,7 +1533,7 @@
 		"cont": "OC",
 		"lat": -8.92,
 		"long": 140.07,
-		"timezone": 9.5
+		"timez": 9.5
 	},
 	{
 		"id": 129,
@@ -1545,7 +1545,7 @@
 		"cont": "NA",
 		"lat": 46.77,
 		"long": 56.2,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 130,
@@ -1557,7 +1557,7 @@
 		"cont": "AF",
 		"lat": -21.12,
 		"long": -55.48,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 131,
@@ -1569,7 +1569,7 @@
 		"cont": "NA",
 		"lat": 18.08,
 		"long": 63.03,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 132,
@@ -1581,7 +1581,7 @@
 		"cont": "AF",
 		"lat": -11.55,
 		"long": -47.28,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 133,
@@ -1593,7 +1593,7 @@
 		"cont": "AF",
 		"lat": -17.05,
 		"long": -42.72,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 134,
@@ -1605,7 +1605,7 @@
 		"cont": "AF",
 		"lat": -15.88,
 		"long": -54.5,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 135,
@@ -1617,7 +1617,7 @@
 		"cont": "AF",
 		"lat": -46.42,
 		"long": -51.75,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 136,
@@ -1629,7 +1629,7 @@
 		"cont": "AF",
 		"lat": -49,
 		"long": -69.27,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 137,
@@ -1641,7 +1641,7 @@
 		"cont": "AF",
 		"lat": -37.85,
 		"long": -77.53,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 138,
@@ -1653,7 +1653,7 @@
 		"cont": "OC",
 		"lat": -13.3,
 		"long": 176.2,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 139,
@@ -1665,7 +1665,7 @@
 		"cont": "SA",
 		"lat": 4,
 		"long": 53,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 140,
@@ -1677,7 +1677,7 @@
 		"cont": "EU",
 		"lat": 52.77,
 		"long": 1.47,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 141,
@@ -1689,7 +1689,7 @@
 		"cont": "EU",
 		"lat": 54.2,
 		"long": 4.53,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 142,
@@ -1701,7 +1701,7 @@
 		"cont": "EU",
 		"lat": 54.73,
 		"long": 6.68,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 143,
@@ -1713,7 +1713,7 @@
 		"cont": "EU",
 		"lat": 49.22,
 		"long": 2.18,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 144,
@@ -1725,7 +1725,7 @@
 		"cont": "EU",
 		"lat": 56.82,
 		"long": 4.18,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 145,
@@ -1737,7 +1737,7 @@
 		"cont": "EU",
 		"lat": 60.5,
 		"long": 1.5,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 146,
@@ -1749,7 +1749,7 @@
 		"cont": "EU",
 		"lat": 49.45,
 		"long": 2.58,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 147,
@@ -1761,7 +1761,7 @@
 		"cont": "EU",
 		"lat": 52.28,
 		"long": 3.73,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 148,
@@ -1773,7 +1773,7 @@
 		"cont": "OC",
 		"lat": -9,
 		"long": -160,
-		"timezone": -11
+		"timez": -11
 	},
 	{
 		"id": 149,
@@ -1785,7 +1785,7 @@
 		"cont": "OC",
 		"lat": -10.72,
 		"long": -165.8,
-		"timezone": -11
+		"timez": -11
 	},
 	{
 		"id": 150,
@@ -1797,7 +1797,7 @@
 		"cont": "EU",
 		"lat": 47.12,
 		"long": -19.28,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 151,
@@ -1809,7 +1809,7 @@
 		"cont": "EU",
 		"lat": 46.87,
 		"long": -8.12,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 152,
@@ -1821,7 +1821,7 @@
 		"cont": "EU",
 		"lat": 47.13,
 		"long": -9.57,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 153,
@@ -1833,7 +1833,7 @@
 		"cont": "SA",
 		"lat": -1.4,
 		"long": 78.4,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 154,
@@ -1845,7 +1845,7 @@
 		"cont": "SA",
 		"lat": -0.78,
 		"long": 91.03,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 155,
@@ -1857,7 +1857,7 @@
 		"cont": "NA",
 		"lat": 19.02,
 		"long": 72.18,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 156,
@@ -1869,7 +1869,7 @@
 		"cont": "NA",
 		"lat": 19.13,
 		"long": 70.68,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 157,
@@ -1881,7 +1881,7 @@
 		"cont": "SA",
 		"lat": 5,
 		"long": 74,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 158,
@@ -1893,7 +1893,7 @@
 		"cont": "NA",
 		"lat": 12.55,
 		"long": 81.72,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 159,
@@ -1905,7 +1905,7 @@
 		"cont": "SA",
 		"lat": 3.98,
 		"long": 81.58,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 160,
@@ -1917,7 +1917,7 @@
 		"cont": "AS",
 		"lat": 36.23,
 		"long": -127.9,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 161,
@@ -1929,7 +1929,7 @@
 		"cont": "NA",
 		"lat": 9,
 		"long": 80,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 162,
@@ -1941,7 +1941,7 @@
 		"cont": "NA",
 		"lat": 15,
 		"long": 87,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 163,
@@ -1953,7 +1953,7 @@
 		"cont": "AS",
 		"lat": 12.6,
 		"long": -99.7,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 164,
@@ -1965,7 +1965,7 @@
 		"cont": "EU",
 		"lat": 41.9,
 		"long": -12.47,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 165,
@@ -1977,7 +1977,7 @@
 		"cont": "AS",
 		"lat": 24.2,
 		"long": -43.83,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 166,
@@ -1989,7 +1989,7 @@
 		"cont": "EU",
 		"lat": 42.82,
 		"long": -12.58,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 167,
@@ -2001,7 +2001,7 @@
 		"cont": "AF",
 		"lat": 35.67,
 		"long": -12.67,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 168,
@@ -2013,7 +2013,7 @@
 		"cont": "EU",
 		"lat": 40.15,
 		"long": -9.27,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 169,
@@ -2025,7 +2025,7 @@
 		"cont": "EU",
 		"lat": 37.5,
 		"long": -14,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 170,
@@ -2037,7 +2037,7 @@
 		"cont": "AF",
 		"lat": 11.75,
 		"long": -42.35,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 171,
@@ -2049,7 +2049,7 @@
 		"cont": "NA",
 		"lat": 12.13,
 		"long": 61.68,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 172,
@@ -2061,7 +2061,7 @@
 		"cont": "AF",
 		"lat": 12.02,
 		"long": 14.8,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 173,
@@ -2073,7 +2073,7 @@
 		"cont": "NA",
 		"lat": 13.87,
 		"long": 61,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 174,
@@ -2085,7 +2085,7 @@
 		"cont": "NA",
 		"lat": 15.43,
 		"long": 61.35,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 175,
@@ -2097,7 +2097,7 @@
 		"cont": "NA",
 		"lat": 13.23,
 		"long": 61.2,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 176,
@@ -2109,7 +2109,7 @@
 		"cont": "AS",
 		"lat": 36.4,
 		"long": -138.38,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 177,
@@ -2121,7 +2121,7 @@
 		"cont": "OC",
 		"lat": 24.28,
 		"long": -153.97,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 178,
@@ -2133,7 +2133,7 @@
 		"cont": "AS",
 		"lat": 27.05,
 		"long": -142.2,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 179,
@@ -2145,7 +2145,7 @@
 		"cont": "AS",
 		"lat": 46.77,
 		"long": -102.17,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 180,
@@ -2157,7 +2157,7 @@
 		"cont": "EU",
 		"lat": 78,
 		"long": -16,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 181,
@@ -2169,7 +2169,7 @@
 		"cont": "EU",
 		"lat": 74.43,
 		"long": -19.08,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 182,
@@ -2181,7 +2181,7 @@
 		"cont": "EU",
 		"lat": 71.05,
 		"long": 8.28,
-		"timezone": 1
+		"timez": 1
 	},
 	{
 		"id": 183,
@@ -2193,7 +2193,7 @@
 		"cont": "AS",
 		"lat": 31.18,
 		"long": -36.42,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 184,
@@ -2205,7 +2205,7 @@
 		"cont": "NA",
 		"lat": 37.6,
 		"long": 91.87,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 185,
@@ -2217,7 +2217,7 @@
 		"cont": "NA",
 		"lat": 20,
 		"long": 75,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 186,
@@ -2229,7 +2229,7 @@
 		"cont": "OC",
 		"lat": 15.18,
 		"long": -145.72,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 187,
@@ -2241,7 +2241,7 @@
 		"cont": "OC",
 		"lat": 0,
 		"long": 176,
-		"timezone": 12
+		"timez": 12
 	},
 	{
 		"id": 188,
@@ -2253,7 +2253,7 @@
 		"cont": "OC",
 		"lat": 13.37,
 		"long": -144.7,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 189,
@@ -2265,7 +2265,7 @@
 		"cont": "OC",
 		"lat": 16.72,
 		"long": 169.53,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 190,
@@ -2277,7 +2277,7 @@
 		"cont": "OC",
 		"lat": 28.2,
 		"long": 177.37,
-		"timezone": 11
+		"timez": 11
 	},
 	{
 		"id": 191,
@@ -2289,7 +2289,7 @@
 		"cont": "OC",
 		"lat": 5.87,
 		"long": 162.07,
-		"timezone": 11
+		"timez": 11
 	},
 	{
 		"id": 192,
@@ -2301,7 +2301,7 @@
 		"cont": "OC",
 		"lat": 21.12,
 		"long": 157.48,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 193,
@@ -2313,7 +2313,7 @@
 		"cont": "OC",
 		"lat": 29,
 		"long": 178,
-		"timezone": 10
+		"timez": 10
 	},
 	{
 		"id": 194,
@@ -2325,7 +2325,7 @@
 		"cont": "OC",
 		"lat": -14.32,
 		"long": 170.78,
-		"timezone": 11
+		"timez": 11
 	},
 	{
 		"id": 195,
@@ -2337,7 +2337,7 @@
 		"cont": "OC",
 		"lat": -11.05,
 		"long": 171.25,
-		"timezone": 11
+		"timez": 11
 	},
 	{
 		"id": 196,
@@ -2349,7 +2349,7 @@
 		"cont": "OC",
 		"lat": 19.28,
 		"long": -166.63,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 197,
@@ -2361,7 +2361,7 @@
 		"cont": "NA",
 		"lat": 61.4,
 		"long": 148.87,
-		"timezone": 8
+		"timez": 8
 	},
 	{
 		"id": 198,
@@ -2373,7 +2373,7 @@
 		"cont": "NA",
 		"lat": 18.4,
 		"long": 75,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 199,
@@ -2385,7 +2385,7 @@
 		"cont": "NA",
 		"lat": 17.73,
 		"long": 64.8,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 200,
@@ -2397,7 +2397,7 @@
 		"cont": "NA",
 		"lat": 18.18,
 		"long": 66.55,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 201,
@@ -2409,7 +2409,7 @@
 		"cont": "NA",
 		"lat": 18.08,
 		"long": 67.88,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 202,
@@ -2421,7 +2421,7 @@
 		"cont": "EU",
 		"lat": 61,
 		"long": -9,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 203,
@@ -2433,7 +2433,7 @@
 		"cont": "SA",
 		"lat": -32.5,
 		"long": 62.13,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 204,
@@ -2445,7 +2445,7 @@
 		"cont": "EU",
 		"lat": 50,
 		"long": -6,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 205,
@@ -2457,7 +2457,7 @@
 		"cont": "EU",
 		"lat": 55.45,
 		"long": -23.63,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 206,
@@ -2469,7 +2469,7 @@
 		"cont": "EU",
 		"lat": 42.83,
 		"long": -25.08,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 207,
@@ -2481,7 +2481,7 @@
 		"cont": "SA",
 		"lat": -10,
 		"long": 76,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 208,
@@ -2493,7 +2493,7 @@
 		"cont": "AS",
 		"lat": 33.83,
 		"long": -35.83,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 209,
@@ -2505,7 +2505,7 @@
 		"cont": "EU",
 		"lat": 47.33,
 		"long": -13.33,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 210,
@@ -2517,7 +2517,7 @@
 		"cont": "EU",
 		"lat": 61.38,
 		"long": -24.82,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 211,
@@ -2529,7 +2529,7 @@
 		"cont": "EU",
 		"lat": 60.13,
 		"long": -20.37,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 212,
@@ -2541,7 +2541,7 @@
 		"cont": "EU",
 		"lat": 60,
 		"long": -19,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 213,
@@ -2553,7 +2553,7 @@
 		"cont": "EU",
 		"lat": 50,
 		"long": -16,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 214,
@@ -2565,7 +2565,7 @@
 		"cont": "EU",
 		"lat": 49,
 		"long": -20,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 215,
@@ -2577,7 +2577,7 @@
 		"cont": "EU",
 		"lat": 50.7,
 		"long": -4.85,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 216,
@@ -2589,7 +2589,7 @@
 		"cont": "NA",
 		"lat": 74,
 		"long": 42.78,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 217,
@@ -2601,7 +2601,7 @@
 		"cont": "EU",
 		"lat": 62.07,
 		"long": 6.93,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 218,
@@ -2613,7 +2613,7 @@
 		"cont": "EU",
 		"lat": 56,
 		"long": -10,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 219,
@@ -2625,7 +2625,7 @@
 		"cont": "OC",
 		"lat": -9.5,
 		"long": -147.12,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 220,
@@ -2637,7 +2637,7 @@
 		"cont": "SA",
 		"lat": 12.53,
 		"long": 69.98,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 221,
@@ -2649,7 +2649,7 @@
 		"cont": "AS",
 		"lat": 39.78,
 		"long": -126.3,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 222,
@@ -2661,7 +2661,7 @@
 		"cont": "EU",
 		"lat": 52.28,
 		"long": -5.47,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 223,
@@ -2673,7 +2673,7 @@
 		"cont": "SA",
 		"lat": 12.17,
 		"long": 69,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 224,
@@ -2685,7 +2685,7 @@
 		"cont": "SA",
 		"lat": 12.2,
 		"long": 68.25,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 225,
@@ -2697,7 +2697,7 @@
 		"cont": "NA",
 		"lat": 17.57,
 		"long": 63.1,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 226,
@@ -2709,7 +2709,7 @@
 		"cont": "NA",
 		"lat": 18.07,
 		"long": 63.07,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 227,
@@ -2721,7 +2721,7 @@
 		"cont": "SA",
 		"lat": -10,
 		"long": 53,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 228,
@@ -2733,7 +2733,7 @@
 		"cont": "SA",
 		"lat": -3.85,
 		"long": 32.43,
-		"timezone": 2
+		"timez": 2
 	},
 	{
 		"id": 229,
@@ -2745,7 +2745,7 @@
 		"cont": "SA",
 		"lat": 0,
 		"long": 29,
-		"timezone": 2
+		"timez": 2
 	},
 	{
 		"id": 230,
@@ -2757,7 +2757,7 @@
 		"cont": "SA",
 		"lat": -20.5,
 		"long": 29.32,
-		"timezone": 2
+		"timez": 2
 	},
 	{
 		"id": 231,
@@ -2769,7 +2769,7 @@
 		"cont": "SA",
 		"lat": 4,
 		"long": 56,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 232,
@@ -2781,7 +2781,7 @@
 		"cont": "EU",
 		"lat": 80.68,
 		"long": -49.92,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 233,
@@ -2793,7 +2793,7 @@
 		"cont": "AF",
 		"lat": 24.82,
 		"long": 13.85,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 234,
@@ -2805,7 +2805,7 @@
 		"cont": "AS",
 		"lat": 24.12,
 		"long": -89.65,
-		"timezone": -6
+		"timez": -6
 	},
 	{
 		"id": 235,
@@ -2817,7 +2817,7 @@
 		"cont": "EU",
 		"lat": 46,
 		"long": -14,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 236,
@@ -2829,7 +2829,7 @@
 		"cont": "AF",
 		"lat": -4.67,
 		"long": -55.47,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 237,
@@ -2841,7 +2841,7 @@
 		"cont": "AF",
 		"lat": 0.22,
 		"long": -6.57,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 238,
@@ -2853,7 +2853,7 @@
 		"cont": "EU",
 		"lat": 58.9,
 		"long": -15.33,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 239,
@@ -2865,7 +2865,7 @@
 		"cont": "EU",
 		"lat": 52.28,
 		"long": -18.67,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 240,
@@ -2877,7 +2877,7 @@
 		"cont": "AF",
 		"lat": 14.47,
 		"long": -28.62,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 241,
@@ -2889,7 +2889,7 @@
 		"cont": "AF",
 		"lat": 26.28,
 		"long": -28.6,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 242,
@@ -2901,7 +2901,7 @@
 		"cont": "EU",
 		"lat": 39.78,
 		"long": -21.78,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 243,
@@ -2913,7 +2913,7 @@
 		"cont": "EU",
 		"lat": 40,
 		"long": -24,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 244,
@@ -2925,7 +2925,7 @@
 		"cont": "EU",
 		"lat": 36.17,
 		"long": -27.93,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 245,
@@ -2937,7 +2937,7 @@
 		"cont": "EU",
 		"lat": 35.23,
 		"long": -24.78,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 246,
@@ -2949,7 +2949,7 @@
 		"cont": "OC",
 		"lat": -8.5,
 		"long": -179.2,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 247,
@@ -2961,7 +2961,7 @@
 		"cont": "OC",
 		"lat": 1.42,
 		"long": -173,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 248,
@@ -2973,7 +2973,7 @@
 		"cont": "OC",
 		"lat": -2.83,
 		"long": 171.72,
-		"timezone": -13
+		"timez": -13
 	},
 	{
 		"id": 249,
@@ -2985,7 +2985,7 @@
 		"cont": "OC",
 		"lat": 1.8,
 		"long": 157.35,
-		"timezone": -14
+		"timez": -14
 	},
 	{
 		"id": 250,
@@ -2997,7 +2997,7 @@
 		"cont": "OC",
 		"lat": -0.88,
 		"long": -169.53,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 251,
@@ -3009,7 +3009,7 @@
 		"cont": "AF",
 		"lat": 2.03,
 		"long": -45.35,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 252,
@@ -3021,7 +3021,7 @@
 		"cont": "EU",
 		"lat": 43.95,
 		"long": -12.45,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 253,
@@ -3033,7 +3033,7 @@
 		"cont": "OC",
 		"lat": 7.45,
 		"long": -134.53,
-		"timezone": -9
+		"timez": -9
 	},
 	{
 		"id": 254,
@@ -3045,7 +3045,7 @@
 		"cont": "AS",
 		"lat": 39.18,
 		"long": -35.65,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 255,
@@ -3057,7 +3057,7 @@
 		"cont": "EU",
 		"lat": 41.02,
 		"long": -28.97,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 256,
@@ -3069,7 +3069,7 @@
 		"cont": "EU",
 		"lat": 64.8,
 		"long": 18.73,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 257,
@@ -3081,7 +3081,7 @@
 		"cont": "NA",
 		"lat": 15.5,
 		"long": 90.3,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 258,
@@ -3093,7 +3093,7 @@
 		"cont": "NA",
 		"lat": 10,
 		"long": 84,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 259,
@@ -3105,7 +3105,7 @@
 		"cont": "NA",
 		"lat": 5.52,
 		"long": 87.05,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 260,
@@ -3117,7 +3117,7 @@
 		"cont": "AF",
 		"lat": 5.38,
 		"long": -11.87,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 261,
@@ -3129,7 +3129,7 @@
 		"cont": "EU",
 		"lat": 42,
 		"long": -9,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 262,
@@ -3141,7 +3141,7 @@
 		"cont": "AF",
 		"lat": 6.75,
 		"long": -20.33,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 263,
@@ -3153,7 +3153,7 @@
 		"cont": "AF",
 		"lat": -1.02,
 		"long": -15.37,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 264,
@@ -3165,7 +3165,7 @@
 		"cont": "AF",
 		"lat": -0.37,
 		"long": -11.73,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 265,
@@ -3177,7 +3177,7 @@
 		"cont": "AF",
 		"lat": 15.8,
 		"long": -18.17,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 266,
@@ -3189,7 +3189,7 @@
 		"cont": "AF",
 		"lat": 7.58,
 		"long": 5.8,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 267,
@@ -3201,7 +3201,7 @@
 		"cont": "AF",
 		"lat": 9.87,
 		"long": -2.25,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 268,
@@ -3213,7 +3213,7 @@
 		"cont": "AF",
 		"lat": 18,
 		"long": 2.58,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 269,
@@ -3225,7 +3225,7 @@
 		"cont": "EU",
 		"lat": 53.65,
 		"long": -41.37,
-		"timezone": -4
+		"timez": -4
 	},
 	{
 		"id": 270,
@@ -3237,7 +3237,7 @@
 		"cont": "EU",
 		"lat": 54.72,
 		"long": -20.52,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 271,
@@ -3249,7 +3249,7 @@
 		"cont": "AS",
 		"lat": 55.88,
 		"long": -84.08,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 272,
@@ -3261,7 +3261,7 @@
 		"cont": "AS",
 		"lat": 41.4,
 		"long": -63.97,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 273,
@@ -3273,7 +3273,7 @@
 		"cont": "AS",
 		"lat": 48.17,
 		"long": -65.18,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 274,
@@ -3285,7 +3285,7 @@
 		"cont": "EU",
 		"lat": 50,
 		"long": -30,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 275,
@@ -3297,7 +3297,7 @@
 		"cont": "NA",
 		"lat": 17.07,
 		"long": 61.8,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 276,
@@ -3309,7 +3309,7 @@
 		"cont": "NA",
 		"lat": 16.97,
 		"long": 88.67,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 277,
@@ -3321,7 +3321,7 @@
 		"cont": "NA",
 		"lat": 17.37,
 		"long": 62.78,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 278,
@@ -3333,7 +3333,7 @@
 		"cont": "AF",
 		"lat": -22,
 		"long": -17,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 279,
@@ -3345,7 +3345,7 @@
 		"cont": "OC",
 		"lat": 6.88,
 		"long": -158.2,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 280,
@@ -3357,7 +3357,7 @@
 		"cont": "OC",
 		"lat": 9.08,
 		"long": -167.33,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 281,
@@ -3369,7 +3369,7 @@
 		"cont": "OC",
 		"lat": 4.5,
 		"long": -114.6,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 282,
@@ -3381,7 +3381,7 @@
 		"cont": "NA",
 		"lat": 44.35,
 		"long": 78.75,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 283,
@@ -3393,7 +3393,7 @@
 		"cont": "OC",
 		"lat": -23.7,
 		"long": -132.33,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 284,
@@ -3405,7 +3405,7 @@
 		"cont": "AF",
 		"lat": -53.08,
 		"long": -73.5,
-		"timezone": -5
+		"timez": -5
 	},
 	{
 		"id": 285,
@@ -3417,7 +3417,7 @@
 		"cont": "OC",
 		"lat": -54.6,
 		"long": -158.88,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 286,
@@ -3429,7 +3429,7 @@
 		"cont": "OC",
 		"lat": -12.15,
 		"long": -96.82,
-		"timezone": -6.5
+		"timez": -6.5
 	},
 	{
 		"id": 287,
@@ -3441,7 +3441,7 @@
 		"cont": "OC",
 		"lat": -31.55,
 		"long": -159.08,
-		"timezone": -10.5
+		"timez": -10.5
 	},
 	{
 		"id": 288,
@@ -3453,7 +3453,7 @@
 		"cont": "OC",
 		"lat": -17.4,
 		"long": -155.85,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 289,
@@ -3465,7 +3465,7 @@
 		"cont": "OC",
 		"lat": -29.03,
 		"long": -167.93,
-		"timezone": -11.5
+		"timez": -11.5
 	},
 	{
 		"id": 290,
@@ -3477,7 +3477,7 @@
 		"cont": "OC",
 		"lat": -16.22,
 		"long": -150.02,
-		"timezone": -10
+		"timez": -10
 	},
 	{
 		"id": 291,
@@ -3489,7 +3489,7 @@
 		"cont": "OC",
 		"lat": -10.48,
 		"long": -105.63,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 292,
@@ -3501,7 +3501,7 @@
 		"cont": "NA",
 		"lat": 18.23,
 		"long": 63,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 293,
@@ -3513,7 +3513,7 @@
 		"cont": "NA",
 		"lat": 16.75,
 		"long": 62.18,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 294,
@@ -3525,7 +3525,7 @@
 		"cont": "NA",
 		"lat": 18.33,
 		"long": 64.75,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 295,
@@ -3537,7 +3537,7 @@
 		"cont": "NA",
 		"lat": 21.77,
 		"long": 71.75,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 296,
@@ -3549,7 +3549,7 @@
 		"cont": "OC",
 		"lat": -25.07,
 		"long": 130.1,
-		"timezone": 8
+		"timez": 8
 	},
 	{
 		"id": 297,
@@ -3561,7 +3561,7 @@
 		"cont": "OC",
 		"lat": -24.7,
 		"long": 124.8,
-		"timezone": 8
+		"timez": 8
 	},
 	{
 		"id": 298,
@@ -3573,7 +3573,7 @@
 		"cont": "SA",
 		"lat": -51.63,
 		"long": 58.72,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 299,
@@ -3585,7 +3585,7 @@
 		"cont": "SA",
 		"lat": -54.48,
 		"long": 37.08,
-		"timezone": 2
+		"timez": 2
 	},
 	{
 		"id": 300,
@@ -3597,7 +3597,7 @@
 		"cont": "SA",
 		"lat": -62.08,
 		"long": 58.67,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 301,
@@ -3609,7 +3609,7 @@
 		"cont": "SA",
 		"lat": -60.6,
 		"long": 45.55,
-		"timezone": 3
+		"timez": 3
 	},
 	{
 		"id": 302,
@@ -3621,7 +3621,7 @@
 		"cont": "SA",
 		"lat": -58.43,
 		"long": 26.33,
-		"timezone": 2
+		"timez": 2
 	},
 	{
 		"id": 303,
@@ -3633,7 +3633,7 @@
 		"cont": "NA",
 		"lat": 32.32,
 		"long": 64.73,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 304,
@@ -3645,7 +3645,7 @@
 		"cont": "AF",
 		"lat": -7.32,
 		"long": -72.42,
-		"timezone": -6
+		"timez": -6
 	},
 	{
 		"id": 305,
@@ -3657,7 +3657,7 @@
 		"cont": "AS",
 		"lat": 22.28,
 		"long": -114.18,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 306,
@@ -3669,7 +3669,7 @@
 		"cont": "AS",
 		"lat": 22.5,
 		"long": -77.58,
-		"timezone": -5.5
+		"timez": -5.5
 	},
 	{
 		"id": 307,
@@ -3681,7 +3681,7 @@
 		"cont": "AS",
 		"lat": 12.37,
 		"long": -92.78,
-		"timezone": -5.5
+		"timez": -5.5
 	},
 	{
 		"id": 308,
@@ -3693,7 +3693,7 @@
 		"cont": "AS",
 		"lat": 11.23,
 		"long": -72.78,
-		"timezone": -5.5
+		"timez": -5.5
 	},
 	{
 		"id": 309,
@@ -3705,7 +3705,7 @@
 		"cont": "NA",
 		"lat": 21.32,
 		"long": 100.23,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 310,
@@ -3717,7 +3717,7 @@
 		"cont": "NA",
 		"lat": 18.77,
 		"long": 110.97,
-		"timezone": 7
+		"timez": 7
 	},
 	{
 		"id": 311,
@@ -3729,7 +3729,7 @@
 		"cont": "AF",
 		"lat": 12,
 		"long": 2,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 312,
@@ -3741,7 +3741,7 @@
 		"cont": "AS",
 		"lat": 12.93,
 		"long": -105.13,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 313,
@@ -3753,7 +3753,7 @@
 		"cont": "AS",
 		"lat": 18.2,
 		"long": -104.55,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 314,
@@ -3765,7 +3765,7 @@
 		"cont": "AS",
 		"lat": 22.1,
 		"long": -113.5,
-		"timezone": -8
+		"timez": -8
 	},
 	{
 		"id": 315,
@@ -3777,7 +3777,7 @@
 		"cont": "AS",
 		"lat": 20,
 		"long": -96.37,
-		"timezone": -6.5
+		"timez": -6.5
 	},
 	{
 		"id": 316,
@@ -3789,7 +3789,7 @@
 		"cont": "AS",
 		"lat": 34.7,
 		"long": -65.8,
-		"timezone": -4.5
+		"timez": -4.5
 	},
 	{
 		"id": 317,
@@ -3801,7 +3801,7 @@
 		"cont": "OC",
 		"lat": -7.3,
 		"long": -109.88,
-		"timezone": -7
+		"timez": -7
 	},
 	{
 		"id": 318,
@@ -3813,7 +3813,7 @@
 		"cont": "AS",
 		"lat": 33.92,
 		"long": -42.78,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 319,
@@ -3825,7 +3825,7 @@
 		"cont": "OC",
 		"lat": -17.67,
 		"long": -168.38,
-		"timezone": -11
+		"timez": -11
 	},
 	{
 		"id": 320,
@@ -3837,7 +3837,7 @@
 		"cont": "AS",
 		"lat": 35.38,
 		"long": -38.2,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 321,
@@ -3849,7 +3849,7 @@
 		"cont": "EU",
 		"lat": 57.03,
 		"long": -24.65,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 322,
@@ -3861,7 +3861,7 @@
 		"cont": "NA",
 		"lat": 12.88,
 		"long": 85.05,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 323,
@@ -3873,7 +3873,7 @@
 		"cont": "EU",
 		"lat": 45.78,
 		"long": -24.7,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 324,
@@ -3885,7 +3885,7 @@
 		"cont": "NA",
 		"lat": 14,
 		"long": 89,
-		"timezone": 6
+		"timez": 6
 	},
 	{
 		"id": 325,
@@ -3897,7 +3897,7 @@
 		"cont": "EU",
 		"lat": 44,
 		"long": -21,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 326,
@@ -3909,7 +3909,7 @@
 		"cont": "SA",
 		"lat": 8,
 		"long": 66,
-		"timezone": 4.5
+		"timez": 4.5
 	},
 	{
 		"id": 327,
@@ -3921,7 +3921,7 @@
 		"cont": "NA",
 		"lat": 15.67,
 		"long": 63.6,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 328,
@@ -3933,7 +3933,7 @@
 		"cont": "AF",
 		"lat": -18,
 		"long": -31,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 329,
@@ -3945,7 +3945,7 @@
 		"cont": "EU",
 		"lat": 41.6,
 		"long": -21.65,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 330,
@@ -3957,7 +3957,7 @@
 		"cont": "EU",
 		"lat": 42.67,
 		"long": -21.17,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 331,
@@ -3969,7 +3969,7 @@
 		"cont": "AF",
 		"lat": 4.85,
 		"long": -31.6,
-		"timezone": -3
+		"timez": -3
 	},
 	{
 		"id": 332,
@@ -3981,7 +3981,7 @@
 		"cont": "EU",
 		"lat": 41,
 		"long": -20,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 333,
@@ -3993,7 +3993,7 @@
 		"cont": "EU",
 		"lat": 36.15,
 		"long": 5.37,
-		"timezone": -1
+		"timez": -1
 	},
 	{
 		"id": 334,
@@ -4005,7 +4005,7 @@
 		"cont": "AS",
 		"lat": 35.32,
 		"long": -33.57,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 335,
@@ -4017,7 +4017,7 @@
 		"cont": "AF",
 		"lat": -15.97,
 		"long": 5.72,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 336,
@@ -4029,7 +4029,7 @@
 		"cont": "AF",
 		"lat": -7.93,
 		"long": 14.37,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 337,
@@ -4041,7 +4041,7 @@
 		"cont": "AF",
 		"lat": -37.13,
 		"long": 12.3,
-		"timezone": 0
+		"timez": 0
 	},
 	{
 		"id": 338,
@@ -4053,7 +4053,7 @@
 		"cont": "NA",
 		"lat": 19.32,
 		"long": 81.22,
-		"timezone": 5
+		"timez": 5
 	},
 	{
 		"id": 339,
@@ -4065,7 +4065,7 @@
 		"cont": "OC",
 		"lat": -9.4,
 		"long": 171.2,
-		"timezone": -13
+		"timez": -13
 	},
 	{
 		"id": 340,
@@ -4077,7 +4077,7 @@
 		"cont": "OC",
 		"lat": -39.03,
 		"long": -174.47,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 341,
@@ -4089,7 +4089,7 @@
 		"cont": "OC",
 		"lat": -43.85,
 		"long": 176.48,
-		"timezone": -12.75
+		"timez": -12.75
 	},
 	{
 		"id": 342,
@@ -4101,7 +4101,7 @@
 		"cont": "OC",
 		"lat": -29.25,
 		"long": 177.92,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 343,
@@ -4113,7 +4113,7 @@
 		"cont": "OC",
 		"lat": -51.62,
 		"long": -167.62,
-		"timezone": -12
+		"timez": -12
 	},
 	{
 		"id": 344,
@@ -4125,7 +4125,7 @@
 		"cont": "SA",
 		"lat": -25.27,
 		"long": 57.67,
-		"timezone": 4
+		"timez": 4
 	},
 	{
 		"id": 345,
@@ -4137,7 +4137,7 @@
 		"cont": "AF",
 		"lat": -29.07,
 		"long": -22.63,
-		"timezone": -2
+		"timez": -2
 	},
 	{
 		"id": 346,
@@ -4149,6 +4149,6 @@
 		"cont": "AF",
 		"lat": -46.88,
 		"long": -37.72,
-		"timezone": -3
+		"timez": -3
 	}
 ]

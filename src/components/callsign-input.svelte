@@ -27,7 +27,7 @@
 		}}
 		on:input={(e) => {
 			const t = e.currentTarget;
-			if (/^[A-Z\d\/]*$/i.test(t.value)) {
+			if (/^[A-Z\d/]*$/i.test(t.value)) {
 				inputText = t.value.toUpperCase();
 			} else {
 				// Users enter the not supported characters
