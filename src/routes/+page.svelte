@@ -49,7 +49,7 @@
 </script>
 
 <div class="py-10">
-	<h1 class="mb-10 text-center text-5xl font-light">Callsign Tester</h1>
+	<h1 class="mb-10 text-center text-5xl font-light">Callsign Checker</h1>
 
 	<div class="mb-4">
 		<div class="mb-1 text-center text-sm font-light">Enter a callsign</div>
