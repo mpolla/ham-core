@@ -81,7 +81,10 @@ export class DxccOverrides {
 		);
 	}
 
-	merge(other: DxccOverrides | null): DxccOverrides {
+	/**
+	 * Other takes precedence over this.
+	 */
+	merge(other?: DxccOverrides | null): DxccOverrides {
 		if (!other) return this;
 		return new DxccOverrides({
 			cqz: other.cqz ?? this.cqz,

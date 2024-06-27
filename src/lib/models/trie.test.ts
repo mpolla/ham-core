@@ -7,13 +7,10 @@ describe('parseString', () => {
             31
 			-YAP-4
             -X-3
-            3(32)
-			=401
+            3=401(32)
             --700
-            4
-			=400
-			700
-			=500
+            4=400
+			700=500
         `;
 
 		const root = TrieNode.decodeFromString(encoded);

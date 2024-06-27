@@ -4,6 +4,7 @@ import { TrieNode } from '../src/lib/models/trie';
 export function fullBuildTrie(prefixes: [string, number][]): TrieNode {
 	const root = buildTrie(prefixes);
 	collapseNodes(root);
+	buildShortcuts(root);
 	mergeNodes(root);
 	minimizeIds(root);
 	validateTrie(root, prefixes);
@@ -29,12 +30,20 @@ export function collapseNodes(root: TrieNode): void {
 	console.log('Collapsed trie with', root.getAllNodes().size, 'nodes');
 }
 
+export function buildShortcuts(root: TrieNode): void {
+	for (const node of root.getAllNodes()) {
+		node.buildShortcuts();
+	}
+
+	console.log('Built shortcuts with', root.getAllNodes().size, 'nodes');
+}
+
 export function mergeNodes(root: TrieNode): void {
 	const nodes = new Map([...root.getAllNodes()].map((node) => [node.id, node]));
 
 	const parents: Map<number, TrieNode[]> = new Map();
 	for (const node of nodes.values()) {
-		for (const child of node.children.values()) {
+		for (const child of [...node.children.values(), ...node.shortcuts.values()]) {
 			const list = parents.get(child.id) ?? [];
 			list.push(node);
 			parents.set(child.id, list);
@@ -54,14 +63,15 @@ export function mergeNodes(root: TrieNode): void {
 				continue;
 			}
 
-			if (!existing.canMerge(node)) {
-				throw new Error('Merge conflict false positive');
-			}
-
 			for (const parent of parents.get(node.id) ?? []) {
 				for (const [k, v] of parent.children) {
 					if (v === node) {
 						parent.children.set(k, existing);
+					}
+				}
+				for (const [k, v] of parent.shortcuts) {
+					if (v === node) {
+						parent.shortcuts.set(k, existing);
 					}
 				}
 			}
@@ -78,36 +88,21 @@ export function validateTrie(root: TrieNode, prefixes: [string, number][]): void
 	for (const [callRaw, entity] of prefixes) {
 		const [, call, overridesRaw] = callRaw.match(/^=?((?:[A-Z\d/])+)(.*)/)!;
 		const isExact = callRaw.startsWith('=');
-		let node: TrieNode | null = root;
-		let currentEntity: number | null = null;
-		let currentOverrides: DxccOverrides = new DxccOverrides();
 
-		let endOfCall = true;
-		for (const c of call) {
-			node = node.children.get(c) ?? null;
-			if (!node) {
-				endOfCall = false;
-				break;
-			}
-			currentEntity = node.entity ?? currentEntity;
-			currentOverrides = currentOverrides.merge(node.overrides);
-		}
-		if (endOfCall && isExact) {
-			node = node?.children.get('') ?? null;
-			currentEntity = node?.entity ?? currentEntity;
-			currentOverrides = currentOverrides.merge(node?.overrides ?? null);
-		}
+		const node = root.findDxcc(call + (isExact ? '' : ' '));
 
-		if (currentEntity !== entity) {
-			console.error('Failed to find', call, entity);
-			console.log('Found', currentEntity);
+		if (node?.entityId !== entity) {
+			console.log('Failed to find', call, entity);
+			console.log('Found', node?.entityId);
 		}
 		const overrides = DxccOverrides.fromString(overridesRaw);
-		if (!overrides.isSubsetOf(currentOverrides)) {
-			console.error('Overrides do not match', call, overridesRaw);
-			console.log('Found', currentOverrides?.toString());
+		if (!overrides.isSubsetOf(node?.dxccOverrides)) {
+			console.log('Overrides do not match', call, overridesRaw);
+			console.log('Found', node?.dxccOverrides.toString());
 		}
 	}
+
+	console.log('Finished validation');
 }
 
 export function minimizeIds(root: TrieNode): void {
@@ -115,6 +110,8 @@ export function minimizeIds(root: TrieNode): void {
 	for (const node of root.getAllNodes()) {
 		node.id = i++;
 	}
+
+	console.log('Minimized ids with', root.getAllNodes().size, 'nodes');
 }
 
 interface IEntity {

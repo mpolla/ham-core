@@ -7,6 +7,7 @@ export class TrieNode {
 	public entity: number | null;
 	public overrides: DxccOverrides;
 	public children: Map<string, TrieNode>;
+	public shortcuts: Map<string, TrieNode>;
 
 	constructor({
 		id,
@@ -24,6 +25,7 @@ export class TrieNode {
 		this.entity = entity ?? null;
 		this.children = children ?? new Map();
 		this.overrides = overrides ?? new DxccOverrides();
+		this.shortcuts = new Map();
 	}
 
 	/**
@@ -52,7 +54,7 @@ export class TrieNode {
 					`Overrides conflict: ${JSON.stringify(this.overrides)} vs ${JSON.stringify(overrides)}`
 				);
 			}
-			this.overrides = this.overrides.merge(overrides ?? null);
+			this.overrides = this.overrides.merge(overrides);
 			return;
 		}
 
@@ -74,11 +76,69 @@ export class TrieNode {
 	}
 
 	/**
+	 * Step through the trie to find the next node that matches the prefix.
+	 */
+	step(prefix: string): { node: TrieNode; length: number } | null {
+		// Check for exact match
+		if (!prefix) {
+			const exact = this.children.get('');
+			return exact ? { node: exact, length: 0 } : null;
+		}
+		// Check for children
+		const next = this.children.get(prefix[0]);
+		if (next) return { node: next, length: 1 };
+		// Check for shortcuts
+		for (const [k, v] of this.shortcuts) {
+			if (prefix.startsWith(k)) return { node: v, length: k.length };
+		}
+		return null;
+	}
+
+	/**
+	 * Find the DXCC entity that matches the prefix.
+	 */
+	findDxcc(prefix: string): RawDxccResult {
+		if (!prefix) {
+			const exact = this.children.get('');
+			// console.log(prefix, exact);
+			return {
+				entityId: exact?.entity ?? this.entity,
+				dxccOverrides: this.overrides.merge(exact?.overrides),
+				matchLength: 0,
+				isExact: !!exact
+			};
+		}
+
+		const next = this.step(prefix);
+		if (!next) {
+			// console.log(prefix, this);
+			return {
+				entityId: this.entity,
+				dxccOverrides: this.overrides,
+				matchLength: 0,
+				isExact: false
+			};
+		}
+
+		const ret = next.node.findDxcc(prefix.slice(next.length));
+
+		// console.log(prefix, ret);
+
+		const anyC = ret.dxccOverrides.toString() || ret.entityId;
+		return {
+			dxccOverrides: this.overrides.merge(ret?.dxccOverrides),
+			entityId: ret?.entityId ?? this.entity,
+			isExact: ret?.isExact ?? false,
+			matchLength: ret.matchLength + (anyC ? next.length : 0)
+		};
+	}
+
+	/**
 	 * Returns all the nodes in the trie.
 	 */
 	getAllNodes(): Set<TrieNode> {
 		const nodes: TrieNode[] = [this];
-		for (const child of this.children.values()) {
+		for (const child of [...this.children.values(), ...this.shortcuts.values()]) {
 			nodes.push(...child.getAllNodes());
 		}
 		return new Set(nodes);
@@ -117,33 +177,49 @@ export class TrieNode {
 		return this.children.size == 0 && !this.entity && !this.overrides.toString();
 	}
 
+	buildShortcuts(): void {
+		for (const child of new Set(this.children.values())) {
+			let k: string | null = null;
+			for (const [key, value] of this.children.entries()) {
+				if (value === child) {
+					if (k) {
+						k = null;
+						break;
+					}
+					k = key;
+				}
+			}
+			if (!k) continue;
+			if (child.children.size + child.shortcuts.size !== 1) continue;
+
+			let curr = child;
+			let stack = k;
+			while (
+				curr.children.size + curr.shortcuts.size === 1 &&
+				!curr.entity &&
+				!curr.overrides.toString()
+			) {
+				const [key, value] = [...curr.children.entries(), ...curr.shortcuts.entries()][0];
+				if (key === '') break;
+				curr = value;
+				stack += key;
+			}
+
+			this.shortcuts.set(stack, curr);
+			this.children.delete(k);
+		}
+	}
+
 	/**
 	 * Generate a hash for merging nodes.
 	 */
 	hash(): string {
-		const children = [...this.children.entries()]
+		const children = [...this.children.entries(), ...this.shortcuts.entries()]
 			.map(([k, v]) => `${k}:${v.id}`)
 			.sort()
 			.join(',');
 		const overrides = this.overrides?.toString() ?? '';
 		return `${this.entity ?? ''}_${children}_${overrides}`;
-	}
-
-	/**
-	 * Checks if this node can be merged with another node.
-	 */
-	canMerge(other: TrieNode): boolean {
-		if (this === other) return false;
-		if (this.entity !== other.entity) return false;
-		if (!this.overrides.isEqual(other.overrides)) return false;
-		// Union set of all children keys
-		const l = new Set([...this.children.keys(), ...other.children.keys()]);
-		for (const key of l) {
-			const a = this.children.get(key);
-			const b = other.children.get(key);
-			if (a !== b) return false;
-		}
-		return true;
 	}
 
 	/**
@@ -157,7 +233,7 @@ export class TrieNode {
 		const overrides = this.overrides?.toString() ?? '';
 		const s = [`${this.id}${overrides}`];
 		if (this.entity) {
-			s.push(`=${this.entity}`);
+			s[0] += `=${this.entity}`;
 		}
 		for (const c of new Set(this.children.values())) {
 			const chars = [];
@@ -166,6 +242,9 @@ export class TrieNode {
 			}
 			chars.sort();
 			s.push(`-${chars.join('')}-${c.id}`);
+		}
+		for (const [k, v] of this.shortcuts.entries()) {
+			s.push(`>${k}-${v.id}`);
 		}
 		return s.join('\n');
 	}
@@ -191,23 +270,34 @@ export class TrieNode {
 		for (let line of s.trim().split('\n')) {
 			line = line.trim();
 			if (!line) continue;
-			if (line.startsWith('=')) {
-				const entity = line.slice(1);
-				currentNode!.entity = parseInt(entity);
-			} else if (line.startsWith('-')) {
+			if (line.startsWith('-')) {
 				const [, chars, child] = line.split('-');
 				const childNode = getNode(parseInt(child));
 				if (chars === '') currentNode!.children.set('', childNode);
 				for (const char of chars) {
 					currentNode!.children.set(char, childNode);
 				}
+			} else if (line.startsWith('>')) {
+				const [shortcut, child] = line.slice(1).split('-');
+				const childNode = getNode(parseInt(child));
+				currentNode!.shortcuts.set(shortcut, childNode);
 			} else {
 				currentNode = getNode(parseInt(line));
-				const overrides = /\d+(.*)/.exec(line)?.[1];
+				const match = /\d+(=\d+)?(.*)/.exec(line);
+				const entity = match?.[1];
+				if (entity) currentNode.entity = parseInt(entity.slice(1));
+				const overrides = match?.[2];
 				if (overrides) currentNode.overrides = DxccOverrides.fromString(overrides);
 			}
 		}
 
 		return root!;
 	}
+}
+
+export interface RawDxccResult {
+	entityId: number | null;
+	dxccOverrides: DxccOverrides;
+	matchLength: number;
+	isExact: boolean;
 }
