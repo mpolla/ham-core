@@ -16,8 +16,8 @@
 	$: updateUrl(callsign);
 
 	function updateUrl(callsign: string) {
-		if (!callsign) goto('.', { keepFocus: true });
-		else goto(`?c=${callsign}`, { keepFocus: true });
+		if (!callsign) goto('.', { keepFocus: true, replaceState: true });
+		else goto(`?c=${callsign}`, { keepFocus: true, replaceState: true });
 	}
 
 	function styleText(): string {
