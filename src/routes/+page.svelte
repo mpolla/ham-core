@@ -4,6 +4,7 @@
 	import { getSecondarySuffixDescription, parseCallsign } from '$lib/callsign';
 	import { findDxcc } from '$lib/dxcc-util';
 	import CallsignInput from '../components/callsign-input.svelte';
+	import DxccEntityInfo from './dxcc-entity-info.svelte';
 
 	let query = new URLSearchParams($page.url.searchParams.toString());
 
@@ -47,75 +48,39 @@
 	}
 </script>
 
-<div class="flex flex-col gap-6 py-10">
-	<h1 class="text-center text-3xl font-medium">Callsign Tester</h1>
+<div class="py-10">
+	<h1 class="mb-10 text-center text-5xl font-light">Callsign Tester</h1>
 
-	<div>
-		<div class="mb-1 text-center">Enter a callsign</div>
+	<div class="mb-4">
+		<div class="mb-1 text-center text-sm font-light">Enter a callsign</div>
 		<CallsignInput bind:inputText={callsign} generateStyledText={styleText} />
 	</div>
 
 	{#if rawDxcc?.matchLength === callsign.length && rawDxcc.isExact}
 		<div class="data-box full cols">
-			<div>
-				<div class="font-mono text-2xl font-medium">{callsign}</div>
-				<div>{rawDxcc.entity?.name ?? '?'}</div>
-			</div>
-			<div class="my-auto text-sm">
-				<div>CQ Zone: {rawDxcc.entity?.cqz ?? '?'}</div>
-				<div>ITU Zone: {rawDxcc.entity?.ituz ?? '?'}</div>
-				<div>Continent: {rawDxcc.entity?.cont ?? '?'}</div>
-			</div>
-			<div class="my-auto text-sm">
-				<div>Lat: {rawDxcc.entity?.lat ?? '?'}</div>
-				<div>Long: {rawDxcc.entity?.long ?? '?'}</div>
-				<div>TZ Offset: {rawDxcc.entity?.timez ?? '?'}</div>
-			</div>
+			<DxccEntityInfo prefix={callsign} dxccEntity={rawDxcc.entity} />
 		</div>
 	{:else if callsignData}
+		{@const { secondaryPrefix, fullDxcc, basePrefix, baseDxcc, secondarySuffixes } = callsignData}
 		<div class="flex flex-col gap-4">
-			{#if callsignData.secondaryPrefix}
+			{#if secondaryPrefix && fullDxcc}
 				<div class="data-box prefix cols">
-					<div>
-						<div class="font-mono text-2xl font-medium">{callsignData.secondaryPrefix}</div>
-						<div>{callsignData.fullDxcc?.name ?? '?'}</div>
-					</div>
-					<div class="my-auto text-sm">
-						<div>CQ Zone: {callsignData.fullDxcc?.cqz ?? '?'}</div>
-						<div>ITU Zone: {callsignData.fullDxcc?.ituz ?? '?'}</div>
-						<div>Continent: {callsignData.fullDxcc?.cont ?? '?'}</div>
-					</div>
-					<div class="my-auto text-sm">
-						<div>Lat: {callsignData.fullDxcc?.lat ?? '?'}</div>
-						<div>Long: {callsignData.fullDxcc?.long ?? '?'}</div>
-						<div>TZ Offset: {callsignData.fullDxcc?.timez ?? '?'}</div>
-					</div>
+					<DxccEntityInfo prefix={secondaryPrefix} dxccEntity={fullDxcc} />
 				</div>
 			{/if}
-			{#if callsignData.baseDxcc}
+			{#if baseDxcc && basePrefix}
 				<div class="data-box base cols">
-					<div>
-						<div class="font-mono text-2xl font-medium">{callsignData.basePrefix}</div>
-						<div>{callsignData.baseDxcc.name ?? '?'}</div>
-					</div>
-					<div class="my-auto text-sm">
-						<div>CQ Zone: {callsignData.baseDxcc.cqz ?? '?'}</div>
-						<div>ITU Zone: {callsignData.baseDxcc.ituz ?? '?'}</div>
-						<div>Continent: {callsignData.baseDxcc.cont ?? '?'}</div>
-					</div>
-					<div class="my-auto text-sm">
-						<div>Lat: {callsignData.baseDxcc.lat ?? '?'}</div>
-						<div>Long: {callsignData.baseDxcc.long ?? '?'}</div>
-						<div>TZ Offset: {callsignData.baseDxcc.timez ?? '?'}</div>
-					</div>
+					<DxccEntityInfo prefix={basePrefix} dxccEntity={baseDxcc} />
 				</div>
 			{/if}
-			{#if callsignData.secondarySuffixes.length > 0}
+			{#if secondarySuffixes.length > 0}
 				<div class="flex flex-wrap gap-4">
-					{#each callsignData.secondarySuffixes as suffix}
+					{#each secondarySuffixes as suffix}
 						<div class="data-box suffix min-w-full flex-grow sm:min-w-[30%]">
-							<div class="font-mono text-2xl font-medium">{suffix}</div>
-							<div>{getSecondarySuffixDescription(suffix)}</div>
+							<div>
+								<div class="font-mono text-2xl font-medium">{suffix}</div>
+								<div>{getSecondarySuffixDescription(suffix)}</div>
+							</div>
 						</div>
 					{/each}
 				</div>
@@ -123,30 +88,21 @@
 		</div>
 	{:else if rawDxcc}
 		<div class="data-box base cols">
-			<div>
-				<div class="font-mono text-2xl font-medium">{callsign.slice(0, rawDxcc.matchLength)}</div>
-				<div>{rawDxcc.entity?.name ?? '?'}</div>
-			</div>
-			<div class="my-auto text-sm">
-				<div>CQ Zone: {rawDxcc.entity?.cqz ?? '?'}</div>
-				<div>ITU Zone: {rawDxcc.entity?.ituz ?? '?'}</div>
-				<div>Continent: {rawDxcc.entity?.cont ?? '?'}</div>
-			</div>
-			<div class="my-auto text-sm">
-				<div>Lat: {rawDxcc.entity?.lat ?? '?'}</div>
-				<div>Long: {rawDxcc.entity?.long ?? '?'}</div>
-				<div>TZ Offset: {rawDxcc.entity?.timez ?? '?'}</div>
-			</div>
+			<DxccEntityInfo prefix={callsign.slice(0, rawDxcc.matchLength)} dxccEntity={rawDxcc.entity} />
 		</div>
 	{/if}
 </div>
 
 <style lang="postcss">
 	.data-box {
-		@apply mx-auto w-full flex-1 rounded-xl p-4 text-center;
+		@apply mx-auto grid w-full flex-1 rounded-xl p-4 text-center;
+
+		& > * {
+			@apply my-auto;
+		}
 	}
 	.data-box.cols {
-		@apply grid grid-cols-3;
+		@apply grid-cols-3;
 	}
 	.data-box.full {
 		@apply bg-amber-600/40;
