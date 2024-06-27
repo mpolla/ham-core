@@ -52,10 +52,13 @@
 </table>
 
 <style lang="postcss">
+	td {
+		@apply text-left;
+	}
 	td:first-of-type {
-		@apply pr-2 text-right text-xs;
+		@apply pr-2 text-xs;
 	}
 	td:last-of-type {
-		@apply text-left font-medium;
+		@apply font-medium;
 	}
 </style>
