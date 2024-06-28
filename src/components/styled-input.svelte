@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 
 	export let inputText = '';
+	export let inputRe: RegExp = /.*/;
+
 	let selectionStart: number | null = inputText.length;
 	let selectionEnd: number | null = inputText.length;
 
@@ -17,8 +19,12 @@
 	});
 </script>
 
+<label for="callsign-input" class="mb-1 block w-full text-center text-sm font-light">
+	Enter a callsign
+</label>
 <div class="relative w-full">
 	<input
+		id="callsign-input"
 		class="input shared"
 		on:keydown={(e) => {
 			const t = e.currentTarget;
@@ -27,7 +33,7 @@
 		}}
 		on:input={(e) => {
 			const t = e.currentTarget;
-			if (/^[A-Z\d/]*$/i.test(t.value)) {
+			if (inputRe.test(t.value)) {
 				inputText = t.value.toUpperCase();
 			} else {
 				// Users enter the not supported characters

@@ -4,13 +4,16 @@
 
 <svelte:head>
 	<title>Callsign Checker</title>
-	<meta name="description" content="Callsign checker for ham radio operators" />
-	<meta name="keywords" content="callsign, ham radio, dxcc, country" />
+	<meta name="description" content="Check what country / DXCC entity a callsign belongs to" />
+	<meta name="keywords" content="callsign, ham radio, amateur radio, dxcc, country" />
 	<meta name="author" content="Jakob Kordež S52KJ" />
 	<meta property="og:url" content="https://cc.jkob.cc/" />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="Callsign Checker" />
-	<meta property="og:description" content="Callsign checker for ham radio operators" />
+	<meta
+		property="og:description"
+		content="Check what country / DXCC entity a callsign belongs to"
+	/>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-[#333] text-[#eee]">
