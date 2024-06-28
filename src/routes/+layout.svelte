@@ -7,8 +7,10 @@
 	<meta name="description" content="Callsign checker for ham radio operators" />
 	<meta name="keywords" content="callsign, ham radio, dxcc, country" />
 	<meta name="author" content="Jakob Kordež S52KJ" />
-	<meta name="og:title" content="Callsign Checker" />
-	<meta name="og:description" content="Callsign checker for ham radio operators" />
+	<meta property="og:url" content="https://cc.jkob.cc/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Callsign Checker" />
+	<meta property="og:description" content="Callsign checker for ham radio operators" />
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-[#333] text-[#eee]">
