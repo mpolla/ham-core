@@ -47,25 +47,14 @@
 	<div class="styled-text shared" contenteditable="false" bind:innerHTML={styledText} />
 </div>
 
-<style>
+<style lang="postcss">
 	.shared {
-		font-family: monospace;
-		text-transform: uppercase;
-		width: 100%;
-		font-size: 32px;
-		padding: 8px 12px;
-		text-align: center;
 		border-radius: 12px;
+		@apply w-full px-3 py-2 text-center font-mono text-2xl uppercase md:text-3xl;
 	}
 
 	.input {
-		border: 1px solid #ccc;
-		position: absolute;
-		top: 0;
-		left: 0;
-		background: transparent;
-		color: transparent;
-		caret-color: white;
+		@apply absolute left-0 top-0 border border-[#ccc] bg-transparent text-transparent caret-white;
 	}
 
 	.input::placeholder {
@@ -74,9 +63,6 @@
 	}
 
 	.styled-text {
-		background: #424242;
-		border: 1px solid transparent;
-		white-space: pre;
-		word-wrap: break-word;
+		@apply whitespace-pre break-words border border-transparent bg-[#424242];
 	}
 </style>

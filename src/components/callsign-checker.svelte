@@ -91,10 +91,10 @@
 
 <style lang="postcss">
 	.data-box {
-		@apply mx-auto grid w-full flex-1 rounded-xl p-4 text-center;
+		@apply mx-auto flex w-full flex-1 flex-wrap items-center justify-evenly gap-4 rounded-xl p-4 text-center sm:grid;
 
-		& > * {
-			@apply my-auto;
+		& > *:first-child {
+			@apply w-full;
 		}
 	}
 	.data-box.cols {

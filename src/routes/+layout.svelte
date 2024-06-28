@@ -22,7 +22,7 @@
 	</div>
 
 	<footer class="bg-[#444] py-3">
-		<div class="c flex justify-between gap-4">
+		<div class="c flex flex-wrap justify-between gap-4">
 			<div>
 				Website by <a href="https://jkob.cc/">S52KJ</a>
 			</div>
