@@ -6,7 +6,7 @@
 	<h1 class="text-5xl font-light">Callsign Checker</h1>
 
 	<div class="mx-auto mt-2">
-		<!-- <a href="/about" class="text-blue-300">About</a> -->
+		<a href="/about" class="text-blue-300">About</a>
 	</div>
 </div>
 
