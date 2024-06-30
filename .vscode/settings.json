@@ -13,5 +13,15 @@
 		"**/*.csv",
 		"**/*.xml"
 	],
-	"cSpell.words": ["adif", "callsign", "callsigns", "clublog", "dxcc", "graphviz", "ituz", "timez"]
+	"cSpell.words": [
+		"adif",
+		"callsign",
+		"callsigns",
+		"clublog",
+		"dxcc",
+		"graphviz",
+		"ituz",
+		"timez",
+		"umami"
+	]
 }

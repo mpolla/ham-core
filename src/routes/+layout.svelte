@@ -1,5 +1,6 @@
 <script>
 	import '../app.css';
+	import Umami from '../components/umami.svelte';
 </script>
 
 <svelte:head>
@@ -35,6 +36,8 @@
 		</div>
 	</footer>
 </div>
+
+<Umami />
 
 <style lang="postcss">
 	.c {
