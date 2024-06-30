@@ -168,13 +168,18 @@ export class TrieNode {
 
 		const newEntity = this.entity ?? currentEntity;
 		const newOverrides = currentOverrides.merge(this.overrides);
-		for (const [k, child] of this.children.entries()) {
+		for (const [k, child] of [...this.children.entries(), ...this.shortcuts.entries()]) {
 			if (child.collapseNodes(newEntity, newOverrides)) {
 				this.children.delete(k);
 			}
 		}
 
-		return this.children.size == 0 && !this.entity && !this.overrides.toString();
+		return (
+			this.children.size === 0 &&
+			this.shortcuts.size === 0 &&
+			!this.entity &&
+			!this.overrides.toString()
+		);
 	}
 
 	buildShortcuts(): void {
@@ -204,6 +209,8 @@ export class TrieNode {
 				curr = value;
 				stack += key;
 			}
+
+			if (stack.length < 2) continue;
 
 			this.shortcuts.set(stack, curr);
 			this.children.delete(k);

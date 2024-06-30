@@ -106,12 +106,27 @@ export function validateTrie(root: TrieNode, prefixes: [string, number][]): void
 }
 
 export function minimizeIds(root: TrieNode): void {
-	let i = 0;
+	const counter = new Map<TrieNode, number>();
+
 	for (const node of root.getAllNodes()) {
-		node.id = i++;
+		counter.set(node, counter.get(node) ?? 0);
+		for (const c of [...node.children.values(), ...node.shortcuts.values()]) {
+			counter.set(node, (counter.get(c) ?? 0) + 1);
+		}
 	}
 
-	console.log('Minimized ids with', root.getAllNodes().size, 'nodes');
+	const nodes = [...counter];
+	nodes.sort((a, b) => {
+		if (a[1] !== b[1]) return b[1] - a[1];
+		return a[0].id - b[0].id;
+	});
+
+	let i = 0;
+	for (const node of nodes) {
+		node[0].id = i++;
+	}
+
+	console.log('Minimized ids with', nodes.length, 'nodes');
 }
 
 interface IEntity {

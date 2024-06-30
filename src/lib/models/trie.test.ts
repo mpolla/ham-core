@@ -52,3 +52,16 @@ describe('parseString', () => {
 		expect(xx?.overrides).toEqual({});
 	});
 });
+
+describe('getAllNodes', () => {
+	test('Basic test', () => {
+		const root = new TrieNode({ id: 0 });
+		const a = new TrieNode({ id: 1 });
+		const b = new TrieNode({ id: 2 });
+
+		root.children.set('A', a);
+		a.shortcuts.set('CB', b);
+
+		expect([...root.getAllNodes()]).toEqual([root, a, b]);
+	});
+});
