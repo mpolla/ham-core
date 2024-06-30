@@ -7,6 +7,13 @@
 	$: tz = dxccEntity.timez;
 	$: lat = dxccEntity.lat;
 	$: long = dxccEntity.long;
+
+	function formatTz(offset: number): string {
+		const sign = offset >= 0 ? '+' : '-';
+		const hours = Math.floor(Math.abs(offset));
+		const minutes = Math.floor((Math.abs(offset) % 1) * 60);
+		return `${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+	}
 </script>
 
 <div>
@@ -46,7 +53,7 @@
 			<td>TZ Offset</td>
 			<td>
 				{#if tz !== undefined}
-					{tz >= 0 ? '+' : '-'}{Math.abs(tz).toFixed(2).padStart(5, '0').replace('.', ':')}
+					{formatTz(tz)}
 				{:else}
 					?
 				{/if}

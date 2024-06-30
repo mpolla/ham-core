@@ -3,6 +3,8 @@
 
 	export let inputText = '';
 	export let inputRe: RegExp = /.*/;
+	export let autofocus: boolean = false;
+	export let placeholder: string | undefined = undefined;
 
 	let selectionStart: number | null = inputText.length;
 	let selectionEnd: number | null = inputText.length;
@@ -16,11 +18,15 @@
 		const input = document.querySelector('.input') as HTMLInputElement;
 		input.value = inputText;
 		input.setSelectionRange(selectionStart, selectionEnd);
+		if (autofocus) input.focus();
 	});
 </script>
 
-<label for="callsign-input" class="mb-1 block w-full text-center text-sm font-light">
-	Enter a callsign
+<label
+	for="callsign-input"
+	class={`mb-1 block w-full text-center text-sm font-light transition ${placeholder && inputText ? '' : 'opacity-0'}`}
+>
+	{placeholder}
 </label>
 <div class="relative w-full">
 	<input
@@ -42,7 +48,7 @@
 				t.setSelectionRange(selectionStart, selectionEnd);
 			}
 		}}
-		placeholder="..."
+		{placeholder}
 	/>
 	<div class="styled-text shared" contenteditable="false" bind:innerHTML={styledText} />
 </div>

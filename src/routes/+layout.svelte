@@ -17,7 +17,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-[#333] text-[#eee]">
-	<div class="c flex-1">
+	<div class="c flex-1 py-12">
 		<slot />
 	</div>
 
@@ -42,6 +42,6 @@
 	}
 
 	footer a {
-		@apply text-[#bbe];
+		@apply text-blue-300;
 	}
 </style>

@@ -50,7 +50,13 @@
 </script>
 
 <div class="mb-4">
-	<StyledInput bind:inputText={callsign} inputRe={/^[A-Z\d/]*$/i} generateStyledText={styleText} />
+	<StyledInput
+		bind:inputText={callsign}
+		inputRe={/^[A-Z\d/]*$/i}
+		generateStyledText={styleText}
+		autofocus
+		placeholder="Enter a callsign"
+	/>
 </div>
 
 {#if rawDxcc?.matchLength === callsign.length && rawDxcc.isExact}
