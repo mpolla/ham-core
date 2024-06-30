@@ -448,6 +448,11 @@
   resolved "https://registry.yarnpkg.com/@types/pug/-/pug-2.0.10.tgz#52f8dbd6113517aef901db20b4f3fca543b88c1f"
   integrity sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA==
 
+"@types/umami@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@types/umami/-/umami-2.10.0.tgz#0897ada5ea5b4c22fce2ff3fa2ccf9e1aef15083"
+  integrity sha512-iWcs1KkcO3ooIi2rR9M5drmpQzlsT+sFiyWElIGmVwjdGlp+vQmy/VYIChYnF5ETqx7KrL80JfSkroS6dm37Hg==
+
 "@types/xml2js@^0.4.14":
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@types/xml2js/-/xml2js-0.4.14.tgz#5d462a2a7330345e2309c6b549a183a376de8f9a"
