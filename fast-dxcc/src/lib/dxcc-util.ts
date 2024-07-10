@@ -1,9 +1,23 @@
-import dxccTreeFile from '../assets/dxcc-tree.txt?raw';
-import dxccEntitiesFile from '../assets/dxcc-entities.json';
-import { TrieNode } from './models/trie';
-import type { DxccEntity } from './models/dxcc-entity';
+import dxccTreeFile from '../data/dxcc-tree.json';
+import dxccEntitiesFile from '../data/dxcc-entities.json';
+import { TrieNode } from './trie';
 
 export const dxccTree = TrieNode.decodeFromString(dxccTreeFile);
+
+export interface DxccEntity {
+	id: number;
+	dxcc?: number;
+	primaryPrefix?: string;
+	name: string;
+	cqz?: number;
+	ituz?: number;
+	cont?: string;
+	long?: number;
+	lat?: number;
+	timez?: number;
+	start?: string;
+	end?: string;
+}
 
 export interface DxccResult {
 	entity: DxccEntity;

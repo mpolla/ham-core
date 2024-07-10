@@ -14,8 +14,8 @@ console.log('Outputting to', outDir);
 
 import fs from 'fs';
 import { parseStringPromise } from 'xml2js';
-import { capitalize } from '../src/lib/string-util';
-import { IClublogFile } from '../src/lib/models/clublog';
+import { capitalize } from '../../src/lib/string-util';
+import { IClublogFile } from '../../src/lib/models/clublog';
 
 // Parse the Clublog XML file
 const file = fs.readFileSync(filePath, 'utf8');
@@ -41,7 +41,7 @@ const out = root.encodeToString();
 fs.writeFileSync(path.join(outDir, 'dxcc-tree.txt'), out);
 
 // Format entities
-import { DxccEntity } from '../src/lib/models/dxcc-entity';
+import type { DxccEntity } from 'fast-dxcc';
 
 const entities: DxccEntity[] = [];
 

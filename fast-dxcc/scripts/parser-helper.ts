@@ -1,5 +1,5 @@
-import { DxccOverrides } from '../src/lib/models/dxcc-overrides';
-import { TrieNode } from '../src/lib/models/trie';
+import { DxccOverrides } from '../src/lib/dxcc-overrides';
+import { TrieNode } from '../src/lib/trie';
 
 export function fullBuildTrie(prefixes: [string, number][]): TrieNode {
 	const root = buildTrie(prefixes);

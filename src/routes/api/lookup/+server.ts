@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { findDxcc } from '$lib/dxcc-util';
-import type { DxccEntity } from '$lib/models/dxcc-entity';
+import { findDxcc, type DxccEntity } from 'fast-dxcc';
 
 export const POST: RequestHandler = async ({ request }) => {
 	let req;

@@ -7,7 +7,7 @@ if (!filePath) {
 	process.exit(1);
 }
 
-const OUT_DIR = '../src/assets/';
+const OUT_DIR = '../src/data/';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(__dirname, OUT_DIR);
 console.log('Outputting to', outDir);
@@ -19,7 +19,7 @@ if (type !== 'dat' && type !== 'csv') {
 }
 
 import fs from 'fs';
-import { DxccEntity } from '../src/lib/models/dxcc-entity';
+import { DxccEntity } from '../src/lib/dxcc-util';
 import { fullBuildTrie, parseCsv, parseDat } from './parser-helper';
 
 // Parse the cty file
@@ -82,7 +82,7 @@ const root = fullBuildTrie([...prefixes.entries()]);
 
 // Output the trie
 const out = root.encodeToString();
-fs.writeFileSync(path.join(outDir, 'dxcc-tree.txt'), out);
+fs.writeFileSync(path.join(outDir, 'dxcc-tree.json'), JSON.stringify(out, null, '\t') + '\n');
 
 // Output the entities
 entities.sort((a, b) => a.id - b.id);

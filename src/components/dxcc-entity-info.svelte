@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DxccEntity } from '$lib/models/dxcc-entity';
+	import type { DxccEntity } from 'fast-dxcc';
 
 	export let prefix: string;
 	export let dxccEntity: DxccEntity;

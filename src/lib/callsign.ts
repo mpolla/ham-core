@@ -1,5 +1,4 @@
-import { findDxcc } from './dxcc-util';
-import type { DxccEntity } from './models/dxcc-entity';
+import { findDxcc, type DxccEntity } from 'fast-dxcc';
 
 export const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)((?:\/[A-Z\d]+)*)$/i;
 

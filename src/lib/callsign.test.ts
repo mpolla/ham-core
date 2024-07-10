@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseCallsign } from './callsign';
-import { dxccEntities } from './dxcc-util';
+import { dxccEntities } from 'fast-dxcc';
 
 const s5 = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5');
 const sv = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV');

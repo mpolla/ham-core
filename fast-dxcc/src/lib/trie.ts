@@ -274,7 +274,7 @@ export class TrieNode {
 		}
 
 		let currentNode: TrieNode | null = null;
-		for (let line of s.trim().split('\n')) {
+		for (let line of s.split('\n')) {
 			line = line.trim();
 			if (!line) continue;
 			if (line.startsWith('-')) {
