@@ -1,0 +1,5 @@
+{
+	"cSpell.words": ["daisyui", "datetime", "dxcc", "ituz", "rcvd", "supabase"],
+	"cSpell.files": ["src/**/*.{js,ts,svelte}"],
+	"cSpell.ignorePaths": ["src/lib/database.types.ts"]
+}
