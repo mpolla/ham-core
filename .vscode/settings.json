@@ -1,6 +1,16 @@
 {
 	"vite.autoStart": false,
-	"cSpell.words": ["callsign", "daisyui", "datetime", "dxcc", "ituz", "rcvd", "supabase"],
+	"cSpell.words": [
+		"adi",
+		"adif",
+		"callsign",
+		"daisyui",
+		"datetime",
+		"dxcc",
+		"ituz",
+		"rcvd",
+		"supabase"
+	],
 	"cSpell.files": ["src/**/*.{js,ts,svelte}"],
 	"cSpell.ignorePaths": ["src/lib/database.types.ts"]
 }

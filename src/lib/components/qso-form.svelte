@@ -3,29 +3,71 @@
 	import { findDxcc } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { filteredInput, uppercaseInput } from '$lib/helpers/input-helpers';
+	import { Mode } from '$lib/models/mode';
+	import GridInput from './inputs/grid-input.svelte';
+	import RstInput from './inputs/rst-input.svelte';
+	import FrequencyInput from './inputs/frequency-input.svelte';
 
 	let callsignInput: HTMLInputElement;
 	let callsign = '';
 	const callsignFilter = filteredInput(/[^A-Z\d/]/gi);
 
+	let date = '';
+	let time = '';
+
+	$: defaultRst = ((): [string, number, number] | [] => {
+		switch (mode?.name) {
+			case 'SSB':
+			case 'LSB':
+			case 'USB':
+				return ['59', 1, 2];
+			case 'CW':
+			case 'RTTY':
+				return ['599', 1, 2];
+			default:
+				return [];
+		}
+	})();
+
+	let mode = Mode.ALL_MODES.get('SSB');
+	let freq = '7.150';
+
 	$: dxcc = findDxcc(callsign);
 	$: isValidCall = !!callsign.match(advancedCallsignRe);
 
+	function setDateTimeNow() {
+		const now = new Date();
+		date = now.toISOString().slice(0, 10);
+		time = now.toISOString().slice(11, 16);
+	}
+
 	onMount(() => {
 		callsignInput.focus();
+		setDateTimeNow();
 	});
 </script>
 
 <div class="flex flex-col gap-6 rounded-xl bg-base-300 p-6">
 	<h1 class="text-2xl font-light">New QSO</h1>
 
-	<div class="flex gap-4">
-		<input type="text" class="input input-bordered w-full" placeholder="Date" />
-		<input type="text" class="input input-bordered w-full" placeholder="Time" />
+	<div class="flex justify-start gap-4">
+		<input
+			type="date"
+			bind:value={date}
+			class="input input-bordered w-full max-w-44"
+			placeholder="Date"
+		/>
+		<input
+			type="time"
+			bind:value={time}
+			class="input input-bordered w-full max-w-32"
+			placeholder="Time"
+		/>
+		<button class="btn btn-outline btn-xs my-auto" on:click={setDateTimeNow}>Now</button>
 	</div>
 
-	<div class="flex gap-4">
-		<div class="flex-[2]">
+	<div class="flex flex-col gap-4 sm:flex-row">
+		<div class=" max-w-2xl flex-grow-[2]">
 			<input
 				type="text"
 				use:uppercaseInput
@@ -33,36 +75,53 @@
 				bind:this={callsignInput}
 				bind:value={callsign}
 				class={`input input-bordered w-full ${isValidCall ? 'input-success' : ''}`}
+				placeholder="Callsign"
 			/>
-
-			<div class="pl-4 pt-1">
-				{#if dxcc}
-					{dxcc?.entity.name}
-				{:else}
-					&ZeroWidthSpace;
-				{/if}
-			</div>
 		</div>
 
-		<div class="flex-1">
-			<input type="text" class="input input-bordered w-full" placeholder="RST Sent" />
-		</div>
-
-		<div class="flex-1">
-			<input type="text" class="input input-bordered w-full" placeholder="RST Received" />
+		<div class="flex max-w-2xl flex-grow gap-4">
+			<RstInput
+				defaultValue={defaultRst[0]}
+				defaultStartSel={defaultRst[1]}
+				defaultEndSel={defaultRst[2]}
+				label="RST Sent"
+			/>
+			<RstInput
+				defaultValue={defaultRst[0]}
+				defaultStartSel={defaultRst[1]}
+				defaultEndSel={defaultRst[2]}
+				label="RST Rcv"
+			/>
 		</div>
 	</div>
 
 	<div class="flex gap-4">
-		<select class="select select-bordered">
-			<option>SSB</option>
-			<option>CW</option>
-			<option>FT8</option>
-			<option>RTTY</option>
+		<select class="select select-bordered" bind:value={mode}>
+			{#each Mode.ALL_MODES.values() as mode}
+				<option value={mode}>{mode.name}</option>
+				{#each mode.subModes as subMode}
+					<option value={subMode}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+				{/each}
+			{/each}
 		</select>
 
-		<input type="text" class="input input-bordered w-full" placeholder="Frequency" />
+		<FrequencyInput bind:value={freq} />
+
+		<label class="input input-bordered flex w-full max-w-32 items-center gap-2">
+			<input type="text" class="w-full" placeholder="Power" />
+			<div class="select-none">W</div>
+		</label>
 	</div>
 
-	<button class="btn btn-primary ml-auto">Save</button>
+	<GridInput />
+
+	<div class="flex items-end gap-4">
+		{#if dxcc}
+			<div>{dxcc.entity.name}</div>
+			<div>{dxcc.entity.cont}</div>
+			<div><span class="text-xs">CQ</span> {dxcc.entity.cqz}</div>
+			<div><span class="text-xs">ITU</span> {dxcc.entity.ituz}</div>
+		{/if}
+		<button class="btn btn-primary ml-auto">Save</button>
+	</div>
 </div>
