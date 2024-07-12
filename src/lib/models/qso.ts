@@ -1,4 +1,3 @@
-import type { Json } from '$lib/database.types';
 import type { QsoType } from '$lib/supabase';
 
 export class Qso implements QsoType {
@@ -11,7 +10,7 @@ export class Qso implements QsoType {
 	public frequency: number;
 	public id: number;
 	public mode: string;
-	public other: Json;
+	public other: { [field: string]: string };
 	public power: number | null;
 	public profile_id: number | null;
 	public rst_rcvd: string | null;
@@ -29,13 +28,32 @@ export class Qso implements QsoType {
 		this.frequency = fields.frequency;
 		this.id = fields.id;
 		this.mode = fields.mode;
-		this.other = fields.other;
+		this.other = fields.other as { [field: string]: string };
 		this.power = fields.power;
 		this.profile_id = fields.profile_id;
 		this.rst_rcvd = fields.rst_rcvd;
 		this.rst_sent = fields.rst_sent;
 		this.updated_at = fields.updated_at;
 		this.user_id = fields.user_id;
+	}
+
+	toAdif(): { [field: string]: string | undefined } {
+		let time = this.datetime.substring(11, 19).replace(/:/g, '');
+		if (time.substring(4) === '00') time = time.substring(0, 4);
+		return {
+			...this.other,
+			CALL: this.call,
+			COMMENT: this.comment || undefined,
+			COUNTRY: this.country || undefined,
+			QSO_DATE: this.datetime.substring(0, 10).replace(/-/g, ''),
+			TIME_ON: time,
+			DXCC: this.dxcc.toString(),
+			FREQ: (this.frequency / 1e6).toString(),
+			MODE: this.mode,
+			RST_RCVD: this.rst_rcvd || undefined,
+			RST_SENT: this.rst_sent || undefined,
+			TX_PWR: this.power?.toString()
+		};
 	}
 
 	static fromAdif(adif: { [field: string]: string }): Qso {
