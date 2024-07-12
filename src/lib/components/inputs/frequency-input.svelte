@@ -1,6 +1,15 @@
 <script lang="ts">
 	export let value = '';
 	export let label = '';
+
+	function handleInput(val: string): string {
+		val = val.replaceAll(',', '.');
+		val = val.replaceAll(/[^0-9.]/g, '');
+		let [, int, dec] = val.match(/^(\d*\.?)(.*)$/)!;
+		int ??= '';
+		dec ??= '';
+		return `${int}${dec.replaceAll('.', '')}`;
+	}
 </script>
 
 <label class="input input-bordered flex w-full max-w-44 items-center gap-2">
@@ -8,19 +17,26 @@
 		type="text"
 		class="w-full"
 		on:keydown={(e) => {
-			const field = e.currentTarget;
-			const selStart = field.selectionStart;
-			const selEnd = field.selectionEnd;
-			console.log(e.key);
+			const t = e.currentTarget;
+			const selStart = t.selectionStart;
+			const selEnd = t.selectionEnd;
 			if (e.key === 'ArrowUp') {
 				e.preventDefault();
-				field.value = (parseFloat(field.value) + 0.001).toFixed(3);
-				field.setSelectionRange(selStart, selEnd);
+				t.value = (parseFloat(t.value) + 0.001).toFixed(3);
+				t.setSelectionRange(selStart, selEnd);
 			} else if (e.key === 'ArrowDown') {
 				e.preventDefault();
-				field.value = (parseFloat(field.value) - 0.001).toFixed(3);
-				field.setSelectionRange(selStart, selEnd);
+				t.value = (parseFloat(t.value) - 0.001).toFixed(3);
+				t.setSelectionRange(selStart, selEnd);
 			}
+		}}
+		on:input={(e) => {
+			// TODO handle dot and comma
+			const t = e.currentTarget;
+			const sel = t.selectionStart ?? 0;
+			const ns = handleInput(t.value.slice(0, sel)).length;
+			t.value = handleInput(t.value);
+			t.setSelectionRange(ns, ns);
 		}}
 		bind:value
 		placeholder={label}

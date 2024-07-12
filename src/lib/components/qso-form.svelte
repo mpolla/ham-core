@@ -4,9 +4,9 @@
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { filteredInput, uppercaseInput } from '$lib/helpers/input-helpers';
 	import { Mode } from '$lib/models/mode';
-	import GridInput from './inputs/grid-input.svelte';
 	import RstInput from './inputs/rst-input.svelte';
 	import FrequencyInput from './inputs/frequency-input.svelte';
+	import TimeInput from './inputs/time-input.svelte';
 
 	let callsignInput: HTMLInputElement;
 	let callsign = '';
@@ -14,6 +14,8 @@
 
 	let date = '';
 	let time = '';
+
+	$: isTimeValid = time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60;
 
 	$: defaultRst = ((): [string, number, number] | [] => {
 		switch (mode?.name) {
@@ -38,7 +40,7 @@
 	function setDateTimeNow() {
 		const now = new Date();
 		date = now.toISOString().slice(0, 10);
-		time = now.toISOString().slice(11, 16);
+		time = `${now.getUTCHours().toString().padStart(2, '0')}${now.getUTCMinutes().toString().padStart(2, '0')}`;
 	}
 
 	onMount(() => {
@@ -57,11 +59,10 @@
 			class="input input-bordered w-full max-w-44"
 			placeholder="Date"
 		/>
-		<input
-			type="time"
+		<TimeInput
+			label="Time"
 			bind:value={time}
-			class="input input-bordered w-full max-w-32"
-			placeholder="Time"
+			class={`input input-bordered w-full max-w-24 ${isTimeValid ? '' : 'input-error'}`}
 		/>
 		<button class="btn btn-outline btn-xs my-auto" on:click={setDateTimeNow}>Now</button>
 	</div>
@@ -112,8 +113,6 @@
 			<div class="select-none">W</div>
 		</label>
 	</div>
-
-	<GridInput />
 
 	<div class="flex items-end gap-4">
 		{#if dxcc}
