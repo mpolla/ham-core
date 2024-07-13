@@ -53,16 +53,11 @@
 	<h1 class="text-2xl font-light">New QSO</h1>
 
 	<div class="flex justify-start gap-4">
-		<input
-			type="date"
-			bind:value={date}
-			class="input input-bordered w-full max-w-44"
-			placeholder="Date"
-		/>
+		<input type="date" bind:value={date} class="input w-full max-w-44" placeholder="Date" />
 		<TimeInput
 			label="Time"
 			bind:value={time}
-			class={`input input-bordered w-full max-w-24 ${isTimeValid ? '' : 'input-error'}`}
+			class={`input w-full max-w-24 ${isTimeValid ? '' : 'input-error'}`}
 		/>
 		<button class="btn btn-outline btn-xs my-auto" on:click={setDateTimeNow}>Now</button>
 	</div>
@@ -75,7 +70,7 @@
 				use:callsignFilter
 				bind:this={callsignInput}
 				bind:value={callsign}
-				class={`input input-bordered w-full ${isValidCall ? 'input-success' : ''}`}
+				class={`input w-full ${isValidCall ? 'input-success' : ''}`}
 				placeholder="Callsign"
 			/>
 		</div>
@@ -85,19 +80,21 @@
 				defaultValue={defaultRst[0]}
 				defaultStartSel={defaultRst[1]}
 				defaultEndSel={defaultRst[2]}
+				class="input"
 				label="RST Sent"
 			/>
 			<RstInput
 				defaultValue={defaultRst[0]}
 				defaultStartSel={defaultRst[1]}
 				defaultEndSel={defaultRst[2]}
+				class="input"
 				label="RST Rcv"
 			/>
 		</div>
 	</div>
 
 	<div class="flex gap-4">
-		<select class="select select-bordered" bind:value={mode}>
+		<select class="select" bind:value={mode}>
 			{#each Mode.ALL_MODES.values() as mode}
 				<option value={mode}>{mode.name}</option>
 				{#each mode.subModes as subMode}
@@ -106,9 +103,9 @@
 			{/each}
 		</select>
 
-		<FrequencyInput bind:value={freq} />
+		<FrequencyInput bind:value={freq} class="input max-w-44" />
 
-		<label class="input input-bordered flex w-full max-w-32 items-center gap-2">
+		<label class="input flex w-full max-w-32 items-center gap-2">
 			<input type="text" class="w-full" placeholder="Power" />
 			<div class="select-none">W</div>
 		</label>

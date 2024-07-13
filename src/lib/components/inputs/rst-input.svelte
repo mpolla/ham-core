@@ -14,7 +14,6 @@
 
 <input
 	type="text"
-	class="input input-bordered"
 	on:focus={(e) => {
 		if (!canFillDefault) return;
 		const field = e.currentTarget;
@@ -23,4 +22,5 @@
 	}}
 	bind:value
 	placeholder={label}
+	{...$$restProps}
 />

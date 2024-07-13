@@ -16,10 +16,4 @@
 	}
 </script>
 
-<input
-	type="text"
-	class="input input-bordered"
-	use:uppercaseInput
-	bind:value
-	placeholder="Gridsquare"
-/>
+<input type="text" use:uppercaseInput bind:value placeholder="Gridsquare" {...$$restProps} />

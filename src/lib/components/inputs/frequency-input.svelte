@@ -1,4 +1,7 @@
 <script lang="ts">
+	let className = '';
+	export { className as class };
+
 	export let value = '';
 	export let label = '';
 
@@ -12,7 +15,7 @@
 	}
 </script>
 
-<label class="input input-bordered flex w-full max-w-44 items-center gap-2">
+<label class={`${className} flex items-center gap-2`}>
 	<input
 		type="text"
 		class="w-full"
