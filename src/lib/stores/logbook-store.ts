@@ -1,15 +1,17 @@
 import type { Database } from '$lib/database.types';
 import { supabase, type IQso } from '$lib/supabase';
 import { derived, get, writable } from 'svelte/store';
+import { logsStore } from './logs-store';
+import { userStore } from './user-store';
 
 interface Filter {
-	log_id?: number;
 	callsign?: string;
 	band?: string;
 	mode?: string;
 }
 
 interface Params {
+	logId?: number;
 	offset: number;
 	limit: number;
 	filter: Filter;
@@ -28,9 +30,13 @@ interface LogbookStore {
 }
 
 const _paramsStore = writable<Params>({ offset: 0, limit: 100, filter: {} });
+const _paramssStore = derived<[typeof _paramsStore, typeof userStore, typeof logsStore], Params>(
+	[_paramsStore, userStore, logsStore],
+	([$p, $u, $l]) => ({ ...$p, logId: $p.logId ?? $u?.info?.default_log_id ?? $l[0]?.id })
+);
 const _qsosStore = writable<QsoStore | undefined>(undefined);
 
-_paramsStore.subscribe(({ offset, limit, filter }) => {
+_paramssStore.subscribe(({ logId, offset, limit, filter }) => {
 	_qsosStore.update((old) => ({
 		qsos: old?.qsos ?? [],
 		total_qsos: old?.total_qsos ?? 0,
@@ -41,8 +47,8 @@ _paramsStore.subscribe(({ offset, limit, filter }) => {
 		.from('qso')
 		.select('*', { count: 'exact' })
 		.order('datetime', { ascending: false })
-		.range(offset, offset + limit);
-	if (filter.log_id) q = q.eq('log_id', filter.log_id);
+		.range(offset, offset + limit - 1);
+	if (logId) q = q.eq('log_id', logId);
 	if (filter.callsign) q = q.ilike('call', `%${filter.callsign}%`);
 	if (filter.band) q = q.eq('band', filter.band);
 	if (filter.mode) q = q.eq('mode', filter.mode);
@@ -61,8 +67,8 @@ _paramsStore.subscribe(({ offset, limit, filter }) => {
 	});
 });
 
-export const logbookStore = derived<[typeof _paramsStore, typeof _qsosStore], LogbookStore>(
-	[_paramsStore, _qsosStore],
+export const logbookStore = derived<[typeof _paramssStore, typeof _qsosStore], LogbookStore>(
+	[_paramssStore, _qsosStore],
 	([$params, $qsos]) => ({
 		params: $params,
 		result: $qsos
@@ -83,6 +89,10 @@ export async function insertQso(
 		return { ...s, offset: 0 };
 	});
 	return true;
+}
+
+export function selectLog(logId: number): void {
+	_paramsStore.update((old) => ({ ...old, logId }));
 }
 
 export function updateFilter(filter: Filter) {

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { parseAdifFile } from '$lib/adif-parser';
 	import { Qso } from '$lib/models/qso';
-	import { supabase } from '$lib/supabase';
+	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
+	import { logsStore } from '$lib/stores/logs-store';
+	import { supabase, type ILog } from '$lib/supabase';
 
-	export let files: FileList;
+	let files: FileList;
 
 	$: fileInfo = files?.length
 		? Array.from(files).map((file) => {
@@ -52,21 +54,53 @@
 			});
 		}
 	}
+
+	function buildLogTitle(log: ILog) {
+		if (!log.title) return log.call;
+		if (log.title.includes(log.call)) return log.title;
+		return `${log.title} - ${log.call}`;
+	}
 </script>
 
 <div class="flex flex-col gap-6">
 	<h1 class="text-3xl">Import ADIF files</h1>
 
-	<div class="flex gap-2">
-		<label class="form-control">
-			<input class="file-input file-input-bordered" multiple type="file" accept=".adi" bind:files />
+	<div class="flex flex-col gap-4 md:flex-row md:items-end">
+		<label class="form-control w-full sm:max-w-xs">
+			<div class="label">
+				<span class="label-text">Logbook</span>
+			</div>
+			<select
+				class="select select-bordered w-full"
+				on:change={(v) => selectLog(+v.currentTarget.value)}
+				value={$logbookStore.params.logId ?? 0}
+			>
+				<option value={0} disabled>Select Log</option>
+				{#each $logsStore as log}
+					<option value={log.id}>
+						{buildLogTitle(log)}
+					</option>
+				{/each}
+			</select>
 		</label>
+
+		<div class="flex gap-2">
+			<label class="form-control w-full sm:max-w-xs">
+				<input
+					class="file-input file-input-bordered w-full"
+					multiple
+					type="file"
+					accept=".adi"
+					bind:files
+				/>
+			</label>
+		</div>
 	</div>
 
 	{#if fileInfo}
 		<div>
 			<h2>Selected files:</h2>
-			<div class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] gap-2">
+			<div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
 				{#each fileInfo as file}
 					<div class="rounded-lg bg-base-200 px-4 py-3">
 						<div class="text-lg font-bold">
@@ -81,7 +115,8 @@
 										{value.length} QSOs
 									</div>
 									<div>
-										From: {new Date(
+										From:
+										{new Date(
 											value.reduce(
 												(acc, qso) => Math.min(acc, new Date(qso.datetime).valueOf()),
 												Infinity
@@ -89,7 +124,8 @@
 										).toLocaleString()}
 									</div>
 									<div>
-										To: {new Date(
+										To:
+										{new Date(
 											value.reduce((acc, qso) => Math.max(acc, new Date(qso.datetime).valueOf()), 0)
 										).toLocaleString()}
 									</div>

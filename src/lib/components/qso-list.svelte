@@ -20,14 +20,15 @@
 	<div>No QSOs found</div>
 {:else}
 	{@const { qsos, total_qsos } = $logbookStore.result}
-	<div class="mx-auto flex w-full max-w-3xl items-center gap-2 rounded bg-base-300 px-2 py-1">
+	<div
+		class="sticky top-4 z-10 mx-auto flex w-full max-w-3xl items-center gap-2 rounded-lg bg-base-300 px-2 py-2"
+	>
 		<button class="btn btn-sm" disabled={offset === 0} on:click={() => firstPage()}>First</button>
 		<button class="btn btn-sm" disabled={offset === 0} on:click={() => prevPage()}>Prev</button>
 		<div class="flex-1 text-center">
 			{offset + 1} - {Math.min(offset + limit, total_qsos)}
 			<span class="text-sm opacity-80">of</span>
-			{total_qsos}
-			<span class="text-sm opacity-80">total</span>
+			{total_qsos}&nbsp;<span class="text-sm opacity-80">total</span>
 		</div>
 		<button class="btn btn-sm" disabled={qsos.length < limit} on:click={() => nextPage()}>
 			Next
@@ -63,7 +64,7 @@
 						<td>
 							<span class={`band band${qso.band}`}>{qso.band}</span>
 						</td>
-						<td class="w-1/5 max-w-0 overflow-hidden overflow-ellipsis whitespace-nowrap">
+						<td class="w-1/5 min-w-32 max-w-0 overflow-hidden overflow-ellipsis whitespace-nowrap">
 							{qso.country}
 						</td>
 					</tr>

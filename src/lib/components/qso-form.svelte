@@ -37,7 +37,7 @@
 	function submit() {
 		if (callsign.length < 3 || !freq) return;
 		insertQso({
-			log_id: $logbookStore.params.filter.log_id,
+			log_id: $logbookStore.params.logId,
 			datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
 			call: callsign,
 			mode,
@@ -116,41 +116,24 @@
 	</div>
 
 	<div class="flex flex-col gap-4 sm:flex-row">
-		<div class="max-w-2xl flex-grow-[2]">
-			<input
-				type="text"
-				use:uppercaseInput
-				use:callsignFilter
-				bind:this={callsignInput}
-				bind:value={callsign}
-				on:input={() => onCallsignChange?.(callsign)}
-				class={`input w-full font-mono placeholder:font-sans ${isValidCall ? 'input-success' : ''}`}
-				placeholder="Callsign"
-			/>
-		</div>
+		<input
+			type="text"
+			use:uppercaseInput
+			use:callsignFilter
+			bind:this={callsignInput}
+			bind:value={callsign}
+			on:input={() => onCallsignChange?.(callsign)}
+			class={`input w-full font-mono placeholder:font-sans sm:w-80 ${isValidCall ? 'input-success' : ''}`}
+			placeholder="Callsign"
+		/>
 
-		<div class="flex max-w-2xl flex-grow gap-4">
-			<RstInput class="input" label="RST Sent" {mode} bind:value={rstSent} />
-			<RstInput class="input" label="RST Rcv" {mode} bind:value={rstRcv} />
+		<div class="flex gap-4">
+			<RstInput class="input w-full sm:w-36" label="RST Sent" {mode} bind:value={rstSent} />
+			<RstInput class="input w-full sm:w-36" label="RST Rcv" {mode} bind:value={rstRcv} />
 		</div>
 	</div>
 
-	<div class="flex gap-4">
-		<select class="select" bind:value={mode}>
-			{#each Mode.ALL_MODES.values() as mode}
-				<option value={mode.name}>{mode.name}</option>
-				{#each mode.subModes as subMode}
-					<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
-				{/each}
-			{/each}
-		</select>
-
-		<FrequencyInput
-			bind:value={freq}
-			onChange={() => (band = Band.getBand(parseFloat(freq) * 1000000)?.name)}
-			class="input max-w-44"
-		/>
-
+	<div class="flex flex-wrap gap-4">
 		<select
 			class="select"
 			bind:value={band}
@@ -165,6 +148,21 @@
 		>
 			{#each Band.ALL_BANDS.values() as band}
 				<option value={band.name}>{band.name}</option>
+			{/each}
+		</select>
+
+		<FrequencyInput
+			bind:value={freq}
+			onChange={() => (band = Band.getBand(parseFloat(freq) * 1000000)?.name)}
+			class="input max-w-44"
+		/>
+
+		<select class="select" bind:value={mode}>
+			{#each Mode.ALL_MODES.values() as mode}
+				<option value={mode.name}>{mode.name}</option>
+				{#each mode.subModes as subMode}
+					<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+				{/each}
 			{/each}
 		</select>
 
