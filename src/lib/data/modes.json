@@ -69,7 +69,8 @@
 		"MFSK32",
 		"MFSK64",
 		"MFSK64L",
-		"MFSK128 MFSK128L",
+		"MFSK128",
+		"MFSK128L",
 		"Q65"
 	],
 	["MSK144"],

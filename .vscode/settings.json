@@ -8,7 +8,9 @@
 		"datetime",
 		"dxcc",
 		"ituz",
+		"qsos",
 		"rcvd",
+		"RTTY",
 		"supabase"
 	],
 	"cSpell.files": ["src/**/*.{js,ts,svelte}"],

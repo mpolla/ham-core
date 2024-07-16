@@ -20,7 +20,7 @@
 								throw new Error('Invalid QSO');
 							}
 						});
-					} catch (e) {
+					} catch {
 						return undefined;
 					}
 				});

@@ -1,6 +1,7 @@
-import type { QsoType } from '$lib/supabase';
+import type { IQso } from '$lib/supabase';
 
-export class Qso implements QsoType {
+export class Qso implements IQso {
+	public band: string | null;
 	public call: string;
 	public comment: string | null;
 	public country: string | null;
@@ -9,16 +10,17 @@ export class Qso implements QsoType {
 	public dxcc: number;
 	public frequency: number;
 	public id: number;
+	public log_id: number | null;
 	public mode: string;
 	public other: { [field: string]: string };
 	public power: number | null;
-	public profile_id: number | null;
 	public rst_rcvd: string | null;
 	public rst_sent: string | null;
 	public updated_at: string;
 	public user_id: string;
 
-	constructor(fields: QsoType) {
+	constructor(fields: IQso) {
+		this.band = fields.band;
 		this.call = fields.call;
 		this.comment = fields.comment;
 		this.country = fields.country;
@@ -27,10 +29,10 @@ export class Qso implements QsoType {
 		this.dxcc = fields.dxcc;
 		this.frequency = fields.frequency;
 		this.id = fields.id;
+		this.log_id = fields.log_id;
 		this.mode = fields.mode;
 		this.other = fields.other as { [field: string]: string };
 		this.power = fields.power;
-		this.profile_id = fields.profile_id;
 		this.rst_rcvd = fields.rst_rcvd;
 		this.rst_sent = fields.rst_sent;
 		this.updated_at = fields.updated_at;
@@ -42,6 +44,7 @@ export class Qso implements QsoType {
 		if (time.substring(4) === '00') time = time.substring(0, 4);
 		return {
 			...this.other,
+			BAND: this.band || undefined,
 			CALL: this.call,
 			COMMENT: this.comment || undefined,
 			COUNTRY: this.country || undefined,
@@ -58,6 +61,7 @@ export class Qso implements QsoType {
 
 	static fromAdif(adif: { [field: string]: string }): Qso {
 		const other = { ...adif };
+		delete other.BAND;
 		delete other.CALL;
 		delete other.COMMENT;
 		delete other.COUNTRY;
@@ -71,6 +75,7 @@ export class Qso implements QsoType {
 		delete other.TX_PWR;
 
 		return new Qso({
+			band: adif.BAND.toLowerCase(),
 			call: adif.CALL,
 			comment: adif.COMMENT,
 			country: adif.COUNTRY,
@@ -78,10 +83,10 @@ export class Qso implements QsoType {
 			dxcc: +adif.DXCC || 0,
 			frequency: parseFloat(adif.FREQ) * 1e6,
 			id: 0,
+			log_id: null,
 			mode: adif.MODE,
 			other,
 			power: adif.TX_PWR ? +adif.TX_PWR : null,
-			profile_id: null,
 			rst_rcvd: adif.RST_RCVD,
 			rst_sent: adif.RST_SENT,
 			user_id: '',

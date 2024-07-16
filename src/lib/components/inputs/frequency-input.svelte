@@ -13,6 +13,8 @@
 		dec ??= '';
 		return `${int}${dec.replaceAll('.', '')}`;
 	}
+
+	export let onChange: ((value: string) => void) | undefined = undefined;
 </script>
 
 <label class={`${className} flex items-center gap-2`}>
@@ -40,6 +42,10 @@
 			const ns = handleInput(t.value.slice(0, sel)).length;
 			t.value = handleInput(t.value);
 			t.setSelectionRange(ns, ns);
+		}}
+		on:change={(e) => {
+			const t = e.currentTarget;
+			onChange?.(t.value);
 		}}
 		bind:value
 		placeholder={label}

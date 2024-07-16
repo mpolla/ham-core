@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="mx-auto w-full max-w-md rounded-xl bg-base-200 p-6">
+<div class="mx-auto my-20 w-full max-w-md rounded-xl bg-base-200 p-6">
 	<h1 class="mb-6 text-center text-4xl">Login</h1>
 
 	<form on:submit|preventDefault={onSubmit} class="flex flex-col gap-4">

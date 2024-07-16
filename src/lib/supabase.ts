@@ -4,5 +4,6 @@ import type { Database } from './database.types';
 
 export const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON);
 
-export type Profile = Database['public']['Tables']['profile']['Row'];
-export type QsoType = Database['public']['Tables']['qso']['Row'];
+export type IUserInfo = Database['public']['Tables']['user_info']['Row'];
+export type ILog = Database['public']['Tables']['log']['Row'];
+export type IQso = Database['public']['Tables']['qso']['Row'];

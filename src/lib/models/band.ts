@@ -8,7 +8,10 @@ export class Band {
 	) {}
 
 	static readonly ALL_BANDS = new Map<string, Band>(
-		bands.map((band) => [band['band'], new Band(band['band'], band['lower'], band['upper'])])
+		bands.map((band) => [
+			band['band'].toLowerCase(),
+			new Band(band['band'].toLowerCase(), band['lower'], band['upper'])
+		])
 	);
 
 	static getBand(freq: number): Band | null {
