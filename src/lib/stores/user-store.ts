@@ -7,9 +7,9 @@ interface UserStore {
 	info?: IUserInfo;
 }
 
-export const userStore = writable<UserStore | null | undefined>(undefined, (set) => {
-	getUserStore().then(set);
-});
+export const userStore = writable<UserStore | null | undefined>(undefined);
+
+getUserStore().then(userStore.set);
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
 	const { data, error } = await supabase.auth.signInWithPassword({ email, password });

@@ -92,7 +92,7 @@ export async function insertQso(
 }
 
 export function selectLog(logId: number): void {
-	_paramsStore.update((old) => ({ ...old, logId }));
+	_paramsStore.update((old) => ({ ...old, logId, offset: 0 }));
 }
 
 export function updateFilter(filter: Filter) {
