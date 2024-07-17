@@ -82,6 +82,14 @@
 		callsignInput.focus();
 		setDateTimeNow();
 		toggleDateTimeTimer();
+
+		const lastQso = $logbookStore.result?.qsos[0];
+		if (lastQso) {
+			mode = lastQso.mode;
+			freq = (lastQso.frequency / 1000000).toFixed(3);
+			band = lastQso.band ?? undefined;
+			power = lastQso.power?.toString() ?? '';
+		}
 	});
 </script>
 
