@@ -55,7 +55,7 @@
 				{#each qsos as qso, i}
 					<tr>
 						<td>{i + 1}</td>
-						<td>{formatDT(qso.datetime)}</td>
+						<td class="min-w-32">{formatDT(qso.datetime)}</td>
 						<td class="font-mono">{qso.call}</td>
 						<td class="text-center">{qso.mode}</td>
 						<td class="text-right font-mono">
