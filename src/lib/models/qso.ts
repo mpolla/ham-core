@@ -73,6 +73,18 @@ export class Qso implements IQso {
 		delete other.RST_RCVD;
 		delete other.RST_SENT;
 		delete other.TX_PWR;
+		delete other.STATION_CALLSIGN;
+		if (adif.BAND?.toLowerCase() === other.BAND_RX?.toLowerCase()) delete other.BAND_RX;
+		if (adif.FREQ === other.FREQ_RX) delete other.FREQ_RX;
+		if (adif.GRIDSQUARE) {
+			delete other.LAT;
+			delete other.LON;
+		}
+		if (adif.QSO_DATE === other.QSO_DATE_OFF && adif.TIME_ON === other.TIME_OFF) {
+			delete other.QSO_DATE_OFF;
+			delete other.TIME_OFF;
+		}
+		for (const key in adif) if (key.startsWith('MY_')) delete other[key];
 
 		return new Qso({
 			band: adif.BAND.toLowerCase(),

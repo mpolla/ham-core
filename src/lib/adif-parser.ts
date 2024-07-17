@@ -15,7 +15,7 @@ export function parseAdifFile(adi: string): AdifParsingResult {
 	const records: AdifFile['records'] = [];
 	let temp: { [field: string]: string } = {};
 
-	for (const m of adi.matchAll(/<(EO[HR]|([A-Z_]+):(\d+))>(.*)\s*/gi)) {
+	for (const m of adi.matchAll(/<(EO[HR]|([A-Z_]+):(\d+))>([^<]*)(?<!\s)\s*/gi)) {
 		const [, tag, field, length, value] = m;
 		if (tag.toUpperCase() === 'EOH') {
 			header = temp;
