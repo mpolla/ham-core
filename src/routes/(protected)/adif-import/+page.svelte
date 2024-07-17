@@ -1,58 +1,16 @@
 <script lang="ts">
-	import { parseAdifFile } from '$lib/adif-parser';
-	import { Qso } from '$lib/models/qso';
 	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
 	import { logsStore } from '$lib/stores/logs-store';
-	import { supabase, type ILog } from '$lib/supabase';
+	import { type ILog } from '$lib/supabase';
+	import Fa from 'svelte-fa';
+	import { adifFilesStore, ImportStatus, setFiles, uploadFiles } from './adif-files-store';
+	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
-	let files: FileList;
+	$: selectedCall = $logsStore.find((l) => l.id === $logbookStore.params.logId)?.call;
 
-	$: fileInfo = files?.length
-		? Array.from(files).map((file) => {
-				const qsosPromise = file.text().then((text) => {
-					try {
-						const res = parseAdifFile(text);
-						console.log(res.warnings);
-						return res.result.records.map((r) => {
-							try {
-								return Qso.fromAdif(r);
-							} catch (e) {
-								console.log(r);
-								console.log(e);
-								throw new Error('Invalid QSO');
-							}
-						});
-					} catch {
-						return undefined;
-					}
-				});
-				return {
-					name: file.name,
-					size: file.size,
-					qsosPromise
-				};
-			})
-		: undefined;
-
-	function submit() {
-		for (const { qsosPromise } of fileInfo!) {
-			qsosPromise.then(async (qsos) => {
-				if (!qsos) return;
-				await supabase.from('qso').insert(
-					qsos.map((qso) => ({
-						...qso,
-						created_at: undefined,
-						updated_at: undefined,
-						id: undefined,
-						user_id: undefined,
-						profile_id: undefined
-					})),
-					{
-						defaultToNull: false
-					}
-				);
-			});
-		}
+	function upload() {
+		if (!$logbookStore.params.logId) return;
+		uploadFiles($logbookStore.params.logId);
 	}
 
 	function buildLogTitle(log: ILog) {
@@ -91,63 +49,69 @@
 					multiple
 					type="file"
 					accept=".adi"
-					bind:files
+					on:change={(e) => setFiles(e.currentTarget.files)}
 				/>
 			</label>
 		</div>
 	</div>
 
-	{#if fileInfo}
+	{#if $adifFilesStore}
 		<div>
-			<h2>Selected files:</h2>
+			<h2 class="mb-2">Selected files:</h2>
 			<div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
-				{#each fileInfo as file}
+				{#each $adifFilesStore as file}
 					<div class="rounded-lg bg-base-200 px-4 py-3">
 						<div class="text-lg font-bold">
-							{file.name}
+							{file.fileName}
 						</div>
-						{#await file.qsosPromise}
+						{#await file.result}
 							<span class="loading loading-spinner loading-sm" />
 						{:then value}
 							<div>
-								{#if value}
-									<div>
-										{value.length} QSOs
-									</div>
-									<div>
-										From:
-										{new Date(
-											value.reduce(
-												(acc, qso) => Math.min(acc, new Date(qso.datetime).valueOf()),
-												Infinity
-											)
-										).toLocaleString()}
-									</div>
-									<div>
-										To:
-										{new Date(
-											value.reduce((acc, qso) => Math.max(acc, new Date(qso.datetime).valueOf()), 0)
-										).toLocaleString()}
-									</div>
-								{:else}
-									<div>Invalid ADIF file</div>
-									<button
-										class="btn btn-outline btn-sm mt-2"
-										on:click={() => (file.qsosPromise = Promise.resolve(undefined))}>Analyze</button
-									>
-								{/if}
+								<div>
+									{value.qsos.length} QSOs
+								</div>
+								<div>
+									Callsign{value.stationCallsigns.length > 1 ? 's' : ''} used:
+									{#each value.stationCallsigns as c}
+										<span class={selectedCall !== c ? 'text-warning' : ''}>{c}</span>
+									{/each}
+								</div>
+								<table>
+									<tr><td class="pr-2">From</td><td>{value.minDate?.toLocaleString()}</td></tr>
+									<tr><td class="pr-2">To</td><td>{value.maxDate?.toLocaleString()}</td></tr>
+								</table>
+								{#each value.warnings as w}
+									<div class="text-warning">{w}</div>
+								{/each}
 							</div>
 						{/await}
+						{#if file.importStatus === ImportStatus.InProgress}
+							<div class="flex items-center gap-2 text-accent">
+								<span class="loading loading-spinner loading-sm" />
+								<span>Importing</span>
+							</div>
+						{:else if file.importStatus === ImportStatus.Success}
+							<div class="flex items-center gap-2 text-success">
+								<Fa icon={faCheckCircle} />
+								<span>Successfully imported</span>
+							</div>
+						{:else if file.importStatus === ImportStatus.Error}
+							<div class="flex items-center gap-2 text-error">
+								<Fa icon={faXmarkCircle} />
+								<span>Failed to import</span>
+							</div>
+						{/if}
 					</div>
 				{/each}
 			</div>
 		</div>
 
-		{#await Promise.all(fileInfo.map((file) => file.qsosPromise))}
+		{#await Promise.all($adifFilesStore.map((file) => file.result))}
 			<span class="loading loading-spinner" />
 		{:then value}
 			{#if value.every((v) => v)}
-				<button class="btn btn-primary" on:click={submit}>Import</button>
+				<button class="btn btn-primary" on:click={upload}>Import</button>
 			{/if}
 		{/await}
 	{/if}

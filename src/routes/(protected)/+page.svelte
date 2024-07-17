@@ -22,7 +22,7 @@
 					on:change={(v) => selectLog(+v.currentTarget.value)}
 					value={$logbookStore.params.logId ?? 0}
 				>
-					<option value={0}>All</option>
+					<option value={0} disabled>Select log</option>
 					{#each $logsStore as log}
 						<option value={log.id}>
 							{buildLogTitle(log)}
