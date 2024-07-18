@@ -70,6 +70,7 @@
 	}
 
 	function clear() {
+		isPure = true;
 		callsign = '';
 		rstSent = '';
 		rstRcv = '';
@@ -78,22 +79,28 @@
 		callsignInputElement.focus();
 	}
 
+	let isPure = true;
+	$: lastQso = $logbookStore.result?.qsos[0];
+	$: if (isPure && lastQso) {
+		isPure = false;
+		mode = lastQso.mode;
+		freq = (lastQso.frequency / 1000000).toFixed(3);
+		band = lastQso.band ?? undefined;
+		power = lastQso.power?.toString() ?? '';
+	}
+
 	onMount(() => {
 		callsignInputElement.focus();
 		setDateTimeNow();
 		toggleDateTimeTimer();
-
-		const lastQso = $logbookStore.result?.qsos[0];
-		if (lastQso) {
-			mode = lastQso.mode;
-			freq = (lastQso.frequency / 1000000).toFixed(3);
-			band = lastQso.band ?? undefined;
-			power = lastQso.power?.toString() ?? '';
-		}
 	});
 </script>
 
-<form on:submit|preventDefault={submit} class="flex flex-col gap-6 rounded-xl bg-base-300 p-6">
+<form
+	on:submit|preventDefault={submit}
+	on:input={() => (isPure = false)}
+	class="flex flex-col gap-6 rounded-xl bg-base-300 p-6"
+>
 	<div class="flex items-start gap-4">
 		<h1 class="mr-auto text-2xl font-light">New QSO</h1>
 		<button type="button" class="btn btn-outline btn-xs" on:click={clear}>Clear</button>
