@@ -29,10 +29,12 @@
 				e.preventDefault();
 				t.value = (parseFloat(t.value) + 0.001).toFixed(3);
 				t.setSelectionRange(selStart, selEnd);
+				value = t.value;
 			} else if (e.key === 'ArrowDown') {
 				e.preventDefault();
 				t.value = (parseFloat(t.value) - 0.001).toFixed(3);
 				t.setSelectionRange(selStart, selEnd);
+				value = t.value;
 			}
 		}}
 		on:input={(e) => {
