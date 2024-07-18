@@ -25,7 +25,7 @@
 		value={selectedValue}
 	>
 		<option value="0" disabled>Select Log</option>
-		{#each $logsStore as log}
+		{#each $logsStore ?? [] as log}
 			<option value={log.id}>
 				{buildLogTitle(log)}
 			</option>

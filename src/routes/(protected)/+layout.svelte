@@ -8,7 +8,9 @@
 
 	userStore.subscribe((value) => {
 		if (value === null) {
-			goto(`/login?redirect=${$page.url}`);
+			const p = $page.url.pathname;
+			const r = p.match(/^\/(?:log)?$/) ? '' : `?redirect=${p}`;
+			goto(`/login${r}`);
 		}
 	});
 </script>

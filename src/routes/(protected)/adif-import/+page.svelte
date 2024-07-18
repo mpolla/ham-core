@@ -6,7 +6,7 @@
 	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
 
-	$: selectedCall = $logsStore.find((l) => l.id === $logbookStore.params.logId)?.call;
+	$: selectedCall = $logsStore?.find((l) => l.id === $logbookStore.params.logId)?.call;
 
 	function upload() {
 		if (!$logbookStore.params.logId) return;

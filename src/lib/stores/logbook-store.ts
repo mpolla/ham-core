@@ -32,7 +32,7 @@ interface LogbookStore {
 const _paramsStore = writable<Params>({ offset: 0, limit: 100, filter: {} });
 const _paramssStore = derived<[typeof _paramsStore, typeof userStore, typeof logsStore], Params>(
 	[_paramsStore, userStore, logsStore],
-	([$p, $u, $l]) => ({ ...$p, logId: $p.logId ?? $u?.info?.default_log_id ?? $l[0]?.id })
+	([$p, $u, $l]) => ({ ...$p, logId: $p.logId ?? $u?.info?.default_log_id ?? $l?.[0]?.id })
 );
 const _qsosStore = writable<QsoStore | undefined>(undefined);
 
