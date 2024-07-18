@@ -1,6 +1,6 @@
 import { supabase, type IUserInfo } from '$lib/supabase';
 import type { User } from '@supabase/supabase-js';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 interface UserStore {
 	user: User;
@@ -25,6 +25,26 @@ export const signOut = async () => {
 	await supabase.auth.signOut();
 	userStore.set(null);
 };
+
+export function setDefaultLog(logId: number) {
+	const userId = get(userStore)?.user?.id;
+	if (!userId) return;
+	supabase
+		.from('user_info')
+		.update({ default_log_id: logId })
+		.eq('user_id', userId)
+		.select()
+		.single()
+		.then((res) => {
+			userStore.update((store) => {
+				if (!store) return store;
+				return {
+					...store,
+					info: res.data!
+				};
+			});
+		});
+}
 
 async function getUserStore(user?: User): Promise<UserStore | null> {
 	if (!user) {

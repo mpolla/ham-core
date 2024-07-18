@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
 	import { logsStore } from '$lib/stores/logs-store';
-	import { type ILog } from '$lib/supabase';
 	import Fa from 'svelte-fa';
 	import { adifFilesStore, ImportStatus, setFiles, uploadFiles } from './adif-files-store';
 	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+	import LogbookSelect from '$lib/components/logbook-select.svelte';
 
 	$: selectedCall = $logsStore.find((l) => l.id === $logbookStore.params.logId)?.call;
 
@@ -12,35 +12,13 @@
 		if (!$logbookStore.params.logId) return;
 		uploadFiles($logbookStore.params.logId);
 	}
-
-	function buildLogTitle(log: ILog) {
-		if (!log.title) return log.call;
-		if (log.title.includes(log.call)) return log.title;
-		return `${log.title} - ${log.call}`;
-	}
 </script>
 
 <div class="flex flex-col gap-6">
 	<h1 class="text-3xl">Import ADIF files</h1>
 
 	<div class="flex flex-col gap-4 md:flex-row md:items-end">
-		<label class="form-control w-full sm:max-w-xs">
-			<div class="label">
-				<span class="label-text">Logbook</span>
-			</div>
-			<select
-				class="select select-bordered w-full"
-				on:change={(v) => selectLog(+v.currentTarget.value)}
-				value={$logbookStore.params.logId ?? 0}
-			>
-				<option value={0} disabled>Select Log</option>
-				{#each $logsStore as log}
-					<option value={log.id}>
-						{buildLogTitle(log)}
-					</option>
-				{/each}
-			</select>
-		</label>
+		<LogbookSelect class="w-full max-w-xs" />
 
 		<div class="flex gap-2">
 			<label class="form-control w-full sm:max-w-xs">

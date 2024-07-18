@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { findDxcc } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
-	import { filteredInput, uppercaseInput } from '$lib/helpers/input-helpers';
+	import { callsignInput } from '$lib/helpers/input-helpers';
 	import { Mode } from '$lib/models/mode';
 	import RstInput from './inputs/rst-input.svelte';
 	import FrequencyInput from './inputs/frequency-input.svelte';
@@ -10,11 +10,8 @@
 	import { Band } from '$lib/models/band';
 	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
 
-	export let onCallsignChange: ((callsign: string) => void) | undefined = undefined;
-
-	let callsignInput: HTMLInputElement;
+	let callsignInputElement: HTMLInputElement;
 	let callsign = '';
-	const callsignFilter = filteredInput(/[^A-Z\d/]/gi);
 
 	let rstSent = '';
 	let rstRcv = '';
@@ -74,12 +71,11 @@
 		rstSent = '';
 		rstRcv = '';
 		if (!dateTimeTimer) setDateTimeNow();
-		callsignInput.focus();
-		onCallsignChange?.(callsign);
+		callsignInputElement.focus();
 	}
 
 	onMount(() => {
-		callsignInput.focus();
+		callsignInputElement.focus();
 		setDateTimeNow();
 		toggleDateTimeTimer();
 
@@ -126,11 +122,9 @@
 	<div class="flex flex-col gap-4 sm:flex-row">
 		<input
 			type="text"
-			use:uppercaseInput
-			use:callsignFilter
-			bind:this={callsignInput}
+			use:callsignInput
+			bind:this={callsignInputElement}
 			bind:value={callsign}
-			on:input={() => onCallsignChange?.(callsign)}
 			class={`input w-full font-mono placeholder:font-sans sm:w-80 ${isValidCall ? 'input-success' : ''}`}
 			placeholder="Callsign"
 		/>

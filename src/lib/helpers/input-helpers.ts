@@ -16,14 +16,11 @@ export function uppercaseInput(element: HTMLInputElement) {
 export function filteredInput(pattern: RegExp) {
 	function filter(element: HTMLInputElement) {
 		function onInput() {
-			const value = element.value;
-			const selStart = element.selectionStart;
-			const selEnd = element.selectionEnd;
-			element.value = value.replace(pattern, '');
-			element.setSelectionRange(
-				value.slice(0, selStart ?? 0).replace(pattern, '').length,
-				value.slice(0, selEnd ?? 0).replace(pattern, '').length
-			);
+			const val = element.value;
+			const sel = element.selectionStart ?? 0;
+			const newSel = val.slice(0, sel).replace(pattern, '').length;
+			element.value = val.replace(pattern, '');
+			element.setSelectionRange(newSel, newSel);
 		}
 		element.addEventListener('input', onInput);
 		return {
@@ -34,4 +31,29 @@ export function filteredInput(pattern: RegExp) {
 	}
 
 	return filter;
+}
+
+export function callsignInput(element: HTMLInputElement) {
+	const a = uppercaseInput(element);
+	const b = filteredInput(/[^A-Z0-9/]/g)(element);
+	return {
+		destroy() {
+			a.destroy();
+			b.destroy();
+		}
+	};
+}
+
+export function gridsquareInput(field: HTMLInputElement) {
+	function handleInput() {
+		const selStart = field.selectionStart;
+		field.value = field.value.slice(0, 2).toUpperCase() + field.value.slice(2).toLowerCase();
+		field.setSelectionRange(selStart, selStart);
+	}
+	field.addEventListener('input', handleInput);
+	return {
+		destroy() {
+			field.removeEventListener('input', handleInput);
+		}
+	};
 }
