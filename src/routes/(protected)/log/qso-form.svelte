@@ -130,22 +130,6 @@
 		</button>
 	</div>
 
-	<div class="flex flex-col gap-4 sm:flex-row">
-		<input
-			type="text"
-			use:callsignInput
-			bind:this={callsignInputElement}
-			bind:value={callsign}
-			class={`input w-full font-mono placeholder:font-sans sm:w-80 ${isValidCall ? 'input-success' : ''}`}
-			placeholder="Callsign"
-		/>
-
-		<div class="flex gap-4">
-			<RstInput class="input w-full sm:w-36" label="RST Sent" {mode} bind:value={rstSent} />
-			<RstInput class="input w-full sm:w-36" label="RST Rcv" {mode} bind:value={rstRcv} />
-		</div>
-	</div>
-
 	<div class="flex flex-wrap gap-4">
 		<select
 			class="select"
@@ -183,6 +167,22 @@
 			<input type="text" class="w-full" placeholder="Power" bind:value={power} />
 			<div class="select-none">W</div>
 		</label>
+	</div>
+
+	<div class="flex flex-col gap-4 sm:flex-row">
+		<input
+			type="text"
+			use:callsignInput
+			bind:this={callsignInputElement}
+			bind:value={callsign}
+			class={`input w-full font-mono placeholder:font-sans sm:w-80 ${isValidCall ? 'input-success' : ''}`}
+			placeholder="Callsign"
+		/>
+
+		<div class="flex gap-4">
+			<RstInput class="input w-full sm:w-36" label="RST Sent" {mode} bind:value={rstSent} />
+			<RstInput class="input w-full sm:w-36" label="RST Rcv" {mode} bind:value={rstRcv} />
+		</div>
 	</div>
 
 	<input
