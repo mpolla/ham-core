@@ -2,13 +2,14 @@
 	import { onMount } from 'svelte';
 	import { findDxcc } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
-	import { callsignInput } from '$lib/helpers/input-helpers';
+	import { callsignInput, gridsquareInput } from '$lib/helpers/input-helpers';
 	import TimeInput from '$lib/components/inputs/time-input.svelte';
 	import RstInput from '$lib/components/inputs/rst-input.svelte';
 	import FrequencyInput from '$lib/components/inputs/frequency-input.svelte';
 	import { Mode } from '$lib/models/mode';
 	import { Band } from '$lib/models/band';
 	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
+	import { locatorRegex } from '$lib/utils/locator-util';
 
 	let callsignInputElement: HTMLInputElement;
 	let callsign = '';
@@ -27,6 +28,7 @@
 	let band: string | undefined = '40m';
 
 	let power = '';
+	let gridsquare = '';
 
 	$: dxcc = findDxcc(callsign);
 	$: isValidCall = !!callsign.match(advancedCallsignRe);
@@ -44,7 +46,8 @@
 			rst_rcvd: rstRcv,
 			dxcc: dxcc?.entity.dxcc ?? 0,
 			country: dxcc?.entity.name ?? null,
-			power: power ? parseInt(power) : null
+			power: power ? parseInt(power) : null,
+			other: { GRIDSQUARE: gridsquare ? gridsquare : null }
 		}).then((r) => {
 			if (r) clear();
 		});
@@ -70,6 +73,7 @@
 		callsign = '';
 		rstSent = '';
 		rstRcv = '';
+		gridsquare = '';
 		if (!dateTimeTimer) setDateTimeNow();
 		callsignInputElement.focus();
 	}
@@ -173,6 +177,14 @@
 			<div class="select-none">W</div>
 		</label>
 	</div>
+
+	<input
+		type="text"
+		use:gridsquareInput
+		bind:value={gridsquare}
+		class={`input max-w-xs ${gridsquare && !gridsquare.match(locatorRegex) ? 'input-error' : ''}`}
+		placeholder="Gridsquare"
+	/>
 
 	<div class="flex items-end gap-4">
 		{#if dxcc}
