@@ -1,7 +1,8 @@
 <script lang="ts">
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
-	import QsoForm from '$lib/components/qso-form.svelte';
-	import QsoList from '$lib/components/qso-list.svelte';
+	import QsoList from './qso-list.svelte';
+	import QsoForm from './qso-form.svelte';
+	import Filters from './filters.svelte';
 </script>
 
 <div class="flex flex-col gap-10">
@@ -13,5 +14,13 @@
 
 	<QsoForm />
 
-	<QsoList />
+	<div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
+		<div class="w-full lg:max-w-xs">
+			<Filters />
+		</div>
+
+		<div class="flex flex-col gap-4">
+			<QsoList />
+		</div>
+	</div>
 </div>

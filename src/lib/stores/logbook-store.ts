@@ -95,6 +95,12 @@ export function selectLog(logId: number): void {
 	_paramsStore.update((old) => ({ ...old, logId, offset: 0 }));
 }
 
+export function setLimit(limit: number) {
+	_paramsStore.update((s) => {
+		return { ...s, limit };
+	});
+}
+
 export function updateFilter(filter: Filter) {
 	_paramsStore.update((s) => {
 		return { ...s, filter: { ...s.filter, ...filter }, offset: 0 };

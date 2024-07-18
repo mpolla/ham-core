@@ -3,10 +3,10 @@
 	import { findDxcc } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { callsignInput } from '$lib/helpers/input-helpers';
+	import TimeInput from '$lib/components/inputs/time-input.svelte';
+	import RstInput from '$lib/components/inputs/rst-input.svelte';
+	import FrequencyInput from '$lib/components/inputs/frequency-input.svelte';
 	import { Mode } from '$lib/models/mode';
-	import RstInput from './inputs/rst-input.svelte';
-	import FrequencyInput from './inputs/frequency-input.svelte';
-	import TimeInput from './inputs/time-input.svelte';
 	import { Band } from '$lib/models/band';
 	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
 
