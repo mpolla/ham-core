@@ -3,7 +3,7 @@
 	import { Band } from '$lib/models/band';
 	import { Mode } from '$lib/models/mode';
 	import { logbookStore, setLimit, updateFilter } from '$lib/stores/logbook-store';
-	import { faChevronDown, faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
@@ -26,7 +26,7 @@
 			<input
 				type="text"
 				use:callsignInput
-				class="grow"
+				class="min-w-0 grow"
 				placeholder="Search Callsign"
 				value={callsign}
 				on:input={(v) => setCallsign(v.currentTarget.value)}

@@ -182,7 +182,7 @@
 		type="text"
 		use:gridsquareInput
 		bind:value={gridsquare}
-		class={`input max-w-xs ${gridsquare && !gridsquare.match(locatorRegex) ? 'input-error' : ''}`}
+		class={`input sm:max-w-xs ${gridsquare && !gridsquare.match(locatorRegex) ? 'input-error' : ''}`}
 		placeholder="Gridsquare"
 	/>
 

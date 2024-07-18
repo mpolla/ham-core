@@ -3,6 +3,7 @@
 	import QsoList from './qso-list.svelte';
 	import QsoForm from './qso-form.svelte';
 	import Filters from './filters.svelte';
+	import Pagination from './pagination.svelte';
 </script>
 
 <div class="flex flex-col gap-10">
@@ -19,7 +20,9 @@
 			<Filters />
 		</div>
 
-		<div class="flex flex-col gap-4">
+		<div class="flex w-full max-w-3xl flex-col gap-4">
+			<Pagination />
+
 			<QsoList />
 		</div>
 	</div>
