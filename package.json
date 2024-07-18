@@ -11,7 +11,8 @@
 		"test": "vitest",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"supabase:gen": "supabase gen types --lang typescript --project-id ucetbiziqepeihxlgvrq --schema public > src/lib/database.types.ts && prettier --write src/lib/database.types.ts"
+		"supabase:gen": "supabase gen types --lang typescript --project-id ucetbiziqepeihxlgvrq --schema public > src/lib/database.types.ts && prettier --write src/lib/database.types.ts",
+		"supabase:dump": "supabase db dump --linked --schema public -f supabase/schema.sql"
 	},
 	"devDependencies": {
 		"@fortawesome/free-solid-svg-icons": "^6.6.0",
