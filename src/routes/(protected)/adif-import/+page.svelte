@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
+	import { logbookStore } from '$lib/stores/logbook-store';
 	import { logsStore } from '$lib/stores/logs-store';
 	import Fa from 'svelte-fa';
 	import { adifFilesStore, ImportStatus, setFiles, uploadFiles } from './adif-files-store';
