@@ -63,6 +63,7 @@ export type Database = {
 					datetime: string;
 					dxcc: number;
 					frequency: number;
+					gridsquare: string | null;
 					id: number;
 					log_id: number | null;
 					mode: string;
@@ -82,6 +83,7 @@ export type Database = {
 					datetime: string;
 					dxcc?: number;
 					frequency: number;
+					gridsquare?: string | null;
 					id?: number;
 					log_id?: number | null;
 					mode: string;
@@ -101,6 +103,7 @@ export type Database = {
 					datetime?: string;
 					dxcc?: number;
 					frequency?: number;
+					gridsquare?: string | null;
 					id?: number;
 					log_id?: number | null;
 					mode?: string;
@@ -112,13 +115,6 @@ export type Database = {
 					user_id?: string;
 				};
 				Relationships: [
-					{
-						foreignKeyName: 'qso_created_by_fkey';
-						columns: ['user_id'];
-						isOneToOne: false;
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					},
 					{
 						foreignKeyName: 'qso_profile_id_fkey';
 						columns: ['log_id'];

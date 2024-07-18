@@ -41,13 +41,13 @@
 			call: callsign,
 			mode,
 			frequency: parseFloat(freq) * 1000000,
-			band: band ?? null,
+			band: band || null,
 			rst_sent: rstSent,
 			rst_rcvd: rstRcv,
 			dxcc: dxcc?.entity.dxcc ?? 0,
-			country: dxcc?.entity.name ?? null,
+			country: dxcc?.entity.name || null,
 			power: power ? parseInt(power) : null,
-			other: { GRIDSQUARE: gridsquare ? gridsquare : null }
+			gridsquare: gridsquare || null
 		}).then((r) => {
 			if (r) clear();
 		});

@@ -9,6 +9,7 @@ export class Qso implements IQso {
 	public datetime: string;
 	public dxcc: number;
 	public frequency: number;
+	public gridsquare: string | null;
 	public id: number;
 	public log_id: number | null;
 	public mode: string;
@@ -28,6 +29,7 @@ export class Qso implements IQso {
 		this.datetime = fields.datetime;
 		this.dxcc = fields.dxcc;
 		this.frequency = fields.frequency;
+		this.gridsquare = fields.gridsquare;
 		this.id = fields.id;
 		this.log_id = fields.log_id;
 		this.mode = fields.mode;
@@ -55,7 +57,8 @@ export class Qso implements IQso {
 			MODE: this.mode,
 			RST_RCVD: this.rst_rcvd || undefined,
 			RST_SENT: this.rst_sent || undefined,
-			TX_PWR: this.power?.toString()
+			TX_PWR: this.power?.toString(),
+			GRIDSQUARE: this.gridsquare || undefined
 		};
 	}
 
@@ -73,6 +76,7 @@ export class Qso implements IQso {
 		delete other.RST_RCVD;
 		delete other.RST_SENT;
 		delete other.TX_PWR;
+		delete other.GRIDSQUARE;
 		delete other.STATION_CALLSIGN;
 		if (adif.BAND?.toLowerCase() === other.BAND_RX?.toLowerCase()) delete other.BAND_RX;
 		if (adif.FREQ === other.FREQ_RX) delete other.FREQ_RX;
@@ -94,6 +98,7 @@ export class Qso implements IQso {
 			datetime: this.formatAdifDateTime(adif.QSO_DATE, adif.TIME_ON),
 			dxcc: +adif.DXCC || 0,
 			frequency: parseFloat(adif.FREQ) * 1e6,
+			gridsquare: adif.GRIDSQUARE,
 			id: 0,
 			log_id: null,
 			mode: adif.MODE,
