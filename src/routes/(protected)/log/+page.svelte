@@ -4,6 +4,7 @@
 	import QsoForm from './qso-form.svelte';
 	import Filters from './filters.svelte';
 	import Pagination from './pagination.svelte';
+	import Selection from './selection.svelte';
 </script>
 
 <div class="flex flex-col gap-10">
@@ -16,8 +17,10 @@
 	<QsoForm />
 
 	<div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
-		<div class="w-full lg:max-w-xs">
+		<div class="flex w-full flex-col gap-2 lg:max-w-xs">
 			<Filters />
+
+			<Selection />
 		</div>
 
 		<div class="flex w-full max-w-3xl flex-col gap-4">

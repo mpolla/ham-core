@@ -3,7 +3,7 @@
 	import { Band } from '$lib/models/band';
 	import { Mode } from '$lib/models/mode';
 	import { logbookStore, setLimit, updateFilter } from '$lib/stores/logbook-store';
-	import { faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faChevronDown, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
@@ -50,12 +50,16 @@
 			</select>
 		</label>
 
-		<button class="btn" on:click={() => (filterOpen = !filterOpen)}>
-			<Fa class={`transition ${filterOpen ? 'rotate-90' : ''}`} icon={faChevronRight} />
+		<button class="btn btn-ghost justify-start" on:click={() => (filterOpen = !filterOpen)}>
+			<Fa icon={faFilter} />
 			<span>Filters</span>
 			{#if filterCount > 0}
 				<span class="badge badge-primary">{filterCount}</span>
 			{/if}
+			<Fa
+				class={`ml-auto transition @xl:ml-4 ${filterOpen ? 'rotate-180' : ''}`}
+				icon={faChevronDown}
+			/>
 		</button>
 		<!-- <button class="btn">
             <Fa icon={faSort} />

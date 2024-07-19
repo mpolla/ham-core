@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { logbookStore } from '$lib/stores/logbook-store';
+	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
 
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();
@@ -7,13 +8,31 @@
 		const time = dtp.slice(11, 16);
 		return `${date} ${time}`;
 	}
+
+	$: someSelected = $logbookStore.result?.qsos.some((q) => $selectedStore.has(q.id));
+	$: allSelected =
+		someSelected && $logbookStore.result?.qsos.every((q) => $selectedStore.has(q.id));
 </script>
 
 <div class="overflow-x-auto">
 	<table class="table mx-auto w-full max-w-3xl">
 		<thead>
 			<tr>
-				<th></th>
+				<th>
+					{#if $logbookStore.result}
+						<input
+							type="checkbox"
+							class="checkbox"
+							indeterminate={someSelected && !allSelected}
+							checked={allSelected}
+							on:change={(v) =>
+								setSelectedAll(
+									$logbookStore.result?.qsos.map((q) => q.id),
+									v.currentTarget.checked
+								)}
+						/>
+					{/if}
+				</th>
 				<th>Date & Time</th>
 				<th>Call</th>
 				<th class="text-center">Mode</th>
@@ -32,7 +51,19 @@
 			{:else}
 				{#each $logbookStore.result.qsos as qso, i}
 					<tr>
-						<td>{i + 1}</td>
+						<th class="relative text-center">
+							<span>{i + 1}</span>
+							<div
+								class={`absolute inset-0 transition-opacity hover:opacity-100 ${$selectedStore.size ? 'opacity-100' : 'opacity-0'}`}
+							>
+								<input
+									type="checkbox"
+									class="checkbox absolute inset-0 m-auto bg-base-100"
+									checked={$selectedStore.has(qso.id)}
+									on:change={(v) => setSelected(qso.id, v.currentTarget.checked)}
+								/>
+							</div>
+						</th>
 						<td class="min-w-32">{formatDT(qso.datetime)}</td>
 						<td class="font-mono">{qso.call}</td>
 						<td class="text-center">{qso.mode}</td>
