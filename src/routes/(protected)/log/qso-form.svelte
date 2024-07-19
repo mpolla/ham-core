@@ -23,9 +23,9 @@
 
 	$: isTimeValid = time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60;
 
-	let mode = 'SSB';
-	let freq = '7.150';
-	let band: string | undefined = '40m';
+	let mode = '';
+	let freq = '';
+	let band: string | undefined = '';
 
 	let power = '';
 	let gridsquare = '';
@@ -75,14 +75,13 @@
 		rstSent = '';
 		rstRcv = '';
 		gridsquare = '';
-		if (!dateTimeTimer) setDateTimeNow();
+		if (!dateTimeTimer) toggleDateTimeTimer();
 		callsignInputElement.focus();
 	}
 
 	let isPure = true;
 	$: lastQso = $logbookStore.result?.qsos[0];
 	$: if (isPure && lastQso) {
-		isPure = false;
 		mode = lastQso.mode;
 		freq = (lastQso.frequency / 1000000).toFixed(3);
 		band = lastQso.band ?? undefined;
@@ -98,7 +97,7 @@
 
 <form
 	on:submit|preventDefault={submit}
-	on:input={() => (isPure = false)}
+	on:beforeinput={() => (isPure = false)}
 	class="flex flex-col gap-6 rounded-xl bg-base-300 p-6"
 >
 	<div class="flex items-start gap-4">
