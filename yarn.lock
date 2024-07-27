@@ -1167,8 +1167,10 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-"fast-dxcc@file:fast-dxcc":
-  version "1.0.0"
+fast-dxcc@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/fast-dxcc/-/fast-dxcc-1.1.1.tgz#4c557ad1cf467a2deb9700ba670deedd02185136"
+  integrity sha512-CM7RVzD8S6SOfyRFQygir4kM4TK402tKbKqVO9WBhhyNOeJpJ34S0YbQ35zu65D55cqCAEd2oK9YqvmEM58jlg==
 
 fast-glob@^3.2.9, fast-glob@^3.3.0:
   version "3.3.2"
