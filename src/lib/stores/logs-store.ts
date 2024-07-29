@@ -1,8 +1,12 @@
 import { supabase, type ILog } from '$lib/supabase';
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
+import { userStore } from './user-store';
 
-export const logsStore = writable<ILog[] | undefined>(undefined, (set) => {
-	if (get(logsStore) === undefined) fetchLogs().then(set);
+export const logsStore = writable<ILog[] | undefined>(undefined);
+
+userStore.subscribe((user) => {
+	if (!user) logsStore.set(undefined);
+	else fetchLogs().then(logsStore.set);
 });
 
 async function fetchLogs(): Promise<ILog[]> {

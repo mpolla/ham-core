@@ -3,16 +3,14 @@
 	import { page } from '$app/stores';
 	import { signIn, userStore } from '$lib/stores/user-store';
 
-	userStore.subscribe((value) => {
-		if (value) {
-			const redirect = $page.url.searchParams.get('redirect');
-			if (redirect) {
-				goto(redirect);
-			} else {
-				goto('/');
-			}
+	$: if ($userStore) {
+		const redirect = $page.url.searchParams.get('redirect');
+		if (redirect) {
+			goto(redirect);
+		} else {
+			goto('/');
 		}
-	});
+	}
 
 	let email = '';
 	let password = '';

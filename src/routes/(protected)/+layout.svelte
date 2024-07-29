@@ -6,13 +6,11 @@
 	import { faUser } from '@fortawesome/free-solid-svg-icons';
 	import Clock from '$lib/components/clock.svelte';
 
-	userStore.subscribe((value) => {
-		if (value === null) {
-			const p = $page.url.pathname;
-			const r = p.match(/^\/(?:log)?$/) ? '' : `?redirect=${p}`;
-			goto(`/login${r}`);
-		}
-	});
+	$: if ($userStore === null) {
+		const p = $page.url.pathname;
+		const r = p.match(/^\/(?:log)?$/) ? '' : `?redirect=${p}`;
+		goto(`/login${r}`);
+	}
 </script>
 
 <div class="navbar justify-between bg-base-100 shadow-xl">
