@@ -31,3 +31,20 @@ yarn build
 ```
 
 Deploy the contents of the `build` directory to your server.
+
+## Updating the country database
+
+1. Download the latest Big CTY (`cty.csv`) file from [Country Files](https://www.country-files.com/).
+2. Move into the `fast-dxcc` directory.
+3. Run the script `cty-parser.ts` to parse the `cty.csv` file.
+4. Run `npm version minor` to update the version number.
+5. Run `yarn build` to build the code.
+6. Publish the new version to npm with `npm publish`.
+
+### Updating the `callsign-checker` app
+
+1. Move into the `callsign-checker` directory.
+2. Update the `fast-dxcc` dependency in `package.json` to the new version.
+3. Run `yarn install` to update the dependency.
+4. Run `yarn build` to build the code.
+5. Deploy the new version to your server.
