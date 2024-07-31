@@ -1,9 +1,10 @@
-import type { IQso } from '$lib/supabase';
+import type { ILog, IQso } from '$lib/supabase';
 
 export class Qso implements IQso {
 	public band: string | null;
 	public call: string;
 	public comment: string | null;
+	public cont: string | null;
 	public country: string | null;
 	public created_at: string;
 	public datetime: string;
@@ -24,6 +25,7 @@ export class Qso implements IQso {
 		this.band = fields.band;
 		this.call = fields.call;
 		this.comment = fields.comment;
+		this.cont = fields.cont;
 		this.country = fields.country;
 		this.created_at = fields.created_at;
 		this.datetime = fields.datetime;
@@ -41,14 +43,15 @@ export class Qso implements IQso {
 		this.user_id = fields.user_id;
 	}
 
-	toAdif(): { [field: string]: string | undefined } {
+	toAdif(log?: ILog): { [field: string]: string } {
 		let time = this.datetime.substring(11, 19).replace(/:/g, '');
 		if (time.substring(4) === '00') time = time.substring(0, 4);
-		return {
+		const ret = {
 			...this.other,
 			BAND: this.band || undefined,
 			CALL: this.call,
 			COMMENT: this.comment || undefined,
+			CONT: this.cont || undefined,
 			COUNTRY: this.country || undefined,
 			QSO_DATE: this.datetime.substring(0, 10).replace(/-/g, ''),
 			TIME_ON: time,
@@ -58,7 +61,21 @@ export class Qso implements IQso {
 			RST_RCVD: this.rst_rcvd || undefined,
 			RST_SENT: this.rst_sent || undefined,
 			TX_PWR: this.power?.toString(),
-			GRIDSQUARE: this.gridsquare || undefined
+			GRIDSQUARE: this.gridsquare || undefined,
+			// Log info
+			STATION_CALLSIGN: log?.call,
+			// TODO OPERATOR
+			// TODO OWNER_CALLSIGN
+			MY_COUNTRY: log?.country,
+			MY_DXCC: log?.dxcc.toString(),
+			MY_CQ_ZONE: log?.cqz?.toString() || undefined,
+			MY_ITU_ZONE: log?.ituz?.toString() || undefined,
+			MY_GRIDSQUARE: log?.grid || undefined,
+			MY_NAME: log?.name || undefined
+			// TODO MY_RIG
+		};
+		return Object.fromEntries(Object.entries(ret).filter(([, v]) => v !== undefined)) as {
+			[field: string]: string;
 		};
 	}
 
@@ -67,6 +84,7 @@ export class Qso implements IQso {
 		delete other.BAND;
 		delete other.CALL;
 		delete other.COMMENT;
+		delete other.CONT;
 		delete other.COUNTRY;
 		delete other.QSO_DATE;
 		delete other.TIME_ON;
@@ -94,6 +112,7 @@ export class Qso implements IQso {
 			band: adif.BAND.toLowerCase(),
 			call: adif.CALL,
 			comment: adif.COMMENT,
+			cont: adif.CONT,
 			country: adif.COUNTRY,
 			datetime: this.formatAdifDateTime(adif.QSO_DATE, adif.TIME_ON),
 			dxcc: +adif.DXCC || 0,

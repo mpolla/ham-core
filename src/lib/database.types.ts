@@ -58,6 +58,7 @@ export type Database = {
 					band: string | null;
 					call: string;
 					comment: string | null;
+					cont: string | null;
 					country: string | null;
 					created_at: string;
 					datetime: string;
@@ -78,6 +79,7 @@ export type Database = {
 					band?: string | null;
 					call: string;
 					comment?: string | null;
+					cont?: string | null;
 					country?: string | null;
 					created_at?: string;
 					datetime: string;
@@ -98,6 +100,7 @@ export type Database = {
 					band?: string | null;
 					call?: string;
 					comment?: string | null;
+					cont?: string | null;
 					country?: string | null;
 					created_at?: string;
 					datetime?: string;
@@ -172,7 +175,46 @@ export type Database = {
 			};
 		};
 		Views: {
-			[_ in never]: never;
+			qso_band_summary: {
+				Row: {
+					band: string | null;
+					qso_count: number | null;
+				};
+				Relationships: [];
+			};
+			qso_call_summary: {
+				Row: {
+					call: string | null;
+					qso_count: number | null;
+				};
+				Relationships: [];
+			};
+			qso_cont_summary: {
+				Row: {
+					cont: string | null;
+					qso_count: number | null;
+				};
+				Relationships: [];
+			};
+			qso_dxcc_summary: {
+				Row: {
+					dxcc: number | null;
+				};
+				Relationships: [];
+			};
+			qso_grid_summary: {
+				Row: {
+					grid: string | null;
+				};
+				Relationships: [];
+			};
+			qso_mode_summary: {
+				Row: {
+					mode: string | null;
+					qso_count: number | null;
+				};
+				Relationships: [];
+			};
 		};
 		Functions: {
 			[_ in never]: never;

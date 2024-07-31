@@ -48,3 +48,24 @@ export function parseAdifFile(adi: string): AdifParsingResult {
 		}
 	};
 }
+
+export function writeAdifFile(adi: AdifFile, options: { fieldSep: string } = { fieldSep: '\n' }) {
+	const { fieldSep } = options;
+	let res = '';
+
+	if (adi.header) {
+		for (const [field, value] of Object.entries(adi.header)) {
+			res += `<${field}:${value.length}>${value}${fieldSep}`;
+		}
+		res += '<EOH>\n\n';
+	}
+
+	for (const record of adi.records) {
+		for (const [field, value] of Object.entries(record)) {
+			res += `<${field}:${value.length}>${value}${fieldSep}`;
+		}
+		res += '<EOR>\n\n';
+	}
+
+	return res;
+}

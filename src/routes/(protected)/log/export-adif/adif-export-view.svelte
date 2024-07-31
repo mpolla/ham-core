@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { type IQso, supabase } from '$lib/supabase';
+	import { logsStore } from '$lib/stores/logs-store';
+	import { supabase, type IQso } from '$lib/supabase';
 	import { writable } from 'svelte/store';
 	import { selectedStore } from '../selected-store';
-	import { logsStore } from '$lib/stores/logs-store';
 	import { generateText, generateUrl } from '.';
-	import Fa from 'svelte-fa';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
+	import Fa from 'svelte-fa';
 
 	type QsoStore = IQso[] | null | undefined;
 
