@@ -11,6 +11,8 @@
 	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
 	import { locatorRegex } from '$lib/utils/locator-util';
 
+	$: selectedLog = $logbookStore.params.logId;
+
 	let callsignInputElement: HTMLInputElement;
 	let callsign = '';
 
@@ -33,10 +35,12 @@
 	$: dxcc = findDxcc(callsign);
 	$: isValidCall = !!callsign.match(advancedCallsignRe);
 
+	$: canSubmit = callsign.length >= 3 && freq && !!selectedLog;
+
 	function submit() {
-		if (callsign.length < 3 || !freq) return;
+		if (!canSubmit) return;
 		insertQso({
-			log_id: $logbookStore.params.logId,
+			log_id: selectedLog,
 			datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
 			call: callsign,
 			mode,
@@ -202,8 +206,18 @@
 			<div><span class="text-xs">CQ</span> {dxcc.entity.cqz}</div>
 			<div><span class="text-xs">ITU</span> {dxcc.entity.ituz}</div>
 		{/if}
-		<button type="submit" on:click|preventDefault={submit} class="btn btn-primary ml-auto">
-			Save
-		</button>
+		<div class="ml-auto flex items-center gap-4">
+			{#if !selectedLog}
+				<div class="text-error">Please select logbook</div>
+			{/if}
+			<button
+				type="submit"
+				on:click|preventDefault={submit}
+				class="btn btn-primary"
+				disabled={!canSubmit}
+			>
+				Save
+			</button>
+		</div>
 	</div>
 </form>

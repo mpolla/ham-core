@@ -6,11 +6,13 @@
 	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
 
-	$: selectedCall = $logsStore?.find((l) => l.id === $logbookStore.params.logId)?.call;
+	$: selectedLog = $logbookStore.params.logId;
+
+	$: selectedCall = $logsStore?.find((l) => l.id === selectedLog)?.call;
 
 	function upload() {
-		if (!$logbookStore.params.logId) return;
-		uploadFiles($logbookStore.params.logId);
+		if (!selectedLog) return;
+		uploadFiles(selectedLog);
 	}
 </script>
 
@@ -18,7 +20,7 @@
 	<h1 class="text-3xl">Import ADIF files</h1>
 
 	<div class="flex flex-col gap-4 md:flex-row md:items-end">
-		<LogbookSelect class="w-full max-w-xs" />
+		<LogbookSelect class="w-full max-w-xs" canBeEmpty={false} />
 
 		<div class="flex gap-2">
 			<label class="form-control w-full sm:max-w-xs">
@@ -85,12 +87,14 @@
 			</div>
 		</div>
 
-		{#await Promise.all($adifFilesStore.map((file) => file.result))}
-			<span class="loading loading-spinner" />
-		{:then value}
-			{#if value.every((v) => v)}
-				<button class="btn btn-primary" on:click={upload}>Import</button>
-			{/if}
-		{/await}
+		{#if selectedLog}
+			{#await Promise.all($adifFilesStore.map((file) => file.result))}
+				<span class="loading loading-spinner" />
+			{:then value}
+				{#if value.every((v) => v)}
+					<button class="btn btn-primary" on:click={upload}>Import</button>
+				{/if}
+			{/await}
+		{/if}
 	{/if}
 </div>
