@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { logbookStore } from '$lib/stores/logbook-store';
+	import type { IQso } from '$lib/supabase';
+	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
 
 	function formatDT(dt: string): string {
@@ -12,6 +14,17 @@
 	$: someSelected = $logbookStore.result?.qsos.some((q) => $selectedStore.has(q.id));
 	$: allSelected =
 		someSelected && $logbookStore.result?.qsos.every((q) => $selectedStore.has(q.id));
+
+	function getCountry(qso: IQso): string {
+		if (qso.country) {
+			return qso.country;
+		}
+		if (qso.dxcc) {
+			const dxccs = [...dxccEntities.values()].filter((d) => d.dxcc === qso.dxcc);
+			if (dxccs.length === 1) return dxccs[0].name;
+		}
+		return findDxcc(qso.call)?.entity.name ?? '';
+	}
 </script>
 
 <div class="overflow-x-auto">
@@ -74,7 +87,7 @@
 							<span class={`band band${qso.band}`}>{qso.band}</span>
 						</td>
 						<td class="w-1/5 min-w-32 max-w-0 overflow-hidden overflow-ellipsis whitespace-nowrap">
-							{qso.country}
+							{getCountry(qso)}
 						</td>
 					</tr>
 				{/each}
