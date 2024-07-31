@@ -95,14 +95,17 @@
 	});
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <form
 	on:submit|preventDefault={submit}
 	on:beforeinput={() => (isPure = false)}
+	on:input={() => (isPure = false)}
+	on:keydown={({ key, altKey }) => key === 'w' && altKey && clear()}
 	class="flex flex-col gap-6 rounded-xl bg-base-300 p-6"
 >
 	<div class="flex items-start gap-4">
 		<h1 class="mr-auto text-2xl font-light">New QSO</h1>
-		<button type="button" class="btn btn-outline btn-xs" on:click={clear}>Clear</button>
+		<button type="button" class="btn btn-xs" on:click={clear} disabled={isPure}>Clear</button>
 	</div>
 
 	<div class="flex justify-start gap-4">
