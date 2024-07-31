@@ -13,3 +13,25 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
    PUBLIC_SUPABASE_ANON=<your-supabase-anon-key>
    ```
 5. Run the development server: `yarn dev`
+
+### TODOS
+
+- [ ] Complete logbook fields
+- [ ] Export ADIF
+- [ ] Logbook analysis
+- [ ] Migrate QSL CSV generation to modal
+- [ ] Add TRX and antenna fields to QSL CSV
+- [ ] Add QSL, QRZ, LOTW, eQSL, ClubLog, etc. status and support
+- [ ] Add operator lookup (QRZ, HamQTH, etc.)
+- [ ] Add seperate logbook and location information
+- [ ] SOTA, POTA, WWFF, IOTA, etc. support
+- [ ] QSO map
+- [ ] QSO statistics
+- [ ] Offline support
+
+#### Tauri
+
+A list of things to implement when Tauri gets added
+
+- [ ] WSJT-X integration
+- [ ] Rig control
