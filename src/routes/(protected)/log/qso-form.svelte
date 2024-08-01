@@ -48,10 +48,15 @@
 			band: band || null,
 			rst_sent: rstSent,
 			rst_rcvd: rstRcv,
-			dxcc: dxcc?.entity.dxcc ?? 0,
+			dxcc: dxcc?.entity.dxcc,
 			country: dxcc?.entity.name || null,
 			power: power ? parseInt(power) : null,
-			gridsquare: gridsquare || null
+			gridsquare: gridsquare || null,
+			cont: dxcc?.entity.cont || null,
+			other: {
+				CQ_ZONE: dxcc?.entity.cqz,
+				ITU_ZONE: dxcc?.entity.ituz
+			}
 		}).then((r) => {
 			if (r) clear();
 		});
