@@ -17,17 +17,19 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 ### TODOS
 
 - [ ] Complete logbook fields
-- [ ] Export ADIF
+- [x] Export ADIF
 - [ ] Logbook analysis
-- [ ] Migrate QSL CSV generation to modal
+- [x] Migrate QSL CSV generation to modal
 - [ ] Add TRX and antenna fields to QSL CSV
 - [ ] Add QSL, QRZ, LOTW, eQSL, ClubLog, etc. status and support
 - [ ] Add operator lookup (QRZ, HamQTH, etc.)
-- [ ] Add seperate logbook and location information
+- [ ] Add separate logbook and location information
 - [ ] SOTA, POTA, WWFF, IOTA, etc. support
 - [ ] QSO map
 - [ ] QSO statistics
 - [ ] Offline support
+- [ ] Contest mode
+- [ ] Cabrillo export
 
 #### Tauri
 

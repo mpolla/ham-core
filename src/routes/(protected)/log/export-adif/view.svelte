@@ -30,7 +30,7 @@
 			: undefined;
 </script>
 
-<h1 class="mb-8 text-3xl font-light">QSL CSV</h1>
+<h1 class="mb-8 text-3xl font-light">Export ADI</h1>
 
 <div class="max-h-80 overflow-auto rounded-lg bg-base-300">
 	<table class="table">
@@ -42,8 +42,8 @@
 				<th>Time</th>
 				<th>Frequency</th>
 				<th>Mode</th>
-				<th>RST</th>
-				<th>Power</th>
+				<th>RST Sent</th>
+				<th>RST Rcvd</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,7 +64,7 @@
 						<td>{(qso.frequency / 1000000).toFixed(3)}</td>
 						<td>{qso.mode}</td>
 						<td>{qso.rst_sent}</td>
-						<td>{qso.power ?? '?'} W</td>
+						<td>{qso.rst_rcvd}</td>
 					</tr>
 				{/each}
 			{/if}
@@ -73,13 +73,13 @@
 </div>
 
 {#if downloadUrl}
-	<a href={downloadUrl} download="qsl.csv" class="btn btn-primary mt-4">
+	<a href={downloadUrl} download="export.adi" class="btn btn-primary mt-4">
 		<Fa icon={faDownload} />
-		<span>Download QSL CSV</span>
+		<span>Download ADI file</span>
 	</a>
 {:else}
 	<button class="btn btn-primary mt-4" disabled>
 		<Fa icon={faDownload} />
-		<span>Download QSL CSV</span>
+		<span>Download ADI file</span>
 	</button>
 {/if}
