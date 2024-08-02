@@ -72,7 +72,7 @@
 			{/if}
 
 			<div
-				class={`dropdown-content left-0 right-0 top-0 z-40 -m-4 flex flex-col items-stretch gap-4 rounded-lg bg-base-100 p-4 shadow-xl ${filterOpen ? '' : 'hidden'}`}
+				class={`dropdown-content left-0 right-0 top-0 z-40 -m-4 flex flex-col items-stretch gap-4 rounded-lg border border-white/10 bg-base-100 p-4 shadow-xl ${filterOpen ? '' : 'hidden'}`}
 			>
 				<div class="btn invisible" />
 
