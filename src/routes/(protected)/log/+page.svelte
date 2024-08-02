@@ -7,7 +7,7 @@
 	import Selection from './selection.svelte';
 </script>
 
-<div class="flex flex-col gap-10">
+<div class="mx-auto flex max-w-5xl flex-col gap-10">
 	<div class="flex flex-wrap items-end gap-4">
 		<LogbookSelect />
 		<a href="/adif-import" class="btn btn-sm ml-auto">Import ADIF</a>
@@ -16,17 +16,13 @@
 
 	<QsoForm />
 
-	<div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
-		<div class="flex w-full flex-col gap-2 lg:max-w-xs">
-			<Filters />
+	<div class="flex w-full flex-col gap-4">
+		<Filters />
 
-			<Selection />
-		</div>
+		<Pagination />
 
-		<div class="flex w-full max-w-3xl flex-col gap-4">
-			<Pagination />
+		<QsoList />
 
-			<QsoList />
-		</div>
+		<Selection />
 	</div>
 </div>

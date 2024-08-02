@@ -28,7 +28,7 @@
 </script>
 
 <div class="overflow-x-auto">
-	<table class="table mx-auto w-full max-w-3xl">
+	<table class="table mx-auto w-full">
 		<thead>
 			<tr>
 				<th>

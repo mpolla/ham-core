@@ -19,7 +19,9 @@
 </script>
 
 {#if $selectedStore.size > 0}
-	<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-4 @container">
+	<div
+		class="sticky bottom-4 flex flex-col gap-4 rounded-xl bg-base-300 bg-opacity-95 p-4 @container"
+	>
 		<div class="flex items-center justify-between">
 			<div>
 				<span class="font-bold">{$selectedStore.size}</span>
