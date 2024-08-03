@@ -16,6 +16,15 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 
 ### TODOS
 
+- [ ] Logbooks
+  - [x] Create logbook
+  - [x] Edit logbook
+  - [ ] Delete logbook
+- [ ] QSO
+  - [x] Create QSO
+  - [ ] View QSO
+  - [ ] Edit QSO
+  - [ ] Delete QSO
 - [ ] Complete logbook fields
 - [x] Export ADIF
 - [ ] Logbook analysis

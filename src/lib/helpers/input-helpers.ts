@@ -33,6 +33,10 @@ export function filteredInput(pattern: RegExp) {
 	return filter;
 }
 
+export function numberInput(element: HTMLInputElement) {
+	return filteredInput(/[^0-9]/g)(element);
+}
+
 export function callsignInput(element: HTMLInputElement) {
 	const a = uppercaseInput(element);
 	const b = filteredInput(/[^A-Z0-9/]/g)(element);

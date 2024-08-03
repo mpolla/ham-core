@@ -8,6 +8,7 @@ declare global {
 		interface PageState {
 			showQslModal?: boolean;
 			showAdiModal?: boolean;
+			logbookModal?: 'edit' | 'new';
 		}
 		// interface Platform {}
 	}
