@@ -3,6 +3,8 @@
 	import type { IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
+	import Fa from 'svelte-fa';
+	import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();
@@ -25,44 +27,60 @@
 		}
 		return findDxcc(qso.call)?.entity.name ?? '';
 	}
+
+	$: qsoLimit = $logbookStore.params.limit;
 </script>
 
-<div class="overflow-x-auto">
-	<table class="table mx-auto w-full">
-		<thead>
-			<tr>
-				<th>
-					{#if $logbookStore.result}
-						<input
-							type="checkbox"
-							class="checkbox"
-							indeterminate={someSelected && !allSelected}
-							checked={allSelected}
-							on:change={(v) =>
-								setSelectedAll(
-									$logbookStore.result?.qsos.map((q) => q.id),
-									v.currentTarget.checked
-								)}
-						/>
-					{/if}
-				</th>
-				<th>Date & Time</th>
-				<th>Call</th>
-				<th class="text-center">Mode</th>
-				<th class="text-right">Frequency</th>
-				<th class="text-center">Band</th>
-				<th>Country</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#if $logbookStore.result === undefined}
-				<tr><td colspan="7" class="text-center">Loading...</td></tr>
-			{:else if $logbookStore.result.hasError}
-				<tr><td colspan="7" class="text-center">Error loading QSOs</td></tr>
-			{:else if $logbookStore.result.qsos.length === 0}
-				<tr><td colspan="7" class="text-center">No QSOs found</td></tr>
-			{:else}
-				{#each $logbookStore.result.qsos as qso, i}
+<div class="relative">
+	{#if $logbookStore.result?.isLoading}
+		<div
+			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
+		>
+			<div class="sticky top-32 flex items-center gap-4 font-semibold">
+				<span class="loading loading-spinner" />
+				<span>Loading</span>
+			</div>
+		</div>
+	{/if}
+	{#if $logbookStore.result?.hasError}
+		<div
+			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
+		>
+			<div class="sticky top-32 flex items-center gap-4 font-semibold text-error">
+				<Fa icon={faExclamationTriangle} class="text-xl" />
+				<span>Error loading QSOs</span>
+			</div>
+		</div>
+	{/if}
+	<div class=" overflow-x-auto">
+		<table class="table mx-auto w-full">
+			<thead>
+				<tr>
+					<th>
+						{#if $logbookStore.result?.qsos.length}
+							<input
+								type="checkbox"
+								class="checkbox"
+								indeterminate={someSelected && !allSelected}
+								checked={allSelected}
+								on:change={(v) =>
+									setSelectedAll(
+										$logbookStore.result?.qsos.map((q) => q.id),
+										v.currentTarget.checked
+									)}
+							/>
+						{/if}
+					</th>
+					<th>Date & Time</th>
+					<th>Call</th>
+					<th class="text-center">Mode</th>
+					<th class="text-right">Frequency</th>
+					<th class="text-center">Band</th>
+					<th>Country</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each $logbookStore.result?.qsos ?? [] as qso, i}
 					<tr>
 						<th class="relative text-center">
 							<span>{i + 1}</span>
@@ -91,9 +109,12 @@
 						</td>
 					</tr>
 				{/each}
-			{/if}
-		</tbody>
-	</table>
+				{#each Array(Math.max(qsoLimit - ($logbookStore.result?.qsos.length ?? 0), 0)) as _}
+					<tr><td colspan="7">&nbsp;</td></tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <style lang="postcss">
