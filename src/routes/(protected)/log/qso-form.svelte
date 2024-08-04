@@ -54,8 +54,8 @@
 			gridsquare: gridsquare || null,
 			cont: dxcc?.entity.cont || null,
 			other: {
-				CQ_ZONE: dxcc?.entity.cqz,
-				ITU_ZONE: dxcc?.entity.ituz
+				CQZ: dxcc?.entity.cqz,
+				ITUZ: dxcc?.entity.ituz
 			}
 		}).then((r) => {
 			if (r) clear();
