@@ -35,10 +35,13 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 - [ ] Add separate logbook and location information
 - [ ] SOTA, POTA, WWFF, IOTA, etc. support
 - [ ] QSO map
+- [ ] Live QSO path on map
+- [ ] Azimuthal map (maybe)
 - [ ] QSO statistics
 - [ ] Offline support
 - [ ] Contest mode
 - [ ] Cabrillo export
+- [ ] SFI, SSN, A, K index meters
 
 #### Tauri
 
@@ -46,3 +49,9 @@ A list of things to implement when Tauri gets added
 
 - [ ] WSJT-X integration
 - [ ] Rig control
+
+## References
+
+- [D3 Map](https://d3js.org/d3-geo)
+- [D3 Projection](https://d3js.org/d3-geo/projection)
+- [D3 Map with sun](https://observablehq.com/@d3/solar-terminator)
