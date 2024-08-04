@@ -8,6 +8,7 @@
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
 	function setCallsign(v: string) {
+		if (v === callsign) return;
 		clearTimeout(callTimer);
 		callTimer = setTimeout(() => updateFilter({ callsign: v }), 500);
 	}

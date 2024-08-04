@@ -110,7 +110,7 @@
 					</tr>
 				{/each}
 				{#each Array(Math.max(qsoLimit - ($logbookStore.result?.qsos.length ?? 0), 0)) as _}
-					<tr><td colspan="7">&nbsp;</td></tr>
+					<tr><td colspan="7">&ZeroWidthSpace;</td></tr>
 				{/each}
 			</tbody>
 		</table>
