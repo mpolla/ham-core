@@ -1,12 +1,13 @@
 <script lang="ts">
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
+	import BandFix from './band-fix.svelte';
 	import ContFix from './cont-fix.svelte';
 	import DxccFix from './dxcc-fix.svelte';
 
 	let state: 'ready' | 'start' = 'ready';
 </script>
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-8">
 	<h1 class="text-3xl">Analyze logbook</h1>
 
 	{#if state === 'ready'}
@@ -26,6 +27,12 @@
 			<h3 class="text-xl">Missing continents</h3>
 
 			<ContFix />
+		</div>
+
+		<div class="flex flex-col gap-4">
+			<h3 class="text-xl">Missing bands</h3>
+
+			<BandFix />
 		</div>
 	{/if}
 </div>

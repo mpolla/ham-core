@@ -27,7 +27,10 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [ ] Delete QSO
 - [ ] Complete logbook fields
 - [x] Export ADIF
-- [ ] Logbook analysis
+- [x] Logbook analysis
+  - [x] DXCC entities
+  - [x] Continents
+  - [x] Bands
 - [x] Migrate QSL CSV generation to modal
 - [ ] Add TRX and antenna fields to QSL CSV
 - [ ] Add QSL, QRZ, LOTW, eQSL, ClubLog, etc. status and support
