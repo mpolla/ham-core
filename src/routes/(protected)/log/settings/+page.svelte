@@ -2,7 +2,7 @@
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
 	import { logbookStore } from '$lib/stores/logbook-store';
 	import { setDefaultLog, userStore } from '$lib/stores/user-store';
-	import { faEdit, faHeart, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { faEdit, faHeart, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import LogbookForm from './logbook-form.svelte';
 	import { page } from '$app/stores';
@@ -44,6 +44,11 @@
 				<Fa icon={faPlus} />
 				<span>New Log</span>
 			</button>
+
+			<a class="btn" href="/log/analyze">
+				<Fa icon={faMagnifyingGlass} />
+				<span>Analyze</span>
+			</a>
 
 			{#if $page.state.logbookModal}
 				<Modal onClose={() => history.back()}>
