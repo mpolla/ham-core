@@ -24,7 +24,7 @@
 		mode === 'new' ? undefined : $logsStore?.find((l) => l.id === $logbookStore.params.logId);
 
 	$: parsedDxcc = findDxcc($f.call.value)?.entity;
-	const dxccs = Array.from(dxccEntities.values()).sort((a, b) => a.name.localeCompare(b.name));
+	const dxccs = [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name));
 
 	$: dxcc = dxccEntities.get($f.dxcc.value);
 

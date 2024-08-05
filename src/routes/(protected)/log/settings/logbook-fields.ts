@@ -44,7 +44,7 @@ export function copyFrom(log: ILog | undefined) {
 		return;
 	}
 
-	let dxccs = Array.from(dxccEntities.values()).filter((d) => d.dxcc === log.dxcc);
+	let dxccs = [...dxccEntities.values()].filter((d) => d.dxcc === log.dxcc);
 	let dxccId = dxccs.length == 1 ? dxccs[0].id : undefined;
 	if (!dxccId) {
 		dxccs = dxccs.filter((d) => d.name === log.country);
