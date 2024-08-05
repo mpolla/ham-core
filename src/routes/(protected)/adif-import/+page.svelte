@@ -5,6 +5,7 @@
 	import { adifFilesStore, ImportStatus, setFiles, uploadFiles } from './adif-files-store';
 	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
+	import Loading from '$lib/components/loading.svelte';
 
 	$: selectedLog = $logbookStore.params.logId;
 
@@ -89,7 +90,7 @@
 
 		{#if selectedLog}
 			{#await Promise.all($adifFilesStore.map((file) => file.result))}
-				<span class="loading loading-spinner" />
+				<Loading />
 			{:then value}
 				{#if value.every((v) => v)}
 					<button class="btn btn-primary" on:click={upload}>Import</button>

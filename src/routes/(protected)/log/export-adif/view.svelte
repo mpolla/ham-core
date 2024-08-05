@@ -6,6 +6,8 @@
 	import { generateText, generateUrl } from '.';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
+	import Loading from '$lib/components/loading.svelte';
+	import Error from '$lib/components/error.svelte';
 
 	type QsoStore = IQso[] | null | undefined;
 
@@ -48,9 +50,9 @@
 		</thead>
 		<tbody>
 			{#if $qsosStore === undefined}
-				<tr><td colspan="8" class="text-center">Loading...</td></tr>
+				<tr><td colspan="8" class="text-center"><Loading /></td></tr>
 			{:else if $qsosStore === null}
-				<tr><td colspan="8" class="text-center">Error loading QSOs</td></tr>
+				<tr><td colspan="8" class="text-center"><Error text="Error loading QSOs" /></td></tr>
 			{:else if $qsosStore.length === 0}
 				<tr><td colspan="8" class="text-center">No QSOs found</td></tr>
 			{:else}

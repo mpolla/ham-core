@@ -3,8 +3,8 @@
 	import type { IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
-	import Fa from 'svelte-fa';
-	import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+	import Loading from '$lib/components/loading.svelte';
+	import Error from '$lib/components/error.svelte';
 
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();
@@ -36,9 +36,8 @@
 		<div
 			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
 		>
-			<div class="sticky top-32 flex items-center gap-4 font-semibold">
-				<span class="loading loading-spinner" />
-				<span>Loading</span>
+			<div class="sticky top-32 font-semibold">
+				<Loading />
 			</div>
 		</div>
 	{/if}
@@ -46,13 +45,12 @@
 		<div
 			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
 		>
-			<div class="sticky top-32 flex items-center gap-4 font-semibold text-error">
-				<Fa icon={faExclamationTriangle} class="text-xl" />
-				<span>Error loading QSOs</span>
+			<div class="sticky top-32 font-semibold">
+				<Error text="Error loading QSOs" />
 			</div>
 		</div>
 	{/if}
-	<div class=" overflow-x-auto">
+	<div class="overflow-x-auto">
 		<table class="table mx-auto w-full">
 			<thead>
 				<tr>
