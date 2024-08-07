@@ -9,6 +9,7 @@ declare global {
 			showQslModal?: boolean;
 			showAdiModal?: boolean;
 			logbookModal?: 'edit' | 'new';
+			showQsoModal?: number;
 		}
 		// interface Platform {}
 	}

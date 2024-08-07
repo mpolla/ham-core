@@ -1,10 +1,16 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { logbookStore } from '$lib/stores/logbook-store';
 	import type { IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
 	import Loading from '$lib/components/loading.svelte';
 	import Error from '$lib/components/error.svelte';
+	import Fa from 'svelte-fa';
+	import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+	import QsoModal from './qso-modal.svelte';
+	import { pushState } from '$app/navigation';
+	import BandBadge from '$lib/components/band-badge.svelte';
 
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();
@@ -100,10 +106,18 @@
 							{(qso.frequency / 1e6).toFixed(3)}
 						</td>
 						<td class="text-center">
-							<span class={`band band${qso.band}`}>{qso.band}</span>
+							<BandBadge {qso} />
 						</td>
 						<td class="w-1/5 min-w-32 max-w-0 overflow-hidden overflow-ellipsis whitespace-nowrap">
 							{getCountry(qso)}
+						</td>
+						<td>
+							<button
+								class="btn btn-circle btn-ghost btn-sm"
+								on:click={() => pushState('', { showQsoModal: qso.id })}
+							>
+								<Fa icon={faInfoCircle} />
+							</button>
 						</td>
 					</tr>
 				{/each}
@@ -115,50 +129,6 @@
 	</div>
 </div>
 
-<style lang="postcss">
-	span.band {
-		@apply badge font-medium text-black;
-	}
-	span.band160m {
-		background-color: rgba(120, 221, 20, 0.9);
-	}
-	span.band80m {
-		background-color: rgba(241, 117, 241, 0.9);
-	}
-	span.band60m {
-		background-color: rgb(184, 112, 247);
-	}
-	span.band40m {
-		background-color: rgb(111, 149, 253);
-	}
-	span.band30m {
-		background-color: rgba(98, 217, 98, 0.9);
-	}
-	span.band20m {
-		background-color: rgba(242, 196, 12, 0.9);
-	}
-	span.band17m {
-		background-color: rgba(242, 242, 97, 0.9);
-	}
-	span.band15m {
-		background-color: rgba(204, 161, 102, 0.9);
-	}
-	span.band12m {
-		background-color: rgb(194, 66, 66);
-	}
-	span.band10m {
-		background-color: rgba(255, 105, 180, 0.9);
-	}
-	span.band6m {
-		background-color: rgba(255, 63, 63, 0.9);
-	}
-	span.band4m {
-		background-color: rgba(204, 0, 68, 0.9);
-	}
-	span.band2m {
-		background-color: rgba(255, 20, 147, 0.9);
-	}
-	span.band70cm {
-		background-color: rgba(153, 153, 0, 0.9);
-	}
-</style>
+{#if $page.state.showQsoModal}
+	<QsoModal />
+{/if}
