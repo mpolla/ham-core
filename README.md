@@ -22,7 +22,7 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [ ] Delete logbook
 - [ ] QSO
   - [x] Create QSO
-  - [ ] View QSO
+  - [x] View QSO
   - [ ] Edit QSO
   - [ ] Delete QSO
 - [ ] Complete logbook fields
