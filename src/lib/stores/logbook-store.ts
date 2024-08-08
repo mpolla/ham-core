@@ -91,6 +91,10 @@ export async function insertQso(
 	return true;
 }
 
+export function refreshLogbook() {
+	_paramsStore.update((s) => ({ ...s }));
+}
+
 export function selectLog(logId: number): void {
 	_paramsStore.update((old) => ({ ...old, logId, offset: 0 }));
 }
