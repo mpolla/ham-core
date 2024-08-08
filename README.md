@@ -26,6 +26,11 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [ ] Edit QSO
   - [ ] Delete QSO
 - [ ] Complete logbook fields
+- [ ] Complete qso fields
+  - [ ] SOTA, POTA, WWFF, IOTA, etc.
+  - [ ] QSL card
+  - [ ] QRZ, LOTW, eQSL, ClubLog, etc. upload status
+  - [ ] Operator info (Name, Qth, etc.)
 - [x] Export ADIF
 - [x] Logbook analysis
   - [x] DXCC entities
@@ -33,25 +38,38 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [x] Bands
 - [x] Migrate QSL CSV generation to modal
 - [ ] Add TRX and antenna fields to QSL CSV
-- [ ] Add QSL, QRZ, LOTW, eQSL, ClubLog, etc. status and support
+- [ ] Add QRZ, LOTW, eQSL, ClubLog, etc. support
 - [ ] Add operator lookup (QRZ, HamQTH, etc.)
 - [ ] Add separate logbook and location information
-- [ ] SOTA, POTA, WWFF, IOTA, etc. support
-- [ ] QSO map
-- [ ] Live QSO path on map
-- [ ] Azimuthal map (maybe)
+- [ ] Map
+  - [ ] Last N QSO on map
+  - [ ] Live QSO path on map
+  - [ ] Azimuthal map
+  - [ ] Locator grid
+  - [ ] Night/day overlay
+  - [ ] Pskreporter integration
+  - [ ] Reverse beacon network integration
+  - [ ] DXCC entities, CQ, ITU zones (maybe)
 - [ ] QSO statistics
+  - [ ] Per band, mode, etc.
+  - [ ] DXCC, continents, grids by band, mode
+  - [ ] QSO per hour, month, year
+  - [ ] By distance
 - [ ] Offline support
 - [ ] Contest mode
-- [ ] Cabrillo export
+  - [ ] Cabrillo export
 - [ ] SFI, SSN, A, K index meters
+- [ ] Realtime QSO updates
 
 #### Tauri
 
 A list of things to implement when Tauri gets added
 
 - [ ] WSJT-X integration
-- [ ] Rig control
+- [ ] Rig control (Hamlib)
+- [ ] N1MM integration
+- [ ] Background QSO logging
+- [ ] Telnet Cluster integration
 
 ## References
 
