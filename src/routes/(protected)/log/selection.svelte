@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation';
 	import { page } from '$app/stores';
-	import ExportAdiModal from './export-adif/export-adi-modal.svelte';
+	import ExportAdiModal from './adif-export/adif-export-modal.svelte';
 	import GenCsvModal from './gen-csv-qsl/gen-csv-modal.svelte';
 	import { clearSelected, selectedStore } from './selected-store';
 
