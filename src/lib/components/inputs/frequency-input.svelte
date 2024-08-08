@@ -30,11 +30,13 @@
 				t.value = (parseFloat(t.value) + 0.001).toFixed(3);
 				t.setSelectionRange(selStart, selEnd);
 				value = t.value;
+				t.dispatchEvent(new Event('input', { bubbles: true }));
 			} else if (e.key === 'ArrowDown') {
 				e.preventDefault();
 				t.value = (parseFloat(t.value) - 0.001).toFixed(3);
 				t.setSelectionRange(selStart, selEnd);
 				value = t.value;
+				t.dispatchEvent(new Event('input', { bubbles: true }));
 			}
 		}}
 		on:input={(e) => {
