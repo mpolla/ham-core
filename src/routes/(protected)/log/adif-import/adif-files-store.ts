@@ -24,12 +24,12 @@ export interface FileResult {
 export const adifFilesStore = writable<FileResult[] | undefined>(undefined);
 
 export function setFiles(files: FileList | null) {
-	console.log(files);
 	if (!files) adifFilesStore.set(undefined);
 	adifFilesStore.set(
 		[...files!].map((file) => {
 			const qsosPromise = file.text().then((text) => {
 				const res = parseAdifFile(text);
+				if (res.warnings) console.warn('ADI parsing warnings\n', res.warnings.join('\n'));
 				const warnings = res.warnings.length
 					? [`${res.warnings.length} warnings parsing file`]
 					: [];
@@ -77,6 +77,8 @@ export async function uploadFiles(logId: number) {
 	if (!files) return;
 	adifFilesStore.set(files.map((f) => ({ ...f, importStatus: ImportStatus.InProgress })));
 
+	const reqs: PromiseLike<void>[] = [];
+
 	for (let i = 0; i < files.length; i++) {
 		const f = files[i];
 		const { qsos } = await f.result;
@@ -87,7 +89,7 @@ export async function uploadFiles(logId: number) {
 				...files!.slice(i + 1)
 			]);
 
-		supabase
+		const req = supabase
 			.from('qso')
 			.insert(
 				qsos.map((qso) => ({
@@ -109,5 +111,9 @@ export async function uploadFiles(logId: number) {
 					...files!.slice(i + 1)
 				]);
 			});
+
+		reqs.push(req);
 	}
+
+	await Promise.all(reqs);
 }

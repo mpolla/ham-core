@@ -12,7 +12,7 @@
 <div class="mx-auto flex max-w-5xl flex-col gap-10">
 	<div class="flex flex-wrap items-end gap-4">
 		<LogbookSelect />
-		<a href="/adif-import" class="btn btn-sm ml-auto">Import ADIF</a>
+		<a href="/log/adif-import" class="btn btn-sm ml-auto">Import ADI</a>
 		<a href="/log/settings" class="btn btn-sm">
 			<Fa icon={faCog} />
 			<span>Settings</span>

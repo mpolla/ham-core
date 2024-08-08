@@ -18,7 +18,7 @@
 </script>
 
 <div class="flex flex-col gap-6">
-	<h1 class="text-3xl">Import ADIF files</h1>
+	<h1 class="text-3xl">Import ADI files</h1>
 
 	<div class="flex flex-col gap-4 md:flex-row md:items-end">
 		<LogbookSelect class="w-full max-w-xs" canBeEmpty={false} />
