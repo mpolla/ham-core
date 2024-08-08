@@ -20,17 +20,17 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [x] Create logbook
   - [x] Edit logbook
   - [ ] Delete logbook
+  - [ ] Add more fields
 - [ ] QSO
   - [x] Create QSO
   - [x] View QSO
   - [ ] Edit QSO
   - [ ] Delete QSO
-- [ ] Complete logbook fields
-- [ ] Complete qso fields
-  - [ ] SOTA, POTA, WWFF, IOTA, etc.
-  - [ ] QSL card
-  - [ ] QRZ, LOTW, eQSL, ClubLog, etc. upload status
-  - [ ] Operator info (Name, Qth, etc.)
+  - [ ] Add fields
+    - [ ] SOTA, POTA, WWFF, IOTA, etc.
+    - [ ] QSL card
+    - [ ] QRZ, LOTW, eQSL, ClubLog, etc. upload status
+    - [ ] Operator info (Name, Qth, etc.)
 - [x] Export ADIF
 - [x] Logbook analysis
   - [x] DXCC entities
