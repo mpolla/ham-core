@@ -3,6 +3,6 @@
 	import View from './view.svelte';
 </script>
 
-<Modal onClose={() => history.back()}>
+<Modal onClose={() => history.back()} title="QSL CSV">
 	<View />
 </Modal>

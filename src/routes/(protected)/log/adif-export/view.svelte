@@ -32,8 +32,6 @@
 			: undefined;
 </script>
 
-<h1 class="mb-8 text-3xl font-light">Export ADI</h1>
-
 <div class="max-h-80 overflow-auto rounded-lg bg-base-300">
 	<table class="table">
 		<thead class="sticky top-0 bg-base-300">

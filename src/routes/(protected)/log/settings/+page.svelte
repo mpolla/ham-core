@@ -11,6 +11,7 @@
 
 	$: defaultLog = $userStore?.info?.default_log_id;
 	$: selectedLog = $logbookStore.params.logId;
+	$: logbookModal = $page.state.logbookModal;
 </script>
 
 <div class="flex flex-col gap-8">
@@ -19,8 +20,8 @@
 	<div>
 		<h3 class="mb-4 text-2xl">Logbooks</h3>
 
-		<div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end">
-			<LogbookSelect class="w-full sm:max-w-xs" />
+		<div class="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end">
+			<LogbookSelect class="w-full min-w-60 sm:max-w-xs" />
 
 			<button
 				on:click={() => selectedLog && setDefaultLog(selectedLog)}
@@ -50,9 +51,12 @@
 				<span>Analyze</span>
 			</a>
 
-			{#if $page.state.logbookModal}
-				<Modal onClose={() => history.back()}>
-					<LogbookForm mode={$page.state.logbookModal} />
+			{#if logbookModal}
+				<Modal
+					onClose={() => history.back()}
+					title={logbookModal === 'new' ? 'New Log' : 'Edit Log'}
+				>
+					<LogbookForm mode={logbookModal} />
 				</Modal>
 			{/if}
 		</div>

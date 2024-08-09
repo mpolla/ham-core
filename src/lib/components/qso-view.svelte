@@ -21,8 +21,6 @@
 </script>
 
 <div class="flex flex-col gap-8">
-	<h1 class="text-2xl">QSO info</h1>
-
 	<table class="table [&_td]:text-center">
 		<tbody>
 			<tr>

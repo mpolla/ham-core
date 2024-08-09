@@ -10,7 +10,7 @@
 	$: qsoPromise = supabase.from('qso').select('*').eq('id', qsoId).single();
 </script>
 
-<Modal onClose={() => history.back()}>
+<Modal onClose={() => history.back()} title="QSO info">
 	{#await qsoPromise}
 		<Loading />
 	{:then qso}

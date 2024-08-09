@@ -76,9 +76,7 @@
 	onMount(() => copyFrom(log));
 </script>
 
-<div class="flex flex-col gap-4 rounded-xl">
-	<h1 class="text-2xl">{mode === 'new' ? 'New Log' : 'Edit Log'}</h1>
-
+<div class="flex flex-col gap-4">
 	<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
 		<label class="form-control col-span-2">
 			<div class="label">
