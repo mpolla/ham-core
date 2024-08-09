@@ -10,12 +10,9 @@
 	$: _band = band ?? (_freq ? Band.getBand(_freq)?.name : undefined);
 </script>
 
-<span class={`band band${_band}`}>{_band}</span>
+<span class={`badge font-medium text-black band${_band}`}>{_band}</span>
 
 <style lang="postcss">
-	.band {
-		@apply badge font-medium text-black;
-	}
 	.band160m {
 		background-color: rgba(120, 221, 20, 0.9);
 	}
