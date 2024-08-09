@@ -6,6 +6,8 @@
 	import { faChevronDown, faClose, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
+	let callsignInputElement: HTMLInputElement;
+
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
 	function setCallsign(v: string) {
 		if (v === callsign) return;
@@ -32,10 +34,14 @@
 				placeholder="Search Callsign"
 				value={callsign}
 				on:input={(v) => setCallsign(v.currentTarget.value)}
+				bind:this={callsignInputElement}
 			/>
 			<button
 				class="btn btn-circle btn-ghost btn-sm -mr-2 disabled:hidden"
-				on:click={() => updateFilter({ callsign: '' })}
+				on:click={() => {
+					updateFilter({ callsign: '' });
+					callsignInputElement.focus();
+				}}
 				disabled={!callsign}
 			>
 				<Fa icon={faClose} />

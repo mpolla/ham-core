@@ -103,4 +103,21 @@
 			</table>
 		{/if}
 	</div>
+
+	<table class="table table-xs">
+		<thead>
+			<tr>
+				<th>QSO ID</th>
+				<th>Log ID</th>
+				<th>Created At</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{qso.id}</td>
+				<td>{qso.log_id}</td>
+				<td>{formatDT(qso.created_at)}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
