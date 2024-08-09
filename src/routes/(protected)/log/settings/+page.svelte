@@ -1,17 +1,44 @@
 <script lang="ts">
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
 	import { setDefaultLog, userStore } from '$lib/stores/user-store';
-	import { faEdit, faHeart, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faEdit,
+		faHeart,
+		faMagnifyingGlass,
+		faPlus,
+		faTrash
+	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import LogbookForm from './logbook-form.svelte';
 	import { page } from '$app/stores';
-	import { pushState } from '$app/navigation';
+	import { pushState, replaceState } from '$app/navigation';
 	import Modal from '$lib/components/modal.svelte';
+	import { supabase } from '$lib/supabase';
+	import { logsStore, refreshLogs } from '$lib/stores/logs-store';
 
 	$: defaultLog = $userStore?.info?.default_log_id;
 	$: selectedLog = $logbookStore.params.logId;
+	$: log = $logsStore?.find((log) => log.id === selectedLog);
 	$: logbookModal = $page.state.logbookModal;
+	$: deleteConfirmation = $page.state.showConfirmModal;
+
+	function deleteLog() {
+		if (!selectedLog) return;
+		supabase
+			.from('log')
+			.update({ deleted_at: new Date().toISOString() })
+			.eq('id', selectedLog)
+			.then((res) => {
+				if (res.error) {
+					console.error(res.error);
+					return;
+				}
+				refreshLogs();
+				replaceState('', {});
+				selectLog(0);
+			});
+	}
 </script>
 
 <div class="flex flex-col gap-8">
@@ -41,9 +68,13 @@
 				<span>Edit Log</span>
 			</button>
 
-			<button on:click={() => pushState('', { logbookModal: 'new' })} class="btn">
-				<Fa icon={faPlus} />
-				<span>New Log</span>
+			<button
+				on:click={() => pushState('', { showConfirmModal: true })}
+				class="btn"
+				disabled={!selectedLog}
+			>
+				<Fa icon={faTrash} />
+				<span>Delete Log</span>
 			</button>
 
 			<a class="btn" href="/log/analyze">
@@ -51,12 +82,32 @@
 				<span>Analyze</span>
 			</a>
 
+			<button on:click={() => pushState('', { logbookModal: 'new' })} class="btn">
+				<Fa icon={faPlus} />
+				<span>New Log</span>
+			</button>
+
 			{#if logbookModal}
 				<Modal
 					onClose={() => history.back()}
 					title={logbookModal === 'new' ? 'New Log' : 'Edit Log'}
 				>
 					<LogbookForm mode={logbookModal} />
+				</Modal>
+			{/if}
+
+			{#if deleteConfirmation}
+				<Modal onClose={() => history.back()} title="Delete Log">
+					<!-- TODO Get qso count in log -->
+					<p>
+						Are you sure you want to delete the log
+						<span class="rounded bg-base-300 px-2 py-1 font-bold">{log?.title} ({log?.call})</span>
+						and all containing QSOs?
+					</p>
+					<div class="mt-4 flex justify-end gap-2">
+						<button class="btn" on:click={() => history.back()}>Cancel</button>
+						<button class="btn btn-error" on:click={deleteLog}>Delete</button>
+					</div>
 				</Modal>
 			{/if}
 		</div>

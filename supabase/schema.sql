@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS "public"."log" (
     "grid" character varying,
     "cqz" smallint,
     "ituz" smallint,
-    "title" character varying
+    "title" character varying,
+    "deleted_at" timestamp with time zone
 );
 
 ALTER TABLE "public"."log" OWNER TO "postgres";
@@ -64,7 +65,8 @@ CREATE TABLE IF NOT EXISTS "public"."qso" (
     "log_id" bigint,
     "band" character varying,
     "gridsquare" character varying,
-    "cont" character varying
+    "cont" character varying,
+    "deleted_at" timestamp with time zone
 );
 
 ALTER TABLE "public"."qso" OWNER TO "postgres";
@@ -192,6 +194,8 @@ CREATE POLICY "Enable read access for all users" ON "public"."user_info" FOR SEL
 CREATE POLICY "Enable read access for auth users" ON "public"."log" FOR SELECT USING ((("auth"."uid"() = "user_id") OR ("user_id" IS NULL)));
 
 CREATE POLICY "Enable update for users based on user_id" ON "public"."log" FOR UPDATE USING ((( SELECT "auth"."uid"() AS "uid") = "user_id")) WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "user_id"));
+
+CREATE POLICY "Enable update for users based on user_id" ON "public"."qso" FOR UPDATE USING ((( SELECT "auth"."uid"() AS "uid") = "user_id")) WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "user_id"));
 
 CREATE POLICY "Enable update for users by id" ON "public"."user_info" FOR UPDATE TO "authenticated" USING ((( SELECT "auth"."uid"() AS "uid") = "user_id")) WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "user_id"));
 

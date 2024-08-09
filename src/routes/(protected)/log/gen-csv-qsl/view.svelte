@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type IQso, supabase } from '$lib/supabase';
+	import { getQsos, type IQso } from '$lib/supabase';
 	import { writable } from 'svelte/store';
 	import { selectedStore } from '../selected-store';
 	import { logsStore } from '$lib/stores/logs-store';
@@ -13,9 +13,7 @@
 
 	const qsosStore = writable<QsoStore>(undefined);
 
-	$: supabase
-		.from('qso')
-		.select('*')
+	$: getQsos()
 		.in('id', [...$selectedStore])
 		.then(({ data, error }) => {
 			if (error) {

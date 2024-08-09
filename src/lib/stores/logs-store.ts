@@ -1,4 +1,4 @@
-import { supabase, type ILog } from '$lib/supabase';
+import { getLogs, type ILog } from '$lib/supabase';
 import { writable } from 'svelte/store';
 import { userStore } from './user-store';
 
@@ -10,6 +10,10 @@ userStore.subscribe((user) => {
 });
 
 async function fetchLogs(): Promise<ILog[]> {
-	const res = await supabase.from('log').select('*');
+	const res = await getLogs();
 	return res.data?.sort((a, b) => a.id - b.id) ?? [];
+}
+
+export function refreshLogs() {
+	fetchLogs().then(logsStore.set);
 }

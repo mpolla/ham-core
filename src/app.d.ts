@@ -10,6 +10,7 @@ declare global {
 			showAdiModal?: boolean;
 			logbookModal?: 'edit' | 'new';
 			showQsoModal?: number;
+			showConfirmModal?: boolean;
 		}
 		// interface Platform {}
 	}

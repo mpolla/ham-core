@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { logbookStore } from '$lib/stores/logbook-store';
-	import { supabase, type IQso } from '$lib/supabase';
+	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
@@ -12,7 +12,7 @@
 	let conflictCont: { qso: IQso; conts: string[] }[] | undefined = undefined;
 	let selectedCont: { [id: string]: string } = {};
 
-	let contReq = supabase.from('qso').select('*').is('cont', null);
+	let contReq = getQsos().is('cont', null);
 	if (logbookId) contReq = contReq.eq('log_id', logbookId);
 	contReq.then(({ data }) => {
 		missingCont = new Map();

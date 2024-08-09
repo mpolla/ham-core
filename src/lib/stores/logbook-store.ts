@@ -1,5 +1,5 @@
 import type { Database } from '$lib/database.types';
-import { supabase, type IQso } from '$lib/supabase';
+import { getQsos, supabase, type IQso } from '$lib/supabase';
 import { derived, get, writable } from 'svelte/store';
 import { logsStore } from './logs-store';
 import { userStore } from './user-store';
@@ -43,9 +43,7 @@ _paramssStore.subscribe(({ logId, offset, limit, filter }) => {
 		isLoading: true,
 		hasError: false
 	}));
-	let q = supabase
-		.from('qso')
-		.select('*', { count: 'exact' })
+	let q = getQsos('exact')
 		.order('datetime', { ascending: false })
 		.range(offset, offset + limit - 1);
 	if (logId) q = q.eq('log_id', logId);

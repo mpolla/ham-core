@@ -2,9 +2,13 @@
 	import { logsStore } from '$lib/stores/logs-store';
 	import type { IQso } from '$lib/supabase';
 	import { getDistanceBetweenLocators } from '$lib/utils/locator-util';
+	import Fa from 'svelte-fa';
 	import BandBadge from './band-badge.svelte';
+	import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 	export let qso: IQso;
+	export let onEdit: (() => void) | undefined = undefined;
+	export let onDelete: (() => void) | undefined = undefined;
 
 	$: log = $logsStore?.find((log) => log.id === qso.log_id);
 
@@ -79,6 +83,20 @@
 			{/if}
 		</tbody>
 	</table>
+
+	<div>
+		<h2 class="mb-2 text-sm font-medium">Actions</h2>
+		<div class="flex flex-row gap-2">
+			<button class="btn btn-primary btn-sm" disabled={!onEdit} on:click={onEdit}>
+				<Fa icon={faEdit} />
+				<span>Edit</span>
+			</button>
+			<button class="btn btn-error btn-sm" disabled={!onDelete} on:click={onDelete}>
+				<Fa icon={faTrash} />
+				<span>Delete</span>
+			</button>
+		</div>
+	</div>
 
 	<div>
 		{#if qso.other}

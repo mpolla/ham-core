@@ -8,6 +8,7 @@ export class Qso implements IQso {
 	public country: string | null;
 	public created_at: string;
 	public datetime: string;
+	public deleted_at: string | null;
 	public dxcc: number | null;
 	public frequency: number;
 	public gridsquare: string | null;
@@ -29,6 +30,7 @@ export class Qso implements IQso {
 		this.country = fields.country;
 		this.created_at = fields.created_at;
 		this.datetime = fields.datetime;
+		this.deleted_at = fields.deleted_at;
 		this.dxcc = fields.dxcc;
 		this.frequency = fields.frequency;
 		this.gridsquare = fields.gridsquare;
@@ -115,6 +117,7 @@ export class Qso implements IQso {
 			cont: adif.CONT,
 			country: adif.COUNTRY,
 			datetime: this.formatAdifDateTime(adif.QSO_DATE, adif.TIME_ON),
+			deleted_at: null,
 			dxcc: adif.DXCC ? +adif.DXCC : null,
 			frequency: parseFloat(adif.FREQ) * 1e6,
 			gridsquare: adif.GRIDSQUARE,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { logbookStore } from '$lib/stores/logbook-store';
-	import { supabase, type IQso } from '$lib/supabase';
+	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';
@@ -10,7 +10,7 @@
 
 	let missingBand: Map<Band | null, IQso[]> | undefined = undefined;
 
-	let contReq = supabase.from('qso').select('*').is('band', null);
+	let contReq = getQsos().is('band', null);
 	if (logbookId) contReq = contReq.eq('log_id', logbookId);
 	contReq.then(({ data }) => {
 		missingBand = new Map();

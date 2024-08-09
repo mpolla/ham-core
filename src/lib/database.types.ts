@@ -9,6 +9,7 @@ export type Database = {
 					country: string;
 					cqz: number | null;
 					created_at: string;
+					deleted_at: string | null;
 					dxcc: number;
 					grid: string | null;
 					id: number;
@@ -22,6 +23,7 @@ export type Database = {
 					country: string;
 					cqz?: number | null;
 					created_at?: string;
+					deleted_at?: string | null;
 					dxcc: number;
 					grid?: string | null;
 					id?: number;
@@ -35,6 +37,7 @@ export type Database = {
 					country?: string;
 					cqz?: number | null;
 					created_at?: string;
+					deleted_at?: string | null;
 					dxcc?: number;
 					grid?: string | null;
 					id?: number;
@@ -62,6 +65,7 @@ export type Database = {
 					country: string | null;
 					created_at: string;
 					datetime: string;
+					deleted_at: string | null;
 					dxcc: number | null;
 					frequency: number;
 					gridsquare: string | null;
@@ -83,6 +87,7 @@ export type Database = {
 					country?: string | null;
 					created_at?: string;
 					datetime: string;
+					deleted_at?: string | null;
 					dxcc?: number | null;
 					frequency: number;
 					gridsquare?: string | null;
@@ -104,6 +109,7 @@ export type Database = {
 					country?: string | null;
 					created_at?: string;
 					datetime?: string;
+					deleted_at?: string | null;
 					dxcc?: number | null;
 					frequency?: number;
 					gridsquare?: string | null;
