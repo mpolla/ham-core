@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { findDxcc } from 'fast-dxcc';
+	import { findDxcc, type DxccEntity } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { callsignInput, gridsquareInput } from '$lib/helpers/input-helpers';
 	import TimeInput from '$lib/components/inputs/time-input.svelte';
@@ -9,9 +9,16 @@
 	import { Mode } from '$lib/models/mode';
 	import { Band } from '$lib/models/band';
 	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
-	import { locatorRegex } from '$lib/utils/locator-util';
+	import {
+		getDistanceBetweenLocators,
+		locatorRegex,
+		locatorToLongLat
+	} from '$lib/utils/locator-util';
+	import { getDistance } from '$lib/utils/geo-util';
+	import { logsStore } from '$lib/stores/logs-store';
 
 	$: selectedLog = $logbookStore.params.logId;
+	$: log = $logsStore?.find((l) => l.id === selectedLog);
 
 	let callsignInputElement: HTMLInputElement;
 	let callsign = '';
@@ -32,8 +39,22 @@
 	let power = '';
 	let gridsquare = '';
 
-	$: dxcc = findDxcc(callsign);
+	$: dxcc = findDxcc(callsign)?.entity;
 	$: isValidCall = !!callsign.match(advancedCallsignRe);
+
+	$: gridsquareValid = gridsquare.match(locatorRegex);
+	$: distance = getDist(gridsquare, dxcc);
+
+	function getDist(gridsquare: string, dxcc: DxccEntity | undefined) {
+		if (!log?.grid) return;
+		if (gridsquareValid) {
+			return getDistanceBetweenLocators(gridsquare, log.grid);
+		}
+		if (dxcc?.lat && dxcc.long) {
+			const res = locatorToLongLat(log.grid);
+			return getDistance(res.lat, res.long, dxcc.lat!, dxcc.long!);
+		}
+	}
 
 	$: canSubmit = callsign.length >= 3 && freq && !!selectedLog;
 
@@ -48,14 +69,14 @@
 			band: band || null,
 			rst_sent: rstSent,
 			rst_rcvd: rstRcv,
-			dxcc: dxcc?.entity.dxcc,
-			country: dxcc?.entity.name || null,
+			dxcc: dxcc?.dxcc,
+			country: dxcc?.name || null,
 			power: power ? parseInt(power) : null,
 			gridsquare: gridsquare || null,
-			cont: dxcc?.entity.cont || null,
+			cont: dxcc?.cont || null,
 			other: {
-				CQZ: dxcc?.entity.cqz,
-				ITUZ: dxcc?.entity.ituz
+				CQZ: dxcc?.cqz,
+				ITUZ: dxcc?.ituz
 			}
 		}).then((r) => {
 			if (r) clear();
@@ -200,16 +221,21 @@
 		type="text"
 		use:gridsquareInput
 		bind:value={gridsquare}
-		class={`input sm:max-w-xs ${gridsquare && !gridsquare.match(locatorRegex) ? 'input-error' : ''}`}
+		class={`input sm:max-w-xs ${gridsquare && !gridsquareValid ? 'input-error' : ''}`}
 		placeholder="Gridsquare"
 	/>
 
 	<div class="flex items-end gap-4">
 		{#if dxcc}
-			<div>{dxcc.entity.name}</div>
-			<div>{dxcc.entity.cont}</div>
-			<div><span class="text-xs">CQ</span> {dxcc.entity.cqz}</div>
-			<div><span class="text-xs">ITU</span> {dxcc.entity.ituz}</div>
+			<div>{dxcc.name}</div>
+			<div>{dxcc.cont}</div>
+			<div><span class="text-xs">CQ</span> {dxcc.cqz}</div>
+			<div><span class="text-xs">ITU</span> {dxcc.ituz}</div>
+		{/if}
+		{#if distance}
+			<div class={gridsquareValid ? '' : 'opacity-70'}>
+				{(distance / 1000).toFixed(1)} <span class="text-xs">km</span>
+			</div>
 		{/if}
 		<div class="ml-auto flex items-center gap-4">
 			{#if !selectedLog}
