@@ -66,7 +66,7 @@ export function generateText(qsos: IQso[], logs: ILog[]): string {
 	}
 	if (row.length > 0) rows.push(row);
 
-	let text = 'Station,Callsign,Via,Grid,Cqz,Ituz';
+	let text = 'i,Station,Callsign,Via,Grid,Cqz,Ituz';
 	for (let i = 1; i <= QSOS_PER_QSL; ++i)
 		text += `,Q${i}Date,Q${i}Utc,Q${i}Mhz,Q${i}Mode,Q${i}Rst,Q${i}Pwr`;
 
@@ -74,9 +74,9 @@ export function generateText(qsos: IQso[], logs: ILog[]): string {
 		text +
 		'\n' +
 		rows
-			.map((row) => {
+			.map((row, i) => {
 				const f = row[0];
-				let r = `${f.station},${f.call},${f.via},${f.grid},${f.cqz},${f.ituz}`;
+				let r = `${i},${f.station},${f.call},${f.via},${f.grid},${f.cqz},${f.ituz}`;
 				for (const q of row) {
 					r += `,${q.date},${q.time},${q.freq},${q.mode},${q.rst_sent},${q.power}`;
 				}
