@@ -163,7 +163,7 @@ export const parseCsv = (file: string): IEntity[] =>
 				cqz: parseInt(cqz),
 				ituz: parseInt(ituz),
 				lat: parseFloat(lat),
-				long: parseFloat(long),
+				long: -parseFloat(long),
 				timez: parseFloat(timez),
 				otherPrefixes
 			};
@@ -191,7 +191,7 @@ export const parseDat = (file: string): IEntity[] =>
 				cqz: parseInt(cqz),
 				ituz: parseInt(ituz),
 				lat: parseFloat(lat),
-				long: parseFloat(long),
+				long: -parseFloat(long),
 				timez: parseFloat(timez),
 				otherPrefixes
 			};

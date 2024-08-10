@@ -43,7 +43,7 @@
 			<td>Longitude</td>
 			<td>
 				{#if long !== undefined}
-					{Math.abs(long)}°{long >= 0 ? 'W' : 'E'}
+					{Math.abs(long)}°{long < 0 ? 'W' : 'E'}
 				{:else}
 					?
 				{/if}
