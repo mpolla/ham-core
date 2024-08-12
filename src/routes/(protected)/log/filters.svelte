@@ -2,8 +2,14 @@
 	import { callsignInput } from '$lib/helpers/input-helpers';
 	import { Band } from '$lib/models/band';
 	import { Mode } from '$lib/models/mode';
-	import { logbookStore, setLimit, updateFilter } from '$lib/stores/logbook-store';
-	import { faChevronDown, faClose, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { logbookStore, refreshLogbook, setLimit, updateFilter } from '$lib/stores/logbook-store';
+	import {
+		faChevronDown,
+		faClose,
+		faFilter,
+		faRefresh,
+		faSearch
+	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
 	let callsignInputElement: HTMLInputElement;
@@ -125,6 +131,10 @@
 				</button>
 			</div>
 		</div>
+
+		<button class="btn btn-circle" on:click={refreshLogbook}>
+			<Fa icon={faRefresh} />
+		</button>
 
 		<!-- <button class="btn">
             <Fa icon={faSort} />
