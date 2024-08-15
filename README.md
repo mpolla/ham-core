@@ -19,13 +19,13 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 - [ ] Logbooks
   - [x] Create logbook
   - [x] Edit logbook
-  - [ ] Delete logbook
+  - [x] Delete logbook
   - [ ] Add more fields
 - [ ] QSO
   - [x] Create QSO
   - [x] View QSO
   - [ ] Edit QSO
-  - [ ] Delete QSO
+  - [x] Delete QSO
   - [ ] Add fields
     - [ ] SOTA, POTA, WWFF, IOTA, etc.
     - [ ] QSL card
@@ -41,15 +41,16 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 - [ ] Add QRZ, LOTW, eQSL, ClubLog, etc. support
 - [ ] Add operator lookup (QRZ, HamQTH, etc.)
 - [ ] Add separate logbook and location information
-- [ ] Map
-  - [ ] Last N QSO on map
+- [x] Map
+  - [x] Last N QSO on map
   - [ ] Live QSO path on map
-  - [ ] Azimuthal map
+  - [x] Azimuthal map
   - [ ] Locator grid
   - [ ] Night/day overlay
   - [ ] Pskreporter integration
   - [ ] Reverse beacon network integration
   - [ ] DXCC entities, CQ, ITU zones (maybe)
+  - [ ] Find better map provider
 - [ ] QSO statistics
   - [ ] Per band, mode, etc.
   - [ ] DXCC, continents, grids by band, mode
@@ -76,3 +77,4 @@ A list of things to implement when Tauri gets added
 - [D3 Map](https://d3js.org/d3-geo)
 - [D3 Projection](https://d3js.org/d3-geo/projection)
 - [D3 Map with sun](https://observablehq.com/@d3/solar-terminator)
+- [Country borders](https://github.com/topojson/world-atlas)

@@ -18,5 +18,8 @@
 		"supabase"
 	],
 	"cSpell.files": ["src/**/*.{js,ts,svelte}"],
-	"cSpell.ignorePaths": ["src/lib/database.types.ts"]
+	"cSpell.ignorePaths": ["src/lib/database.types.ts"],
+	"workbench.editor.customLabels.patterns": {
+		"*/src/routes/**/+*.*": "Page /${dirname}"
+	}
 }

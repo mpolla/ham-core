@@ -7,6 +7,7 @@
 	import Selection from './selection.svelte';
 	import Fa from 'svelte-fa';
 	import { faCog } from '@fortawesome/free-solid-svg-icons';
+	import LogMap from './log-map.svelte';
 </script>
 
 <div class="mx-auto flex max-w-5xl flex-col gap-10">
@@ -19,7 +20,13 @@
 		</a>
 	</div>
 
-	<QsoForm />
+	<div class="flex flex-col gap-6 lg:flex-row lg:items-center [&>*]:flex-1">
+		<QsoForm />
+
+		<div class="overflow-clip rounded-lg bg-base-200">
+			<LogMap />
+		</div>
+	</div>
 
 	<div class="flex w-full flex-col gap-4">
 		<Filters />

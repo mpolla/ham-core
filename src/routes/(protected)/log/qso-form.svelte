@@ -51,8 +51,8 @@
 			return getDistanceBetweenLocators(gridsquare, log.grid);
 		}
 		if (dxcc?.lat && dxcc.long) {
-			const res = locatorToLongLat(log.grid);
-			return getDistance(res.lat, res.long, dxcc.lat!, dxcc.long!);
+			const [long, lat] = locatorToLongLat(log.grid, true);
+			return getDistance(lat, long, dxcc.lat!, dxcc.long!);
 		}
 	}
 
@@ -131,7 +131,7 @@
 	on:beforeinput={() => (isPure = false)}
 	on:input={() => (isPure = false)}
 	on:keydown={({ key, altKey }) => key === 'w' && altKey && clear()}
-	class="flex flex-col gap-6 rounded-xl bg-base-300 p-6"
+	class="flex min-w-80 flex-col gap-6 rounded-xl bg-base-300 p-6 @container"
 >
 	<div class="flex items-start gap-4">
 		<h1 class="mr-auto text-2xl font-light">New QSO</h1>
@@ -162,58 +162,62 @@
 		</button>
 	</div>
 
-	<div class="flex flex-wrap gap-4">
-		<select
-			class="select"
-			bind:value={band}
-			on:change={() => {
-				const b = Band.ALL_BANDS.get(band ?? '');
-				if (!b) return;
-				const f = parseFloat(freq) * 1000000;
-				if (isNaN(f) || f < b.lower || f > b.upper) {
-					freq = (b.lower / 1000000).toFixed(3);
-				}
-			}}
-		>
-			{#each Band.ALL_BANDS.values() as band}
-				<option value={band.name}>{band.name}</option>
-			{/each}
-		</select>
-
-		<FrequencyInput
-			bind:value={freq}
-			onChange={() => (band = Band.getBand(parseFloat(freq) * 1000000)?.name)}
-			class="input max-w-44"
-		/>
-
-		<select class="select" bind:value={mode}>
-			{#each Mode.ALL_MODES.values() as mode}
-				<option value={mode.name}>{mode.name}</option>
-				{#each mode.subModes as subMode}
-					<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+	<div class="flex flex-col gap-4 @xl:flex-row">
+		<div class="flex gap-4">
+			<select
+				class="select flex-1"
+				bind:value={band}
+				on:change={() => {
+					const b = Band.ALL_BANDS.get(band ?? '');
+					if (!b) return;
+					const f = parseFloat(freq) * 1000000;
+					if (isNaN(f) || f < b.lower || f > b.upper) {
+						freq = (b.lower / 1000000).toFixed(3);
+					}
+				}}
+			>
+				{#each Band.ALL_BANDS.values() as band}
+					<option value={band.name}>{band.name}</option>
 				{/each}
-			{/each}
-		</select>
+			</select>
 
-		<label class="input flex w-full max-w-32 items-center gap-2">
-			<input type="text" class="w-full" placeholder="Power" bind:value={power} />
-			<div class="select-none">W</div>
-		</label>
+			<FrequencyInput
+				bind:value={freq}
+				onChange={() => (band = Band.getBand(parseFloat(freq) * 1000000)?.name)}
+				class="input flex-[2] @xl:max-w-44"
+			/>
+		</div>
+
+		<div class="flex gap-4">
+			<select class="select flex-1" bind:value={mode}>
+				{#each Mode.ALL_MODES.values() as mode}
+					<option value={mode.name}>{mode.name}</option>
+					{#each mode.subModes as subMode}
+						<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+					{/each}
+				{/each}
+			</select>
+
+			<label class="input flex w-full flex-1 items-center gap-2 @xl:max-w-32">
+				<input type="text" class="w-full" placeholder="Power" bind:value={power} />
+				<div class="select-none">W</div>
+			</label>
+		</div>
 	</div>
 
-	<div class="flex flex-col gap-4 sm:flex-row">
+	<div class="flex flex-col gap-4 @xl:flex-row">
 		<input
 			type="text"
 			use:callsignInput
 			bind:this={callsignInputElement}
 			bind:value={callsign}
-			class={`input w-full font-mono placeholder:font-sans sm:w-80 ${isValidCall ? 'input-success' : ''}`}
+			class={`input w-full font-mono placeholder:font-sans @xl:w-80 ${isValidCall ? 'input-success' : ''}`}
 			placeholder="Callsign"
 		/>
 
 		<div class="flex gap-4">
-			<RstInput class="input w-full sm:w-36" label="RST Sent" {mode} bind:value={rstSent} />
-			<RstInput class="input w-full sm:w-36" label="RST Rcv" {mode} bind:value={rstRcv} />
+			<RstInput class="input w-full @xl:w-36" label="RST Sent" {mode} bind:value={rstSent} />
+			<RstInput class="input w-full @xl:w-36" label="RST Rcv" {mode} bind:value={rstRcv} />
 		</div>
 	</div>
 
@@ -221,7 +225,7 @@
 		type="text"
 		use:gridsquareInput
 		bind:value={gridsquare}
-		class={`input sm:max-w-xs ${gridsquare && !gridsquareValid ? 'input-error' : ''}`}
+		class={`input @xl:max-w-xs ${gridsquare && !gridsquareValid ? 'input-error' : ''}`}
 		placeholder="Gridsquare"
 	/>
 

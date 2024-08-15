@@ -2,12 +2,7 @@ import { getDistance } from './geo-util';
 
 export const locatorRegex = /^[A-R]{2}(?:\d{2}[A-X]{2})*(?:\d{2})?$/i;
 
-interface LongLat {
-	long: number;
-	lat: number;
-}
-
-export function locatorToLongLat(locator: string, center: boolean = false): LongLat {
+export function locatorToLongLat(locator: string, center: boolean = false): [number, number] {
 	locator = locator.toUpperCase();
 	if (!locatorRegex.test(locator)) {
 		throw new Error(`Invalid locator: ${locator}`);
@@ -39,11 +34,11 @@ export function locatorToLongLat(locator: string, center: boolean = false): Long
 	long = (long / div) * 10 - 180;
 	lat = (lat / div) * 10 - 90;
 
-	return { long, lat };
+	return [long, lat];
 }
 
 export function getDistanceBetweenLocators(loc1: string, loc2: string): number {
-	const { long: long1, lat: lat1 } = locatorToLongLat(loc1, true);
-	const { long: long2, lat: lat2 } = locatorToLongLat(loc2, true);
+	const [long1, lat1] = locatorToLongLat(loc1, true);
+	const [long2, lat2] = locatorToLongLat(loc2, true);
 	return getDistance(lat1, long1, lat2, long2);
 }
