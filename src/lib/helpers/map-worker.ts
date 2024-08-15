@@ -11,7 +11,7 @@ self.onmessage = (
 	if (proj === 'azimuthal') {
 		projection.rotate([-center[0], -center[1]]);
 	} else {
-		projection.center(center);
+		projection.center([0, center[1]]).rotate([-center[0], 0]);
 	}
 	projection.scale(Math.pow(10, scale));
 	const path = geoPath().projection(projection);

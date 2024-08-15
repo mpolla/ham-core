@@ -49,7 +49,7 @@
 
 	$: {
 		if (projection === 'azimuthal') _projection.rotate([-center[0], -center[1]]);
-		if (projection === 'mercator') _projection.center(center);
+		if (projection === 'mercator') _projection.center([0, center[1]]).rotate([-center[0], 0]);
 		_projection = _projection.scale(Math.pow(10, scale));
 		path = geoPath(_projection);
 		setT();
