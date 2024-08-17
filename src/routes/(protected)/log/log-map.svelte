@@ -22,14 +22,15 @@
 
 	$: log = $logsStore?.find((l) => l.id === $logbookStore.params.logId);
 
-	$: center = log?.grid ? locatorToLongLat(log.grid) : undefined;
-	$: lastQsos = $logbookStore.result?.qsos.map(longLat).filter((q) => !!q) as
-		| [number, number][]
-		| undefined;
+	$: center = (log?.grid ? locatorToLongLat(log.grid) : undefined) as [number, number] | undefined;
+	$: lastQsos = ($logbookStore.result?.qsos.map(longLat).filter((q) => !!q) ?? []) as [
+		number,
+		number
+	][];
 </script>
 
 <Map
 	{center}
-	points={center && lastQsos ? [...lastQsos, center] : []}
+	points={[...(lastQsos ? lastQsos : []), ...(center ? [center] : [])]}
 	lines={center && lastQsos ? lastQsos.map((p) => [p, center]) : []}
 />
