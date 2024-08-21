@@ -134,11 +134,16 @@
 	class="flex min-w-80 flex-col gap-6 rounded-xl bg-base-300 p-6 @container"
 >
 	<div class="flex items-start gap-4">
-		<h1 class="mr-auto text-2xl font-light">New QSO</h1>
+		<div class="font-light">New QSO</div>
+		{#if log}
+			<h1 class="mx-auto text-2xl font-semibold">
+				{log.call}
+			</h1>
+		{/if}
 		<button type="button" class="btn btn-xs" on:click={clear} disabled={isPure}>Clear</button>
 	</div>
 
-	<div class="flex justify-start gap-4">
+	<div class="flex flex-wrap justify-start gap-4">
 		<input
 			type="date"
 			bind:value={date}
@@ -188,7 +193,7 @@
 			/>
 		</div>
 
-		<div class="flex gap-4">
+		<div class="flex flex-wrap gap-4">
 			<select class="select flex-1" bind:value={mode}>
 				{#each Mode.ALL_MODES.values() as mode}
 					<option value={mode.name}>{mode.name}</option>
@@ -198,7 +203,7 @@
 				{/each}
 			</select>
 
-			<label class="input flex w-full flex-1 items-center gap-2 @xl:max-w-32">
+			<label class="input flex w-full min-w-32 flex-1 items-center gap-2 @xl:max-w-32">
 				<input type="text" class="w-full" placeholder="Power" bind:value={power} />
 				<div class="select-none">W</div>
 			</label>
