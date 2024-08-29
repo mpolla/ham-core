@@ -1172,10 +1172,10 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-dxcc@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fast-dxcc/-/fast-dxcc-2.0.0.tgz#0afacf83ae0256e23e21af461e30c8d19e5b3d62"
-  integrity sha512-iGPE/2Mm+dIWszcMXX3RrjlEFeOk8nH97NAGR2u/pM7dyV4MF1R+0SNAoLxri8ZTAM0T3UHqzw9TX/WKSJFiiQ==
+fast-dxcc@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/fast-dxcc/-/fast-dxcc-2.1.0.tgz#ca451ebce6f4de2877387b8335240ed11cc3e161"
+  integrity sha512-hOg4PM6fpCmwnPccc5wQi5Upq+mkoonKNwaileChnR+elomUEwMKI2F+DSfeUTn6fjtSoH+V5NRDcsh4qfuv8A==
 
 fast-glob@^3.2.9, fast-glob@^3.3.0:
   version "3.3.2"
