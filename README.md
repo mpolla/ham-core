@@ -43,9 +43,13 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 - [ ] Add separate logbook and location information
 - [x] Map
   - [x] Last N QSO on map
-  - [ ] Live QSO path on map
+    - [ ] Handle unsure locations
+  - [ ] Current QSO path on map
   - [x] Azimuthal map
-  - [ ] Locator grid
+  - [x] Locator grid
+    - [ ] Grid labels
+    - [ ] 4 and 6 digit grid squares
+  - [ ] Better zoom and pan
   - [ ] Night/day overlay
   - [ ] Pskreporter integration
   - [ ] Reverse beacon network integration

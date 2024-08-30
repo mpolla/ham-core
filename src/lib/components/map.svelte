@@ -3,10 +3,12 @@
 	import { feature } from 'topojson-client';
 	import type { Topology, GeometryCollection } from 'topojson-specification';
 	import Fa from 'svelte-fa';
-	import { faCog, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { faClose, faCog, faExpand, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 	import world110 from '$lib/data/geo/countries-110m.json';
 	import world50 from '$lib/data/geo/countries-50m.json';
 	import MapWorker from '$lib/helpers/map-worker?worker';
+	import { page } from '$app/stores';
+	import { pushState } from '$app/navigation';
 
 	export let center: [number, number] = [0, 0];
 	export let projection: 'mercator' | 'azimuthal' = 'mercator';
@@ -14,6 +16,8 @@
 	export let lines: [[number, number], [number, number]][] = [];
 	export let countryColors: Record<string, string> = {};
 	export let showGridsquares = true;
+
+	$: mapExpanded = $page.state.showExpandedMap;
 
 	let scale = 2.2;
 	function setScale(v: number) {
@@ -67,9 +71,9 @@
 		world50.objects.countries as GeometryCollection
 	).features;
 
-	function getColor(i: number) {
-		const country = (_countries?.[i]?.properties as any)?.name ?? '';
-		return countryColors[country] ?? '#fff6';
+	function getColor(i: number, c: any) {
+		const country = (c?.[i]?.properties as any)?.name ?? '';
+		return countryColors[country] ?? '#9b9';
 	}
 
 	function scrolled(e: WheelEvent) {
@@ -78,42 +82,47 @@
 	}
 </script>
 
-<div class="relative">
-	<svg viewBox="0 0 975 610" width="100%" height="100%" on:wheel={scrolled}>
-		<path d={path({ type: 'Sphere' })} fill="#fff2" stroke="none" />
+<div class={mapExpanded ? 'fixed inset-0 z-40 flex p-8 [&>*]:flex-1' : ''}>
+	{#if mapExpanded}
+		<button class="absolute inset-0 bg-base-300/80" on:click={() => history.back()} />
+	{/if}
 
-		{#each countries as country, i}
-			<path d={country} fill={getColor(i)} stroke="#0009" />
-		{/each}
+	<div class="relative">
+		<svg viewBox="0 0 975 610" width="100%" height="100%" on:wheel={scrolled}>
+			<path d={path({ type: 'Sphere' })} fill="#335" stroke="none" />
 
-		{#if showGridsquares}
-			{@const div = 20}
-			{@const subdiv = 5}
-			<path
-				d={path({
-					type: 'MultiLineString',
-					coordinates: [
-						...Array(360 / div)
-							.fill(0)
-							.map((_, yi) =>
-								Array(360 / subdiv + 1)
-									.fill(0)
-									.map((_, i) => [i * subdiv, yi * (div / 2) - 90])
-							),
+			{#each countries as country, i}
+				<path d={country} fill={getColor(i, _countries)} stroke="#0009" />
+			{/each}
 
-						...Array(360 / div)
-							.fill(0)
-							.map((_, xi) => [
-								[xi * div, -90],
-								[xi * div, 0],
-								[xi * div, 90]
-							])
-					]
-				})}
-				fill="none"
-				stroke="#fff4"
-			/>
-			<!-- {#each Array(180 / (div / 2)).fill(0) as _, yi}
+			{#if showGridsquares}
+				{@const div = 20}
+				{@const subdiv = 3}
+				<path
+					d={path({
+						type: 'MultiLineString',
+						coordinates: [
+							...Array(360 / div)
+								.fill(0)
+								.map((_, yi) =>
+									Array(360 / subdiv + 1)
+										.fill(0)
+										.map((_, i) => [i * subdiv, yi * (div / 2) - 90])
+								),
+
+							...Array(360 / div)
+								.fill(0)
+								.map((_, xi) => [
+									[xi * div, -90],
+									[xi * div, 0],
+									[xi * div, 90]
+								])
+						]
+					})}
+					fill="none"
+					stroke="#6669"
+				/>
+				<!-- {#each Array(180 / (div / 2)).fill(0) as _, yi}
 				{#each Array(360 / div).fill(0) as _, xi}
 					{@const [x, y] = _projection([xi * div, yi * (div / 2) - 90]) ?? [0, 0]}
 					<text {x} {y} fill="#f00" font-size="30">
@@ -121,62 +130,72 @@
 					</text>
 				{/each}
 			{/each} -->
-		{/if}
+			{/if}
 
-		{#each lines as line}
-			<path d={path({ type: 'LineString', coordinates: line })} fill="none" stroke="#f80" />
-		{/each}
+			{#each lines as line}
+				<path d={path({ type: 'LineString', coordinates: line })} fill="none" stroke="#f80" />
+			{/each}
 
-		{#each points as point}
-			{@const [x, y] = _projection(point) ?? [0, 0]}
-			<circle cx={x} cy={y} r="6" fill="#f80" />
-			<circle cx={x} cy={y} r="4" fill="#34c" />
-			<circle cx={x} cy={y} r="2" fill="#f80" />
-		{/each}
-	</svg>
+			{#each points as point}
+				{@const [x, y] = _projection(point) ?? [0, 0]}
+				<circle cx={x} cy={y} r="6" fill="#f80" />
+				<circle cx={x} cy={y} r="4" fill="#34c" />
+				<circle cx={x} cy={y} r="2" fill="#f80" />
+			{/each}
+		</svg>
 
-	<div class="absolute right-3 top-3 flex flex-col gap-2">
-		<div class="dropdown dropdown-end">
-			<div tabindex="0" role="button" class="btn btn-circle btn-sm">
-				<Fa icon={faCog} />
-			</div>
-			<div class="dropdown-content pt-2">
-				<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
-					<div class="flex gap-2">
-						<button
-							class={`btn btn-sm flex-1 ${projection === 'mercator' ? 'btn-primary' : ''}`}
-							on:click={() => (projection = 'mercator')}
-						>
-							Mercator
-						</button>
-						<button
-							class={`btn btn-sm flex-1 ${projection === 'azimuthal' ? 'btn-primary' : ''}`}
-							on:click={() => (projection = 'azimuthal')}
-						>
-							Azimuthal
-						</button>
-					</div>
-					<div>
-						<div class="text-sm">Zoom</div>
-						<input
-							type="range"
-							min="2"
-							max="4"
-							step="0.1"
-							bind:value={scale}
-							class="range range-primary range-sm mt-1 w-full"
-						/>
+		<div class="absolute right-3 top-3 flex flex-col gap-2">
+			<button
+				class="btn btn-circle btn-sm"
+				on:click={mapExpanded
+					? () => history.back()
+					: () => pushState('', { showExpandedMap: true })}
+			>
+				<Fa icon={mapExpanded ? faClose : faExpand} />
+			</button>
+
+			<div class="dropdown dropdown-end">
+				<div tabindex="0" role="button" class="btn btn-circle btn-sm">
+					<Fa icon={faCog} />
+				</div>
+				<div class="dropdown-content pt-2">
+					<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
+						<div class="flex gap-2">
+							<button
+								class={`btn btn-sm flex-1 ${projection === 'mercator' ? 'btn-primary' : ''}`}
+								on:click={() => (projection = 'mercator')}
+							>
+								Mercator
+							</button>
+							<button
+								class={`btn btn-sm flex-1 ${projection === 'azimuthal' ? 'btn-primary' : ''}`}
+								on:click={() => (projection = 'azimuthal')}
+							>
+								Azimuthal
+							</button>
+						</div>
+						<div>
+							<div class="text-sm">Zoom</div>
+							<input
+								type="range"
+								min="2"
+								max="4"
+								step="0.1"
+								bind:value={scale}
+								class="range range-primary range-sm mt-1 w-full"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
+
+			<button class="btn btn-circle btn-sm" on:click={() => zoomIn()}>
+				<Fa icon={faPlus} />
+			</button>
+
+			<button class="btn btn-circle btn-sm" on:click={() => zoomOut()}>
+				<Fa icon={faMinus} />
+			</button>
 		</div>
-
-		<button class="btn btn-circle btn-sm" on:click={() => zoomIn()}>
-			<Fa icon={faPlus} />
-		</button>
-
-		<button class="btn btn-circle btn-sm" on:click={() => zoomOut()}>
-			<Fa icon={faMinus} />
-		</button>
 	</div>
 </div>

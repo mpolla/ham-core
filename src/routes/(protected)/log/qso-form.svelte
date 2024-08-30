@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { findDxcc, type DxccEntity } from 'fast-dxcc';
+	import { dxccEntities, findDxcc, type DxccEntity } from 'fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { callsignInput, gridsquareInput } from '$lib/helpers/input-helpers';
 	import TimeInput from '$lib/components/inputs/time-input.svelte';
@@ -195,12 +195,19 @@
 
 		<div class="flex flex-wrap gap-4">
 			<select class="select flex-1" bind:value={mode}>
-				{#each Mode.ALL_MODES.values() as mode}
-					<option value={mode.name}>{mode.name}</option>
-					{#each mode.subModes as subMode}
-						<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+				<optgroup label="Favorites">
+					<option value="SSB">SSB</option>
+					<option value="CW">CW</option>
+					<option value="FT8">FT8</option>
+				</optgroup>
+				<optgroup label="All">
+					{#each Mode.ALL_MODES.values() as mode}
+						<option value={mode.name}>{mode.name}</option>
+						{#each mode.subModes as subMode}
+							<option value={subMode.name}>&nbsp;&nbsp;&nbsp;&nbsp;{subMode.name}</option>
+						{/each}
 					{/each}
-				{/each}
+				</optgroup>
 			</select>
 
 			<label class="input flex w-full min-w-32 flex-1 items-center gap-2 @xl:max-w-32">
@@ -235,8 +242,17 @@
 	/>
 
 	<div class="flex items-end gap-4">
+		<select
+			class="select select-sm max-w-60"
+			value={dxcc?.id}
+			on:change={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
+		>
+			<option value="">NON-DXCC</option>
+			{#each [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name)) as dxcc}
+				<option value={dxcc.id}>{dxcc.name}</option>
+			{/each}
+		</select>
 		{#if dxcc}
-			<div>{dxcc.name}</div>
 			<div>{dxcc.cont}</div>
 			<div><span class="text-xs">CQ</span> {dxcc.cqz}</div>
 			<div><span class="text-xs">ITU</span> {dxcc.ituz}</div>

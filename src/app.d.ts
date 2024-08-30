@@ -11,6 +11,7 @@ declare global {
 			logbookModal?: 'edit' | 'new';
 			showQsoModal?: number;
 			showConfirmModal?: boolean;
+			showExpandedMap?: boolean;
 		}
 		// interface Platform {}
 	}
