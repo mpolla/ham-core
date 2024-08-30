@@ -16,6 +16,7 @@
 	} from '$lib/utils/locator-util';
 	import { getDistance } from '$lib/utils/geo-util';
 	import { logsStore } from '$lib/stores/logs-store';
+	import type { IQso } from '$lib/supabase';
 
 	$: selectedLog = $logbookStore.params.logId;
 	$: log = $logsStore?.find((l) => l.id === selectedLog);
@@ -113,9 +114,16 @@
 	$: lastQso = $logbookStore.result?.qsos[0];
 	$: if (isPure && lastQso) {
 		mode = lastQso.mode;
-		freq = (lastQso.frequency / 1000000).toFixed(3);
+		freq = getFreq(lastQso);
 		band = lastQso.band ?? undefined;
 		power = lastQso.power?.toString() ?? '';
+	}
+
+	function getFreq(qso: IQso) {
+		const f = qso.frequency / 1000000;
+		const ff = f.toFixed(3);
+		const full = f.toFixed(6).replace(/0+$/, '');
+		return full.length > ff.length ? full : ff;
 	}
 
 	onMount(() => {
@@ -242,26 +250,32 @@
 	/>
 
 	<div class="flex items-end gap-4">
-		<select
-			class="select select-sm max-w-60"
-			value={dxcc?.id}
-			on:change={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
-		>
-			<option value="">NON-DXCC</option>
-			{#each [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name)) as dxcc}
-				<option value={dxcc.id}>{dxcc.name}</option>
-			{/each}
-		</select>
-		{#if dxcc}
-			<div>{dxcc.cont}</div>
-			<div><span class="text-xs">CQ</span> {dxcc.cqz}</div>
-			<div><span class="text-xs">ITU</span> {dxcc.ituz}</div>
-		{/if}
-		{#if distance}
-			<div class={gridsquareValid ? '' : 'opacity-70'}>
-				{(distance / 1000).toFixed(1)} <span class="text-xs">km</span>
+		<div class="flex flex-1 flex-wrap items-end gap-4">
+			<select
+				class="select select-sm max-w-60"
+				value={dxcc?.id}
+				on:change={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
+			>
+				<option value="">NON-DXCC</option>
+				{#each [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name)) as dxcc}
+					<option value={dxcc.id}>{dxcc.name}</option>
+				{/each}
+			</select>
+
+			<div class="flex gap-4">
+				{#if dxcc}
+					<div>{dxcc.cont}</div>
+					<div><span class="text-xs">CQ</span> {dxcc.cqz}</div>
+					<div><span class="text-xs">ITU</span> {dxcc.ituz}</div>
+				{/if}
+				{#if distance}
+					<div class={gridsquareValid ? '' : 'opacity-70'}>
+						{(distance / 1000).toFixed(1)} <span class="text-xs">km</span>
+					</div>
+				{/if}
 			</div>
-		{/if}
+		</div>
+
 		<div class="ml-auto flex items-center gap-4">
 			{#if !selectedLog}
 				<div class="text-error">Please select logbook</div>
