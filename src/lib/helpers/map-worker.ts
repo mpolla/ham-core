@@ -1,18 +1,32 @@
-import { geoAzimuthalEquidistant, geoMercator, geoPath, type GeoPermissibleObjects } from 'd3-geo';
+import { Projection } from '$lib/models/projection';
+import {
+	geoAzimuthalEqualArea,
+	geoAzimuthalEquidistant,
+	geoMercator,
+	geoPath,
+	type GeoPermissibleObjects,
+	type GeoProjection
+} from 'd3-geo';
 
 self.onmessage = (
-	event: MessageEvent<
-		['mercator' | 'azimuthal', [number, number], number, GeoPermissibleObjects[], number]
-	>
+	event: MessageEvent<[Projection, [number, number], number, GeoPermissibleObjects[], number]>
 ) => {
 	if (!event.data[3]) return;
 	const [proj, center, scale, data, time] = event.data;
-	const projection = proj === 'mercator' ? geoMercator() : geoAzimuthalEquidistant();
-	if (proj === 'azimuthal') {
-		projection.rotate([-center[0], -center[1]]);
-	} else {
-		projection.center([0, center[1]]).rotate([-center[0], 0]);
+
+	let projection: GeoProjection;
+	switch (proj) {
+		case Projection.AzimuthalEquidistant:
+			projection = geoAzimuthalEquidistant().rotate([-center[0], -center[1]]);
+			break;
+		case Projection.Mercator:
+			projection = geoMercator().center([0, center[1]]).rotate([-center[0], 0]);
+			break;
+		case Projection.AzimuthalEqualArea:
+			projection = geoAzimuthalEqualArea().rotate([-center[0], -center[1]]);
+			break;
 	}
+
 	projection.scale(Math.pow(10, scale));
 	const path = geoPath().projection(projection);
 	self.postMessage([data.map((r) => path(r)), time]);

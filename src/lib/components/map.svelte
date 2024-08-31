@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { geoPath, geoMercator, geoAzimuthalEquidistant, geoCircle } from 'd3-geo';
+	import {
+		geoPath,
+		geoMercator,
+		geoAzimuthalEquidistant,
+		geoCircle,
+		geoAzimuthalEqualArea
+	} from 'd3-geo';
 	import { feature } from 'topojson-client';
 	import type { Topology, GeometryCollection } from 'topojson-specification';
 	import Fa from 'svelte-fa';
@@ -10,14 +16,17 @@
 	import { page } from '$app/stores';
 	import { pushState } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { Projection } from '$lib/models/projection';
+	import { mapStore, setProjection, setShowGridsquares, setShowNight } from '$lib/stores/map-store';
+
+	$: projection = $mapStore.projection ?? Projection.Mercator;
+	$: showGridsquares = $mapStore.showGridsquares ?? true;
+	$: showNight = $mapStore.showNight ?? true;
 
 	export let center: [number, number] = [0, 0];
-	export let projection: 'mercator' | 'azimuthal' = 'mercator';
 	export let points: [number, number][] = [];
 	export let lines: [[number, number], [number, number]][] = [];
 	export let countryColors: Record<string, string> = {};
-	export let showGridsquares = true;
-	export let showNight = true;
 
 	$: mapExpanded = $page.state.showExpandedMap;
 
@@ -29,7 +38,13 @@
 	const zoomIn = (f = 0.2) => setScale(scale + f);
 	const zoomOut = (f = 0.2) => setScale(scale - f);
 
-	$: _projection = (projection === 'mercator' ? geoMercator : geoAzimuthalEquidistant)();
+	$: _projection = (
+		projection === Projection.Mercator
+			? geoMercator
+			: projection === Projection.AzimuthalEquidistant
+				? geoAzimuthalEquidistant
+				: geoAzimuthalEqualArea
+	)();
 	let path = geoPath(_projection);
 
 	let countries: string[] = [];
@@ -54,9 +69,17 @@
 	}
 
 	$: {
-		if (projection === 'azimuthal' && center) _projection.rotate([-center[0], -center[1]]);
-		if (projection === 'mercator' && center)
-			_projection.center([0, center[1]]).rotate([-center[0], 0]);
+		if (center) {
+			switch (projection) {
+				case Projection.AzimuthalEquidistant:
+				case Projection.AzimuthalEqualArea:
+					_projection.rotate([-center[0], -center[1]]);
+					break;
+				case Projection.Mercator:
+					_projection.center([0, center[1]]).rotate([-center[0], 0]);
+					break;
+			}
+		}
 		_projection = _projection.scale(Math.pow(10, scale));
 		path = geoPath(_projection);
 		setT();
@@ -200,16 +223,22 @@
 					<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
 						<div class="flex gap-2">
 							<button
-								class={`btn btn-sm flex-1 ${projection === 'mercator' ? 'btn-primary' : ''}`}
-								on:click={() => (projection = 'mercator')}
+								class={`btn btn-sm flex-1 ${projection === Projection.Mercator ? 'btn-primary' : ''}`}
+								on:click={() => setProjection(Projection.Mercator)}
 							>
 								Mercator
 							</button>
 							<button
-								class={`btn btn-sm flex-1 ${projection === 'azimuthal' ? 'btn-primary' : ''}`}
-								on:click={() => (projection = 'azimuthal')}
+								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEquidistant ? 'btn-primary' : ''}`}
+								on:click={() => setProjection(Projection.AzimuthalEquidistant)}
 							>
-								Azimuthal
+								Azimuthal ED
+							</button>
+							<button
+								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEqualArea ? 'btn-primary' : ''}`}
+								on:click={() => setProjection(Projection.AzimuthalEqualArea)}
+							>
+								Azimuthal EA
 							</button>
 						</div>
 						<div>
@@ -228,7 +257,8 @@
 								<span class="label-text">Show grid squares</span>
 								<input
 									type="checkbox"
-									bind:checked={showGridsquares}
+									checked={showGridsquares}
+									on:input={() => setShowGridsquares(!showGridsquares)}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>
@@ -238,7 +268,8 @@
 								<span class="label-text">Show Night</span>
 								<input
 									type="checkbox"
-									bind:checked={showNight}
+									checked={showNight}
+									on:input={() => setShowNight(!showNight)}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>
