@@ -50,7 +50,9 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
     - [ ] Grid labels
     - [ ] 4 and 6 digit grid squares
   - [ ] Better zoom and pan
-  - [ ] Night/day overlay
+  - [x] Night/day overlay
+  - [ ] Sun position?
+  - [ ] Persist map settings
   - [ ] Pskreporter integration
   - [ ] Reverse beacon network integration
   - [ ] DXCC entities, CQ, ITU zones (maybe)

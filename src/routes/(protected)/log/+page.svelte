@@ -23,7 +23,7 @@
 	<div class="flex flex-col gap-6 lg:flex-row lg:items-center [&>*]:flex-1">
 		<QsoForm />
 
-		<div class="overflow-clip rounded-lg bg-base-200">
+		<div class="bg-base-200">
 			<LogMap />
 		</div>
 	</div>

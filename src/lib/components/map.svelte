@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { geoPath, geoMercator, geoAzimuthalEquidistant } from 'd3-geo';
+	import { geoPath, geoMercator, geoAzimuthalEquidistant, geoCircle } from 'd3-geo';
 	import { feature } from 'topojson-client';
 	import type { Topology, GeometryCollection } from 'topojson-specification';
 	import Fa from 'svelte-fa';
@@ -9,6 +9,7 @@
 	import MapWorker from '$lib/helpers/map-worker?worker';
 	import { page } from '$app/stores';
 	import { pushState } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	export let center: [number, number] = [0, 0];
 	export let projection: 'mercator' | 'azimuthal' = 'mercator';
@@ -16,6 +17,7 @@
 	export let lines: [[number, number], [number, number]][] = [];
 	export let countryColors: Record<string, string> = {};
 	export let showGridsquares = true;
+	export let showNight = true;
 
 	$: mapExpanded = $page.state.showExpandedMap;
 
@@ -80,6 +82,33 @@
 		zoomOut(e.deltaY * 0.001);
 		e.preventDefault();
 	}
+
+	// Sun position
+	const getSun = (date: Date) => {
+		const start = new Date(date.getUTCFullYear(), 0, 0);
+		const diff = date.valueOf() - start.valueOf();
+		const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+		// Calculate solar declination (latitude)
+		const latitude = -23.44 * Math.cos((360 * (dayOfYear + 10) * Math.PI) / 180 / 365);
+
+		// Calculate the time difference from UTC in hours
+		const utcTime = date.getUTCHours() + date.getUTCMinutes() / 60;
+
+		// Calculate the longitude
+		const longitude = (utcTime - 12) * 15;
+		return [-longitude, latitude];
+	};
+	let sun = getSun(new Date());
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			sun = getSun(new Date());
+		}, 60000);
+		return () => clearInterval(interval);
+	});
+
+	let settingsOpen = false;
 </script>
 
 <div class={mapExpanded ? 'fixed inset-0 z-40 flex p-8 [&>*]:flex-1' : ''}>
@@ -94,6 +123,18 @@
 			{#each countries as country, i}
 				<path d={country} fill={getColor(i, _countries)} stroke="#0009" />
 			{/each}
+
+			{#if showNight}
+				<path
+					d={path(
+						geoCircle()
+							.center([sun[0] + 180, -sun[1]])
+							.radius(90)()
+					)}
+					fill="#0003"
+					stroke="none"
+				/>
+			{/if}
 
 			{#if showGridsquares}
 				{@const div = 20}
@@ -122,14 +163,6 @@
 					fill="none"
 					stroke="#6669"
 				/>
-				<!-- {#each Array(180 / (div / 2)).fill(0) as _, yi}
-				{#each Array(360 / div).fill(0) as _, xi}
-					{@const [x, y] = _projection([xi * div, yi * (div / 2) - 90]) ?? [0, 0]}
-					<text {x} {y} fill="#f00" font-size="30">
-						{xi * div}/{yi * (div / 2) - 90}
-					</text>
-				{/each}
-			{/each} -->
 			{/if}
 
 			{#each lines as line}
@@ -144,7 +177,11 @@
 			{/each}
 		</svg>
 
-		<div class="absolute right-3 top-3 flex flex-col gap-2">
+		<div class="absolute right-3 top-3 flex flex-col gap-2 [&>*]:z-20">
+			{#if settingsOpen}
+				<button class="fixed inset-0 z-10 cursor-auto" on:click={() => (settingsOpen = false)} />
+			{/if}
+
 			<button
 				class="btn btn-circle btn-sm"
 				on:click={mapExpanded
@@ -154,11 +191,12 @@
 				<Fa icon={mapExpanded ? faClose : faExpand} />
 			</button>
 
-			<div class="dropdown dropdown-end">
-				<div tabindex="0" role="button" class="btn btn-circle btn-sm">
+			<div class="relative">
+				<button class="btn btn-circle btn-sm" on:click={() => (settingsOpen = !settingsOpen)}>
 					<Fa icon={faCog} />
-				</div>
-				<div class="dropdown-content pt-2">
+				</button>
+
+				<div class={`absolute right-[calc(100%+.5rem)] top-0 ${settingsOpen ? '' : 'hidden'}`}>
 					<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
 						<div class="flex gap-2">
 							<button
@@ -184,6 +222,26 @@
 								bind:value={scale}
 								class="range range-primary range-sm mt-1 w-full"
 							/>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer">
+								<span class="label-text">Show grid squares</span>
+								<input
+									type="checkbox"
+									bind:checked={showGridsquares}
+									class="checkbox-primary checkbox checkbox-sm"
+								/>
+							</label>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer">
+								<span class="label-text">Show Night</span>
+								<input
+									type="checkbox"
+									bind:checked={showNight}
+									class="checkbox-primary checkbox checkbox-sm"
+								/>
+							</label>
 						</div>
 					</div>
 				</div>
