@@ -1,6 +1,6 @@
 {
 	"name": "fast-dxcc",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Fast implementation for getting information about a callsign",
 	"main": "dist/lib/index.js",
 	"types": "dist/lib/index.d.ts",
