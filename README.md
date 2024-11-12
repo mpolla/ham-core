@@ -72,7 +72,7 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 
 A list of things to implement when Tauri gets added
 
-- [ ] WSJT-X integration
+- [x] WSJT-X integration
 - [ ] Rig control (Hamlib)
 - [ ] N1MM integration
 - [ ] Background QSO logging

@@ -8,16 +8,23 @@
 	import Fa from 'svelte-fa';
 	import { faCog } from '@fortawesome/free-solid-svg-icons';
 	import LogMap from './log-map.svelte';
+	import WsjtButton from '$lib/components/wsjt-button.svelte';
 </script>
 
 <div class="mx-auto flex max-w-5xl flex-col gap-10">
-	<div class="flex flex-wrap items-end gap-4">
-		<LogbookSelect />
-		<a href="/log/adif-import" class="btn btn-sm ml-auto">Import ADI</a>
-		<a href="/log/settings" class="btn btn-sm">
-			<Fa icon={faCog} />
-			<span>Settings</span>
-		</a>
+	<div>
+		<div class="flex flex-wrap items-end gap-4">
+			<LogbookSelect />
+			<a href="/log/adif-import" class="btn btn-sm ml-auto">Import ADI</a>
+			<a href="/log/settings" class="btn btn-sm">
+				<Fa icon={faCog} />
+				<span>Settings</span>
+			</a>
+		</div>
+
+		<div class="flex justify-end gap-4">
+			<WsjtButton />
+		</div>
 	</div>
 
 	<div class="flex flex-col gap-6 lg:flex-row lg:items-center [&>*]:flex-1">
