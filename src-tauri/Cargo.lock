@@ -100,6 +100,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-log",
+ "telnet",
 ]
 
 [[package]]
@@ -3663,6 +3664,12 @@ dependencies = [
  "embed-resource",
  "toml 0.7.8",
 ]
+
+[[package]]
+name = "telnet"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53a8d070ca1b674d310bf5485b570958f50ea7667c4bd6be596ffe8989f8fcae"
 
 [[package]]
 name = "tendril"

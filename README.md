@@ -76,7 +76,7 @@ A list of things to implement when Tauri gets added
 - [ ] Rig control (Hamlib)
 - [ ] N1MM integration
 - [ ] Background QSO logging
-- [ ] Telnet Cluster integration
+- [x] Telnet Cluster integration
 
 ## References
 
