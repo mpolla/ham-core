@@ -1,83 +1,69 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import { get, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 
-interface ClusterStore {
+interface TelnetStore {
 	connected: boolean;
-	messages: string;
-	spots: {
-		spotter: string;
-		dxCall: string;
-		time: Date;
-		freq: number;
-		comment: string;
-	}[];
 	unlisten?: UnlistenFn;
-	listeners?: ((msg: string) => void)[];
+	listeners: ((msg: string) => void)[];
 }
 
-const LABEL = 'telnet-cluster';
+export function createTelnetStore(label: string) {
+	const store = writable<TelnetStore>({
+		connected: false,
+		listeners: []
+	});
 
-export const clusterStore = writable<ClusterStore>({
-	connected: false,
-	messages: '',
-	spots: []
-});
-
-export async function connectTelnet(url: string) {
-	if (get(clusterStore).connected) return;
-
-	const isConnected = await invoke('is_telnet_running', { label: LABEL });
-	if (isConnected) {
-		clusterStore.update((store) => ({
-			...store,
-			connected: true
-		}));
-		createTelnetListener();
-		return;
+	function update(state: Partial<TelnetStore>) {
+		store.update((store) => ({ ...store, ...state }));
 	}
 
-	clusterStore.update((store) => ({
-		...store,
-		connected: true
-	}));
-	const [host, port] = url.split(':');
-	invoke('telnet_start', { host: host, port: parseInt(port), label: LABEL });
-	createTelnetListener();
-}
+	async function connect(url: string) {
+		if (get(store).connected) return;
 
-function createTelnetListener() {
-	get(clusterStore).unlisten?.();
-	listen<Array<number>>(LABEL, (event) => {
-		const payload = event.payload.filter((v) => (v >= 32 && v <= 126) || v === 10);
-
-		for (const listener of get(clusterStore).listeners || []) {
-			listener(String.fromCharCode(...payload));
+		const isConnected = await invoke('is_telnet_running', { label });
+		if (!isConnected) {
+			const [host, port] = url.split(':');
+			invoke('telnet_start', { host: host, port: parseInt(port), label });
 		}
-	}).then((unlisten) => clusterStore.update((store) => ({ ...store, unlisten })));
-}
 
-export function addTelnetListener(listener: (msg: string) => void) {
-	clusterStore.update((store) => ({ ...store, listeners: [...(store.listeners || []), listener] }));
-	return () => {
-		clusterStore.update((store) => ({
-			...store,
-			listeners: store.listeners?.filter((l) => l !== listener)
-		}));
+		update({ connected: true });
+		listen<Array<number>>(label, (event) => {
+			const payload = event.payload.filter((v) => (v >= 32 && v <= 126) || v === 10);
+
+			for (const listener of get(store).listeners) {
+				listener(String.fromCharCode(...payload));
+			}
+		}).then((unlisten) => update({ unlisten }));
+	}
+
+	function disconnect() {
+		const { connected, unlisten } = get(store);
+		if (!connected) return;
+		unlisten?.();
+		invoke('telnet_stop', { label });
+		update({ connected: false, unlisten: undefined });
+	}
+
+	function addListener(listener: (msg: string) => void) {
+		update({ listeners: [...get(store).listeners, listener] });
+		return () => {
+			update({ listeners: get(store).listeners.filter((l) => l !== listener) });
+		};
+	}
+
+	function send(message: string) {
+		if (!get(store).connected) return;
+		if (message.length === 0) return;
+		if (!message.endsWith('\n')) message += '\n';
+		invoke('telnet_send', { label, data: message });
+	}
+
+	return {
+		...derived([store], ([store]) => ({ connected: store.connected })),
+		connect,
+		disconnect,
+		addListener,
+		send
 	};
-}
-
-export function disconnectTelnet() {
-	const { connected, unlisten } = get(clusterStore);
-	if (!connected) return;
-	unlisten?.();
-	invoke('telnet_stop', { label: LABEL });
-	clusterStore.update((store) => ({ ...store, connected: false }));
-}
-
-export function sendTelnet(message: string) {
-	if (!get(clusterStore).connected) return;
-	if (message.length === 0) return;
-	if (!message.endsWith('\n')) message += '\n';
-	invoke('telnet_send', { label: LABEL, data: message });
 }

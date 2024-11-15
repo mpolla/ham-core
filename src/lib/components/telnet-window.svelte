@@ -1,19 +1,14 @@
 <script lang="ts">
-	import {
-		addTelnetListener,
-		clusterStore,
-		connectTelnet,
-		disconnectTelnet,
-		sendTelnet
-	} from '$lib/stores/telnet-store';
-	import { onDestroy, onMount } from 'svelte';
+	import { createTelnetStore } from '$lib/stores/telnet-store';
+	import { onDestroy } from 'svelte';
+
+	const telnetStore = createTelnetStore('telnet-cluster');
 
 	let textArea: HTMLTextAreaElement;
 
 	let url: string = 'sv2hrt.ath.cx:7300';
 	let messages: string = '';
 	let sendMessage: string = '';
-	$: isConnected = $clusterStore.connected;
 	let endsWithNL = false;
 	let unlisten: (() => void) | undefined;
 
@@ -33,25 +28,19 @@
 	};
 
 	function send() {
-		sendTelnet(sendMessage);
+		telnetStore.send(sendMessage);
 		sendMessage = '';
 	}
 
 	function connect() {
-		unlisten?.();
-		connectTelnet(url);
-		unlisten = addTelnetListener(onMessage);
+		unlisten = telnetStore.addListener(onMessage);
+		telnetStore.connect(url);
 	}
 
 	function disconnect() {
 		unlisten?.();
-		disconnectTelnet();
+		telnetStore.disconnect();
 	}
-
-	onMount(() => {
-		unlisten?.();
-		unlisten = addTelnetListener(onMessage);
-	});
 
 	onDestroy(() => disconnect);
 </script>
@@ -62,10 +51,10 @@
 			type="text"
 			bind:value={url}
 			placeholder="URL"
-			disabled={isConnected}
+			disabled={$telnetStore.connected}
 			class="input input-sm grow"
 		/>
-		{#if !isConnected}
+		{#if !$telnetStore.connected}
 			<button on:click={connect} class="btn btn-outline btn-sm">Connect</button>
 		{:else}
 			<button on:click={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
