@@ -46,7 +46,7 @@
 							{file.fileName}
 						</div>
 						{#await file.result}
-							<span class="loading loading-spinner loading-sm" />
+							<span class="loading loading-spinner loading-sm"></span>
 						{:then value}
 							<div>
 								<div>
@@ -59,8 +59,10 @@
 									{/each}
 								</div>
 								<table>
-									<tr><td class="pr-2">From</td><td>{value.minDate?.toLocaleString()}</td></tr>
-									<tr><td class="pr-2">To</td><td>{value.maxDate?.toLocaleString()}</td></tr>
+									<tbody>
+										<tr><td class="pr-2">From</td><td>{value.minDate?.toLocaleString()}</td></tr>
+										<tr><td class="pr-2">To</td><td>{value.maxDate?.toLocaleString()}</td></tr>
+									</tbody>
 								</table>
 								{#each value.warnings as w}
 									<div class="text-warning">{w}</div>
@@ -69,7 +71,7 @@
 						{/await}
 						{#if file.importStatus === ImportStatus.InProgress}
 							<div class="flex items-center gap-2 text-accent">
-								<span class="loading loading-spinner loading-sm" />
+								<span class="loading loading-spinner loading-sm"></span>
 								<span>Importing</span>
 							</div>
 						{:else if file.importStatus === ImportStatus.Success}

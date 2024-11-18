@@ -20,13 +20,14 @@
 		return undefined;
 	}
 
-	$: log = $logsStore?.find((l) => l.id === $logbookStore.params.logId);
+	let log = $derived($logsStore?.find((l) => l.id === $logbookStore.params.logId));
 
-	$: center = (log?.grid ? locatorToLongLat(log.grid) : undefined) as [number, number] | undefined;
-	$: lastQsos = ($logbookStore.result?.qsos.map(longLat).filter((q) => !!q) ?? []) as [
-		number,
-		number
-	][];
+	let center = $derived(
+		(log?.grid ? locatorToLongLat(log.grid) : undefined) as [number, number] | undefined
+	);
+	let lastQsos = $derived(
+		($logbookStore.result?.qsos.map(longLat).filter((q) => !!q) ?? []) as [number, number][]
+	);
 </script>
 
 <Map

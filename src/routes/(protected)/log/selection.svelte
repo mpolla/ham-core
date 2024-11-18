@@ -27,11 +27,11 @@
 				<span class="font-bold">{$selectedStore.size}</span>
 				<span class="text-sm opacity-80">QSOs selected</span>
 			</div>
-			<button class="btn btn-outline btn-error btn-xs" on:click={clearSelected}>Clear</button>
+			<button class="btn btn-outline btn-error btn-xs" onclick={clearSelected}>Clear</button>
 		</div>
 		<div class="flex flex-col flex-wrap gap-2 @md:flex-row">
-			<button on:click={openQslModal} class="btn btn-sm">Generate QSL CSV</button>
-			<button on:click={openAdiModal} class="btn btn-sm">Export ADI</button>
+			<button onclick={openQslModal} class="btn btn-sm">Generate QSL CSV</button>
+			<button onclick={openAdiModal} class="btn btn-sm">Export ADI</button>
 		</div>
 	</div>
 {/if}

@@ -14,7 +14,7 @@
 </script>
 
 {#if isTauri()}
-	<button class="btn btn-xs mt-2" on:click={toggleWsjt}>
+	<button class="btn btn-xs mt-2" onclick={toggleWsjt}>
 		<Fa icon={faCircle} class={$wsjtStore.connected ? 'text-primary' : ''} />
 		<span>WSJT-X</span>
 	</button>

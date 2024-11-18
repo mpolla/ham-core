@@ -1,28 +1,38 @@
 <script lang="ts">
-	export let value = '';
-	export let label = '';
-	export let mode: string | undefined = undefined;
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	$: [defaultValue, defaultStartSel, defaultEndSel] = ((): [string, number, number] | [] => {
-		switch (mode) {
-			case 'SSB':
-			case 'LSB':
-			case 'USB':
-				return ['59', 1, 2];
-			case 'CW':
-			case 'RTTY':
-				return ['599', 1, 2];
-			default:
-				return [];
-		}
-	})();
+	type Props = {
+		value?: string;
+		label?: string;
+		mode?: string | undefined;
+	} & HTMLInputAttributes;
 
-	$: canFillDefault = defaultValue !== undefined && (value === '' || value === defaultValue);
+	let { value = $bindable(''), label = '', mode = undefined, ...rest }: Props = $props();
+
+	let [defaultValue, defaultStartSel, defaultEndSel] = $derived(
+		((): [string, number, number] | [] => {
+			switch (mode) {
+				case 'SSB':
+				case 'LSB':
+				case 'USB':
+					return ['59', 1, 2];
+				case 'CW':
+				case 'RTTY':
+					return ['599', 1, 2];
+				default:
+					return [];
+			}
+		})()
+	);
+
+	let canFillDefault = $derived(
+		defaultValue !== undefined && (value === '' || value === defaultValue)
+	);
 </script>
 
 <input
 	type="text"
-	on:focus={(e) => {
+	onfocus={(e) => {
 		if (!canFillDefault) return;
 		const field = e.currentTarget;
 		field.value = defaultValue ?? '';
@@ -31,5 +41,5 @@
 	}}
 	bind:value
 	placeholder={label}
-	{...$$restProps}
+	{...rest}
 />

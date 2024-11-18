@@ -18,30 +18,33 @@
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabase';
 
-	export let mode: 'new' | 'edit';
+	let { mode }: { mode: 'new' | 'edit' } = $props();
 
-	$: log =
-		mode === 'new' ? undefined : $logsStore?.find((l) => l.id === $logbookStore.params.logId);
+	let log = $derived(
+		mode === 'new' ? undefined : $logsStore?.find((l) => l.id === $logbookStore.params.logId)
+	);
 
-	$: parsedDxcc = findDxcc($f.call.value)?.entity;
+	let parsedDxcc = $derived(findDxcc($f.call.value)?.entity);
 	const dxccs = [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name));
 
-	$: dxcc = dxccEntities.get($f.dxcc.value);
+	let dxcc = $derived(dxccEntities.get($f.dxcc.value));
 
-	$: canSave = $f.call.value && $f.dxcc.value && !$f.isPure;
+	let canSave = $derived($f.call.value && $f.dxcc.value && !$f.isPure);
 
-	$: data = canSave
-		? {
-				call: $f.call.value,
-				title: $f.title.value || null,
-				dxcc: dxcc!.dxcc!,
-				country: dxcc!.name,
-				cqz: +$f.cqz.value || null,
-				ituz: +$f.ituz.value || null,
-				name: $f.name.value || null,
-				grid: $f.grid.value || null
-			}
-		: undefined;
+	let data = $derived(
+		canSave
+			? {
+					call: $f.call.value,
+					title: $f.title.value || null,
+					dxcc: dxcc!.dxcc!,
+					country: dxcc!.name,
+					cqz: +$f.cqz.value || null,
+					ituz: +$f.ituz.value || null,
+					name: $f.name.value || null,
+					grid: $f.grid.value || null
+				}
+			: undefined
+	);
 
 	function create() {
 		if (!canSave) return;
@@ -87,7 +90,7 @@
 				class="input input-bordered font-mono placeholder:font-sans"
 				use:callsignInput
 				value={$f.call.value}
-				on:input={(e) => setCall(e.currentTarget.value)}
+				oninput={(e) => setCall(e.currentTarget.value)}
 			/>
 		</label>
 		<label class="form-control col-span-2">
@@ -98,7 +101,7 @@
 				type="text"
 				class="input input-bordered"
 				value={$f.title.value}
-				on:input={(e) => setTitle(e.currentTarget.value)}
+				oninput={(e) => setTitle(e.currentTarget.value)}
 			/>
 		</label>
 
@@ -109,7 +112,7 @@
 			<select
 				class={`select select-bordered ${dxcc && parsedDxcc && parsedDxcc.id !== dxcc.id ? 'select-warning' : ''}`}
 				value={$f.dxcc.value}
-				on:change={(e) => setDxcc(+e.currentTarget.value)}
+				onchange={(e) => setDxcc(+e.currentTarget.value)}
 			>
 				<option disabled selected>Select Country</option>
 				{#each dxccs as { id, name }}
@@ -127,7 +130,7 @@
 				class={`input input-bordered ${$f.cqz.value && dxcc && +$f.cqz.value !== dxcc.cqz ? 'input-warning' : ''}`}
 				use:numberInput
 				value={$f.cqz.value}
-				on:input={(e) => setCqz(e.currentTarget.value)}
+				oninput={(e) => setCqz(e.currentTarget.value)}
 			/>
 		</label>
 		<label class="form-control">
@@ -139,7 +142,7 @@
 				class={`input input-bordered ${$f.ituz.value && dxcc && +$f.ituz.value !== dxcc.ituz ? 'input-warning' : ''}`}
 				use:numberInput
 				value={$f.ituz.value}
-				on:input={(e) => setItuz(e.currentTarget.value)}
+				oninput={(e) => setItuz(e.currentTarget.value)}
 			/>
 		</label>
 
@@ -151,7 +154,7 @@
 				type="text"
 				class="input input-bordered"
 				value={$f.name.value}
-				on:input={(e) => setName(e.currentTarget.value)}
+				oninput={(e) => setName(e.currentTarget.value)}
 			/>
 		</label>
 		<label class="form-control col-span-2">
@@ -163,7 +166,7 @@
 				class={`input input-bordered ${$f.grid.value && !$f.grid.value.match(locatorRegex) ? 'input-error' : ''}`}
 				use:gridsquareInput
 				value={$f.grid.value}
-				on:input={(e) => setGrid(e.currentTarget.value)}
+				oninput={(e) => setGrid(e.currentTarget.value)}
 			/>
 		</label>
 	</div>
@@ -171,7 +174,7 @@
 	<button
 		class="btn btn-primary ml-auto"
 		disabled={!canSave}
-		on:click={mode === 'new' ? create : update}
+		onclick={mode === 'new' ? create : update}
 	>
 		{mode === 'new' ? 'Create' : 'Save'}
 	</button>

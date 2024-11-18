@@ -13,21 +13,24 @@
 
 	const qsosStore = writable<QsoStore>(undefined);
 
-	$: getQsos()
-		.in('id', [...$selectedStore])
-		.then(({ data, error }) => {
-			if (error) {
-				console.error('Error loading QSOs', error);
-				qsosStore.set(null);
-			} else {
-				qsosStore.set(data);
-			}
-		});
+	$effect(() => {
+		getQsos()
+			.in('id', [...$selectedStore])
+			.then(({ data, error }) => {
+				if (error) {
+					console.error('Error loading QSOs', error);
+					qsosStore.set(null);
+				} else {
+					qsosStore.set(data);
+				}
+			});
+	});
 
-	$: downloadUrl =
+	let downloadUrl = $derived(
 		$qsosStore && $logsStore && $selectedStore.size > 0
 			? generateUrl(generateText($qsosStore, $logsStore))
-			: undefined;
+			: undefined
+	);
 </script>
 
 <div class="max-h-80 overflow-auto rounded-lg bg-base-300">

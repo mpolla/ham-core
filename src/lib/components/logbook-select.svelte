@@ -3,13 +3,16 @@
 	import { logsStore } from '$lib/stores/logs-store';
 	import type { ILog } from '$lib/supabase';
 
-	$: selectedValue = $logbookStore.params.logId ?? 0;
+	let selectedValue = $derived($logbookStore.params.logId ?? 0);
 
-	let className = '';
-	export { className as class };
-	export let canBeEmpty = true;
+	interface Props {
+		class?: string;
+		canBeEmpty?: boolean;
+	}
 
-	$: showError = !canBeEmpty && !selectedValue;
+	let { class: className = '', canBeEmpty = true }: Props = $props();
+
+	let showError = $derived(!canBeEmpty && !selectedValue);
 
 	function buildLogTitle(log: ILog) {
 		if (!log.title) return log.call;
@@ -27,7 +30,7 @@
 	</div>
 	<select
 		class={`select select-bordered w-full ${showError ? 'select-error' : ''}`}
-		on:change={(v) => selectLog(+v.currentTarget.value)}
+		onchange={(v) => selectLog(+v.currentTarget.value)}
 		value={selectedValue}
 	>
 		<option value={0} disabled={!canBeEmpty}>All</option>

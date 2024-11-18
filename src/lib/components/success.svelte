@@ -2,7 +2,7 @@
 	import { faCheck } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
-	export let text: string;
+	let { text }: { text: string } = $props();
 </script>
 
 <div class="flex items-center justify-center gap-4 text-success">

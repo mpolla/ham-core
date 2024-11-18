@@ -17,11 +17,11 @@
 	import { supabase } from '$lib/supabase';
 	import { logsStore, refreshLogs } from '$lib/stores/logs-store';
 
-	$: defaultLog = $userStore?.info?.default_log_id;
-	$: selectedLog = $logbookStore.params.logId;
-	$: log = $logsStore?.find((log) => log.id === selectedLog);
-	$: logbookModal = $page.state.logbookModal;
-	$: deleteConfirmation = $page.state.showConfirmModal;
+	let defaultLog = $derived($userStore?.info?.default_log_id);
+	let selectedLog = $derived($logbookStore.params.logId);
+	let log = $derived($logsStore?.find((log) => log.id === selectedLog));
+	let logbookModal = $derived($page.state.logbookModal);
+	let deleteConfirmation = $derived($page.state.showConfirmModal);
 
 	function deleteLog() {
 		if (!selectedLog) return;
@@ -51,7 +51,7 @@
 			<LogbookSelect class="w-full min-w-60 sm:max-w-xs" />
 
 			<button
-				on:click={() => selectedLog && setDefaultLog(selectedLog)}
+				onclick={() => selectedLog && setDefaultLog(selectedLog)}
 				disabled={!selectedLog || defaultLog === selectedLog}
 				class="btn"
 			>
@@ -60,7 +60,7 @@
 			</button>
 
 			<button
-				on:click={() => pushState('', { logbookModal: 'edit' })}
+				onclick={() => pushState('', { logbookModal: 'edit' })}
 				class="btn"
 				disabled={!selectedLog}
 			>
@@ -69,7 +69,7 @@
 			</button>
 
 			<button
-				on:click={() => pushState('', { showConfirmModal: true })}
+				onclick={() => pushState('', { showConfirmModal: true })}
 				class="btn"
 				disabled={!selectedLog}
 			>
@@ -82,7 +82,7 @@
 				<span>Analyze</span>
 			</a>
 
-			<button on:click={() => pushState('', { logbookModal: 'new' })} class="btn">
+			<button onclick={() => pushState('', { logbookModal: 'new' })} class="btn">
 				<Fa icon={faPlus} />
 				<span>New Log</span>
 			</button>
@@ -105,8 +105,8 @@
 						and all containing QSOs?
 					</p>
 					<div class="mt-4 flex justify-end gap-2">
-						<button class="btn" on:click={() => history.back()}>Cancel</button>
-						<button class="btn btn-error" on:click={deleteLog}>Delete</button>
+						<button class="btn" onclick={() => history.back()}>Cancel</button>
+						<button class="btn btn-error" onclick={deleteLog}>Delete</button>
 					</div>
 				</Modal>
 			{/if}

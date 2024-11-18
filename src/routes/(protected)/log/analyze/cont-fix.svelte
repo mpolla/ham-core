@@ -6,44 +6,46 @@
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';
 
-	$: logbookId = $logbookStore.params.logId;
+	let logbookId = $derived($logbookStore.params.logId);
 
-	let missingCont: Map<string, IQso[]> | undefined = undefined;
-	let conflictCont: { qso: IQso; conts: string[] }[] | undefined = undefined;
-	let selectedCont: { [id: string]: string } = {};
+	let missingCont: Map<string, IQso[]> | undefined = $state(undefined);
+	let conflictCont: { qso: IQso; conts: string[] }[] | undefined = $state(undefined);
+	let selectedCont: { [id: string]: string } = $state({});
 
-	let contReq = getQsos().is('cont', null);
-	if (logbookId) contReq = contReq.eq('log_id', logbookId);
-	contReq.then(({ data }) => {
-		missingCont = new Map();
-		conflictCont = [];
-		for (const qso of data ?? []) {
-			const other = qso.other as { CONT?: string } | undefined;
-			if (other?.CONT) {
-				if (!missingCont.has(other.CONT)) missingCont.set(other.CONT, []);
-				missingCont.get(other.CONT)!.push(qso);
-				continue;
+	$effect(() => {
+		let contReq = getQsos().is('cont', null);
+		if (logbookId) contReq = contReq.eq('log_id', logbookId);
+		contReq.then(({ data }) => {
+			missingCont = new Map();
+			conflictCont = [];
+			for (const qso of data ?? []) {
+				const other = qso.other as { CONT?: string } | undefined;
+				if (other?.CONT) {
+					if (!missingCont.has(other.CONT)) missingCont.set(other.CONT, []);
+					missingCont.get(other.CONT)!.push(qso);
+					continue;
+				}
+
+				const conts = new Set<string>();
+
+				const fromCall = findDxcc(qso.call)?.entity.cont;
+				if (fromCall) conts.add(fromCall);
+				[...dxccEntities.values()]
+					.filter((d) => d.dxcc === qso.dxcc && qso.cont)
+					.forEach((d) => conts.add(d.cont!));
+
+				if (conts.size === 1) {
+					const cont = conts.values().next().value!;
+					if (!missingCont.has(cont)) missingCont.set(cont, []);
+					missingCont.get(cont)!.push(qso);
+				} else {
+					conflictCont.push({ qso, conts: [...conts] });
+				}
 			}
-
-			const conts = new Set<string>();
-
-			const fromCall = findDxcc(qso.call)?.entity.cont;
-			if (fromCall) conts.add(fromCall);
-			[...dxccEntities.values()]
-				.filter((d) => d.dxcc === qso.dxcc && qso.cont)
-				.forEach((d) => conts.add(d.cont!));
-
-			if (conts.size === 1) {
-				const cont = conts.values().next().value;
-				if (!missingCont.has(cont)) missingCont.set(cont, []);
-				missingCont.get(cont)!.push(qso);
-			} else {
-				conflictCont.push({ qso, conts: [...conts] });
-			}
-		}
+		});
 	});
 
-	let contFix: 'ready' | 'inProgress' | 'done' | 'error' = 'ready';
+	let contFix: 'ready' | 'inProgress' | 'done' | 'error' = $state('ready');
 	function fixCont() {
 		if (!missingCont || !conflictCont) return;
 		contFix = 'inProgress';
@@ -114,7 +116,7 @@
 									{#each conts.length ? conts : ['EU', 'AS', 'NA', 'SA', 'OC'] as cont}
 										<button
 											class={`btn btn-sm ${selectedCont[qso.id] === cont ? 'btn-primary' : ''} ${contFix !== 'ready' ? 'btn-disabled' : ''}`}
-											on:click={() => (selectedCont[qso.id] = cont)}
+											onclick={() => (selectedCont[qso.id] = cont)}
 										>
 											{cont}
 										</button>
@@ -135,6 +137,6 @@
 	{:else if contFix === 'error'}
 		<Error text="Error fixing continents" />
 	{:else if contFix === 'ready'}
-		<button class="btn btn-primary" on:click={fixCont}>Fix now</button>
+		<button class="btn btn-primary" onclick={fixCont}>Fix now</button>
 	{/if}
 {/if}

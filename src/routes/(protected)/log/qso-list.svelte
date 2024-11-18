@@ -19,9 +19,10 @@
 		return `${date} ${time}`;
 	}
 
-	$: someSelected = $logbookStore.result?.qsos.some((q) => $selectedStore.has(q.id));
-	$: allSelected =
-		someSelected && $logbookStore.result?.qsos.every((q) => $selectedStore.has(q.id));
+	let someSelected = $derived($logbookStore.result?.qsos.some((q) => $selectedStore.has(q.id)));
+	let allSelected = $derived(
+		someSelected && $logbookStore.result?.qsos.every((q) => $selectedStore.has(q.id))
+	);
 
 	function getCountry(qso: IQso): string {
 		if (qso.country) {
@@ -34,7 +35,7 @@
 		return findDxcc(qso.call)?.entity.name ?? '';
 	}
 
-	$: qsoLimit = $logbookStore.params.limit;
+	let qsoLimit = $derived($logbookStore.params.limit);
 </script>
 
 <div class="relative">
@@ -67,7 +68,7 @@
 								class="checkbox"
 								indeterminate={someSelected && !allSelected}
 								checked={allSelected}
-								on:change={(v) =>
+								onchange={(v) =>
 									setSelectedAll(
 										$logbookStore.result?.qsos.map((q) => q.id),
 										v.currentTarget.checked
@@ -95,7 +96,7 @@
 									type="checkbox"
 									class="checkbox absolute inset-0 m-auto bg-base-100"
 									checked={$selectedStore.has(qso.id)}
-									on:change={(v) => setSelected(qso.id, v.currentTarget.checked)}
+									onchange={(v) => setSelected(qso.id, v.currentTarget.checked)}
 								/>
 							</div>
 						</th>
@@ -114,7 +115,7 @@
 						<td>
 							<button
 								class="btn btn-circle btn-ghost btn-sm"
-								on:click={() => pushState('', { showQsoModal: qso.id })}
+								onclick={() => pushState('', { showQsoModal: qso.id })}
 							>
 								<Fa icon={faInfoCircle} />
 							</button>

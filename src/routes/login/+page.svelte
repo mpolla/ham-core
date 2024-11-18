@@ -3,17 +3,19 @@
 	import { page } from '$app/stores';
 	import { signIn, userStore } from '$lib/stores/user-store';
 
-	$: if ($userStore) {
-		const redirect = $page.url.searchParams.get('redirect');
-		if (redirect) {
-			goto(redirect);
-		} else {
-			goto('/');
+	$effect(() => {
+		if ($userStore) {
+			const redirect = $page.url.searchParams.get('redirect');
+			if (redirect) {
+				goto(redirect);
+			} else {
+				goto('/');
+			}
 		}
-	}
+	});
 
-	let email = '';
-	let password = '';
+	let email = $state('');
+	let password = $state('');
 
 	function onSubmit() {
 		signIn(email, password);
@@ -29,7 +31,13 @@
 	<div class="mx-auto w-full max-w-md rounded-xl bg-base-200 p-6">
 		<h2 class="mb-6 text-center text-3xl font-light">Login</h2>
 
-		<form on:submit|preventDefault={onSubmit} class="flex flex-col gap-4">
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+			class="flex flex-col gap-4"
+		>
 			<input
 				type="email"
 				class="input input-bordered w-full"
@@ -42,7 +50,7 @@
 				placeholder="Password"
 				bind:value={password}
 			/>
-			<button on:click|preventDefault={onSubmit} class="btn btn-primary">Login</button>
+			<button class="btn btn-primary">Login</button>
 		</form>
 	</div>
 </div>

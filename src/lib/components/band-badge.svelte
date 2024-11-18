@@ -2,12 +2,16 @@
 	import { Band } from '$lib/models/band';
 	import type { IQso } from '$lib/supabase';
 
-	export let qso: IQso | undefined = undefined;
-	export let freq: number | undefined = undefined;
-	export let band: string | undefined = undefined;
+	interface Props {
+		qso?: IQso | undefined;
+		freq?: number | undefined;
+		band?: string | undefined;
+	}
 
-	$: _freq = freq ?? qso?.frequency;
-	$: _band = band ?? (_freq ? Band.getBand(_freq)?.name : undefined);
+	let { qso = undefined, freq = undefined, band = undefined }: Props = $props();
+
+	let _freq = $derived(freq ?? qso?.frequency);
+	let _band = $derived(band ?? (_freq ? Band.getBand(_freq)?.name : undefined));
 </script>
 
 <span class={`badge font-medium text-black band${_band}`}>{_band}</span>

@@ -2,11 +2,11 @@
 	import { clusterStore } from '$lib/stores/telnet-store';
 	import { isTauri } from '@tauri-apps/api/core';
 
-	let textArea: HTMLTextAreaElement;
+	let textArea = $state<HTMLTextAreaElement>();
 
-	let url: string = 'sv2hrt.ath.cx:7300';
-	let messages: string = '';
-	let sendMessage: string = '';
+	let url: string = $state('sv2hrt.ath.cx:7300');
+	let messages: string = $state('');
+	let sendMessage: string = $state('');
 	let endsWithNL = false;
 	let unlisten: (() => void) | undefined;
 
@@ -19,9 +19,12 @@
 		if (messages.length > 5000)
 			messages = messages.substring(messages.length - 5000, messages.length);
 
-		const isOnBottom = textArea.scrollTop + textArea.clientHeight >= textArea.scrollHeight;
+		if (!textArea) return;
+		const ta = textArea;
+
+		const isOnBottom = ta.scrollTop + ta.clientHeight >= ta.scrollHeight;
 		if (isOnBottom) {
-			setTimeout(() => (textArea.scrollTop = textArea.scrollHeight), 0);
+			setTimeout(() => (ta.scrollTop = ta.scrollHeight), 0);
 		}
 	};
 
@@ -52,13 +55,14 @@
 				class="input input-sm grow"
 			/>
 			{#if !$clusterStore.connected}
-				<button on:click={connect} class="btn btn-outline btn-sm">Connect</button>
+				<button onclick={connect} class="btn btn-outline btn-sm">Connect</button>
 			{:else}
-				<button on:click={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
+				<button onclick={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
 			{/if}
 		</div>
 
-		<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea" />
+		<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea"
+		></textarea>
 
 		<div class="flex flex-row gap-2">
 			<input
@@ -66,9 +70,9 @@
 				bind:value={sendMessage}
 				placeholder="Message"
 				class="input input-sm grow"
-				on:keypress={(e) => (e.key === 'Enter' ? send() : null)}
+				onkeypress={(e) => (e.key === 'Enter' ? send() : null)}
 			/>
-			<button on:click={send} class="btn btn-outline btn-sm">Send</button>
+			<button onclick={send} class="btn btn-outline btn-sm">Send</button>
 		</div>
 	</div>
 {/if}

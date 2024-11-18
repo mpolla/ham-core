@@ -12,7 +12,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
-	let callsignInputElement: HTMLInputElement;
+	let callsignInputElement = $state<HTMLInputElement>();
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
 	function setCallsign(v: string) {
@@ -21,12 +21,12 @@
 		callTimer = setTimeout(() => updateFilter({ callsign: v }), 500);
 	}
 
-	$: callsign = $logbookStore.params.filter.callsign ?? '';
-	$: limit = $logbookStore.params.limit;
-	let filterOpen = false;
-	$: band = $logbookStore.params.filter.band ?? '';
-	$: mode = $logbookStore.params.filter.mode ?? '';
-	$: filterCount = [band, mode].filter((v) => !!v).length;
+	let callsign = $derived($logbookStore.params.filter.callsign ?? '');
+	let limit = $derived($logbookStore.params.limit);
+	let filterOpen = $state(false);
+	let band = $derived($logbookStore.params.filter.band ?? '');
+	let mode = $derived($logbookStore.params.filter.mode ?? '');
+	let filterCount = $derived([band, mode].filter((v) => !!v).length);
 </script>
 
 <div class="rounded-lg bg-base-300 p-4">
@@ -39,14 +39,14 @@
 				class="min-w-0 grow font-mono placeholder:font-sans"
 				placeholder="Search Callsign"
 				value={callsign}
-				on:input={(v) => setCallsign(v.currentTarget.value)}
+				oninput={(v) => setCallsign(v.currentTarget.value)}
 				bind:this={callsignInputElement}
 			/>
 			<button
 				class="btn btn-circle btn-ghost btn-sm -mr-2 disabled:hidden"
-				on:click={() => {
+				onclick={() => {
 					updateFilter({ callsign: '' });
-					callsignInputElement.focus();
+					callsignInputElement?.focus();
 				}}
 				disabled={!callsign}
 			>
@@ -56,7 +56,7 @@
 
 		<label class="form-control flex-row items-center gap-2">
 			<span class="label-text">Limit</span>
-			<select class="select" value={limit} on:change={(e) => setLimit(+e.currentTarget.value)}>
+			<select class="select" value={limit} onchange={(e) => setLimit(+e.currentTarget.value)}>
 				<option value={10}>10</option>
 				<option value={25}>25</option>
 				<option value={50}>50</option>
@@ -70,7 +70,7 @@
 		<div class={`dropdown relative w-64 ${filterOpen ? 'dropdown-open' : ''}`}>
 			<button
 				class={`btn relative w-full ${filterOpen ? 'z-50' : ''}`}
-				on:click={() => (filterOpen = !filterOpen)}
+				onclick={() => (filterOpen = !filterOpen)}
 			>
 				<Fa icon={faFilter} />
 				<span>Filter by</span>
@@ -81,20 +81,24 @@
 			</button>
 
 			{#if filterOpen}
-				<button class="fixed inset-0 z-40 cursor-default" on:click={() => (filterOpen = false)} />
+				<button
+					aria-label="Dismiss filter"
+					class="fixed inset-0 z-40 cursor-default"
+					onclick={() => (filterOpen = false)}
+				></button>
 			{/if}
 
 			<div
 				class={`dropdown-content left-0 right-0 top-0 z-40 -m-4 flex flex-col items-stretch gap-4 rounded-lg border border-white/10 bg-base-100 p-4 shadow-xl ${filterOpen ? '' : 'hidden'}`}
 			>
-				<div class="btn invisible" />
+				<div class="btn invisible"></div>
 
 				<label class="a form-control">
 					<span class="label-text">Band</span>
 					<select
 						class="select select-bordered"
 						value={band}
-						on:change={(e) => updateFilter({ band: e.currentTarget.value })}
+						onchange={(e) => updateFilter({ band: e.currentTarget.value })}
 					>
 						<option value="">All</option>
 						{#each Band.ALL_BANDS.values() as band}
@@ -108,7 +112,7 @@
 					<select
 						class="select select-bordered"
 						value={mode}
-						on:change={(e) => updateFilter({ mode: e.currentTarget.value })}
+						onchange={(e) => updateFilter({ mode: e.currentTarget.value })}
 					>
 						<option value="">All</option>
 						{#each Mode.ALL_MODES.values() as mode}
@@ -122,7 +126,7 @@
 
 				<button
 					class="btn btn-sm"
-					on:click={() => {
+					onclick={() => {
 						updateFilter({ band: '', mode: '' });
 						filterOpen = false;
 					}}
@@ -132,7 +136,7 @@
 			</div>
 		</div>
 
-		<button class="btn btn-circle" on:click={refreshLogbook}>
+		<button class="btn btn-circle" onclick={refreshLogbook}>
 			<Fa icon={faRefresh} />
 		</button>
 

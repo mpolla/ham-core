@@ -8,8 +8,8 @@
 	import { refreshLogbook } from '$lib/stores/logbook-store';
 	import { getQsos, supabase } from '$lib/supabase';
 
-	$: qsoId = $page.state.showQsoModal!;
-	$: qsoPromise = getQsos().eq('id', qsoId).single();
+	let qsoId = $derived($page.state.showQsoModal!);
+	let qsoPromise = $derived(getQsos().eq('id', qsoId).single());
 
 	function deleteQso() {
 		supabase
@@ -41,8 +41,8 @@
 				<Modal onClose={() => history.back()} title="Delete QSO">
 					<p>Are you sure you want to delete this QSO?</p>
 					<div class="mt-2 flex justify-end gap-4">
-						<button class="btn" on:click={() => history.back()}>Cancel</button>
-						<button class="btn btn-error" on:click={deleteQso}> Delete </button>
+						<button class="btn" onclick={() => history.back()}>Cancel</button>
+						<button class="btn btn-error" onclick={deleteQso}> Delete </button>
 					</div>
 				</Modal>
 			{/if}

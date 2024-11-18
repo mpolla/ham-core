@@ -18,33 +18,22 @@
 	import { logsStore } from '$lib/stores/logs-store';
 	import type { IQso } from '$lib/supabase';
 
-	$: selectedLog = $logbookStore.params.logId;
-	$: log = $logsStore?.find((l) => l.id === selectedLog);
+	let callsignInputElement = $state<HTMLInputElement>();
+	let callsign = $state('');
 
-	let callsignInputElement: HTMLInputElement;
-	let callsign = '';
+	let rstSent = $state('');
+	let rstRcv = $state('');
 
-	let rstSent = '';
-	let rstRcv = '';
+	let date = $state('');
+	let time = $state('');
+	let dateTimeTimer: ReturnType<typeof setInterval> | null = $state(null);
 
-	let date = '';
-	let time = '';
-	let dateTimeTimer: ReturnType<typeof setInterval> | null = null;
+	let mode = $state('');
+	let freq = $state('');
+	let band: string | undefined = $state('');
 
-	$: isTimeValid = time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60;
-
-	let mode = '';
-	let freq = '';
-	let band: string | undefined = '';
-
-	let power = '';
-	let gridsquare = '';
-
-	$: dxcc = findDxcc(callsign)?.entity;
-	$: isValidCall = !!callsign.match(advancedCallsignRe);
-
-	$: gridsquareValid = gridsquare.match(locatorRegex);
-	$: distance = getDist(gridsquare, dxcc);
+	let power = $state('');
+	let gridsquare = $state('');
 
 	function getDist(gridsquare: string, dxcc: DxccEntity | undefined) {
 		if (!log?.grid) return;
@@ -56,8 +45,6 @@
 			return getDistance(lat, long, dxcc.lat!, dxcc.long!);
 		}
 	}
-
-	$: canSubmit = callsign.length >= 3 && freq && !!selectedLog;
 
 	function submit() {
 		if (!canSubmit) return;
@@ -107,17 +94,10 @@
 		rstRcv = '';
 		gridsquare = '';
 		if (!dateTimeTimer) toggleDateTimeTimer();
-		callsignInputElement.focus();
+		callsignInputElement?.focus();
 	}
 
-	let isPure = true;
-	$: lastQso = $logbookStore.result?.qsos[0];
-	$: if (isPure && lastQso) {
-		mode = lastQso.mode;
-		freq = getFreq(lastQso);
-		band = lastQso.band ?? undefined;
-		power = lastQso.power?.toString() ?? '';
-	}
+	let isPure = $state(true);
 
 	function getFreq(qso: IQso) {
 		const f = qso.frequency / 1000000;
@@ -127,18 +107,41 @@
 	}
 
 	onMount(() => {
-		callsignInputElement.focus();
+		callsignInputElement?.focus();
 		setDateTimeNow();
 		toggleDateTimeTimer();
 	});
+	let selectedLog = $derived($logbookStore.params.logId);
+	let log = $derived($logsStore?.find((l) => l.id === selectedLog));
+	let isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
+	let dxcc = $state<DxccEntity>();
+	$effect(() => {
+		dxcc = findDxcc(callsign)?.entity;
+	});
+	let isValidCall = $derived(!!callsign.match(advancedCallsignRe));
+	let gridsquareValid = $derived(gridsquare.match(locatorRegex));
+	let distance = $derived(getDist(gridsquare, dxcc));
+	let lastQso = $derived($logbookStore.result?.qsos[0]);
+	$effect(() => {
+		if (isPure && lastQso) {
+			mode = lastQso.mode;
+			freq = getFreq(lastQso);
+			band = lastQso.band ?? undefined;
+			power = lastQso.power?.toString() ?? '';
+		}
+	});
+	let canSubmit = $derived(callsign.length >= 3 && freq && !!selectedLog);
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form
-	on:submit|preventDefault={submit}
-	on:beforeinput={() => (isPure = false)}
-	on:input={() => (isPure = false)}
-	on:keydown={({ key, altKey }) => key === 'w' && altKey && clear()}
+	onsubmit={(e) => {
+		e.preventDefault();
+		submit();
+	}}
+	onbeforeinput={() => (isPure = false)}
+	oninput={() => (isPure = false)}
+	onkeydown={({ key, altKey }) => key === 'w' && altKey && clear()}
 	class="flex min-w-80 flex-col gap-6 rounded-xl bg-base-300 p-6 @container"
 >
 	<div class="flex items-start gap-4">
@@ -148,7 +151,7 @@
 				{log.call}
 			</h1>
 		{/if}
-		<button type="button" class="btn btn-xs" on:click={clear} disabled={isPure}>Clear</button>
+		<button type="button" class="btn btn-xs" onclick={clear} disabled={isPure}>Clear</button>
 	</div>
 
 	<div class="flex flex-wrap justify-start gap-4">
@@ -166,11 +169,11 @@
 			disabled={!!dateTimeTimer}
 		/>
 		{#if !dateTimeTimer}
-			<button class="btn btn-outline btn-xs my-auto" type="button" on:click={setDateTimeNow}>
+			<button class="btn btn-outline btn-xs my-auto" type="button" onclick={setDateTimeNow}>
 				Now
 			</button>
 		{/if}
-		<button class="btn btn-outline btn-xs my-auto" type="button" on:click={toggleDateTimeTimer}>
+		<button class="btn btn-outline btn-xs my-auto" type="button" onclick={toggleDateTimeTimer}>
 			{#if dateTimeTimer}Manual{:else}Auto{/if} time
 		</button>
 	</div>
@@ -180,7 +183,7 @@
 			<select
 				class="select flex-1"
 				bind:value={band}
-				on:change={() => {
+				onchange={() => {
 					const b = Band.ALL_BANDS.get(band ?? '');
 					if (!b) return;
 					const f = parseFloat(freq) * 1000000;
@@ -253,10 +256,10 @@
 		<div class="flex flex-1 flex-wrap items-end gap-4">
 			<select
 				class="select select-sm max-w-60"
-				value={dxcc?.id}
-				on:change={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
+				value={dxcc?.id ?? 0}
+				onchange={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
 			>
-				<option value="">NON-DXCC</option>
+				<option value="0"></option>
 				{#each [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name)) as dxcc}
 					<option value={dxcc.id}>{dxcc.name}</option>
 				{/each}
@@ -280,14 +283,7 @@
 			{#if !selectedLog}
 				<div class="text-error">Please select logbook</div>
 			{/if}
-			<button
-				type="submit"
-				on:click|preventDefault={submit}
-				class="btn btn-primary"
-				disabled={!canSubmit}
-			>
-				Save
-			</button>
+			<button class="btn btn-primary" disabled={!canSubmit}>Save</button>
 		</div>
 	</div>
 </form>

@@ -4,7 +4,8 @@
 		geoMercator,
 		geoAzimuthalEquidistant,
 		geoCircle,
-		geoAzimuthalEqualArea
+		geoAzimuthalEqualArea,
+		type GeoProjection
 	} from 'd3-geo';
 	import { feature } from 'topojson-client';
 	import type { Topology, GeometryCollection } from 'topojson-specification';
@@ -19,18 +20,16 @@
 	import { Projection } from '$lib/models/projection';
 	import { mapStore, setProjection, setShowGridsquares, setShowNight } from '$lib/stores/map-store';
 
-	$: projection = $mapStore.projection ?? Projection.Mercator;
-	$: showGridsquares = $mapStore.showGridsquares ?? true;
-	$: showNight = $mapStore.showNight ?? true;
+	interface Props {
+		center?: [number, number];
+		points?: [number, number][];
+		lines?: [[number, number], [number, number]][];
+		countryColors?: Record<string, string>;
+	}
 
-	export let center: [number, number] = [0, 0];
-	export let points: [number, number][] = [];
-	export let lines: [[number, number], [number, number]][] = [];
-	export let countryColors: Record<string, string> = {};
+	let { center = [0, 0], points = [], lines = [], countryColors = {} }: Props = $props();
 
-	$: mapExpanded = $page.state.showExpandedMap;
-
-	let scale = 2.2;
+	let scale = $state(2.2);
 	function setScale(v: number) {
 		v = Math.min(4, Math.max(2, v));
 		if (v !== scale) scale = v;
@@ -38,17 +37,8 @@
 	const zoomIn = (f = 0.2) => setScale(scale + f);
 	const zoomOut = (f = 0.2) => setScale(scale - f);
 
-	$: _projection = (
-		projection === Projection.Mercator
-			? geoMercator
-			: projection === Projection.AzimuthalEquidistant
-				? geoAzimuthalEquidistant
-				: geoAzimuthalEqualArea
-	)();
-	let path = geoPath(_projection);
-
-	let countries: string[] = [];
-	let _countries: typeof countries110;
+	let countries: string[] = $state([]);
+	let _countries: typeof countries110 | undefined = $state();
 
 	let mapWorker = new MapWorker();
 	let lastRender = Date.now();
@@ -66,25 +56,6 @@
 		hqTimeout = setTimeout(() => {
 			mapWorker?.postMessage([projection, center, scale, countries50, lastRender]);
 		}, 100);
-	}
-
-	$: {
-		if (center) {
-			switch (projection) {
-				case Projection.AzimuthalEquidistant:
-				case Projection.AzimuthalEqualArea:
-					_projection.rotate([-center[0], -center[1]]);
-					break;
-				case Projection.Mercator:
-					_projection.center([0, center[1]]).rotate([-center[0], 0]);
-					break;
-			}
-		}
-		_projection = _projection.scale(Math.pow(10, scale));
-		path = geoPath(_projection);
-		setT();
-		countries = countries110.map((e) => path(e)!);
-		_countries = countries110;
 	}
 
 	let countries110 = feature(
@@ -122,7 +93,7 @@
 		const longitude = (utcTime - 12) * 15;
 		return [-longitude, latitude];
 	};
-	let sun = getSun(new Date());
+	let sun = $state(getSun(new Date()));
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -131,16 +102,54 @@
 		return () => clearInterval(interval);
 	});
 
-	let settingsOpen = false;
+	let settingsOpen = $state(false);
+	let projection = $derived($mapStore.projection ?? Projection.Mercator);
+	let showGridsquares = $derived($mapStore.showGridsquares ?? true);
+	let showNight = $derived($mapStore.showNight ?? true);
+	let mapExpanded = $derived($page.state.showExpandedMap);
+	let _projection: GeoProjection = geoMercator();
+	let path = $state(geoPath(_projection));
+
+	$effect(() => {
+		_projection = (
+			projection === Projection.Mercator
+				? geoMercator
+				: projection === Projection.AzimuthalEquidistant
+					? geoAzimuthalEquidistant
+					: geoAzimuthalEqualArea
+		)();
+	});
+	$effect(() => {
+		if (center) {
+			switch (projection) {
+				case Projection.AzimuthalEquidistant:
+				case Projection.AzimuthalEqualArea:
+					_projection.rotate([-center[0], -center[1]]);
+					break;
+				case Projection.Mercator:
+					_projection.center([0, center[1]]).rotate([-center[0], 0]);
+					break;
+			}
+		}
+		_projection = _projection.scale(Math.pow(10, scale));
+		// path = geoPath(_projection);
+		setT();
+		countries = countries110.map((e) => path(e)!);
+		_countries = countries110;
+	});
 </script>
 
 <div class={mapExpanded ? 'fixed inset-0 z-40 flex p-8 [&>*]:flex-1' : ''}>
 	{#if mapExpanded}
-		<button class="absolute inset-0 bg-base-300/80" on:click={() => history.back()} />
+		<button
+			aria-label="Shrink map"
+			class="absolute inset-0 bg-base-300/80"
+			onclick={() => history.back()}
+		></button>
 	{/if}
 
 	<div class="relative">
-		<svg viewBox="0 0 975 610" width="100%" height="100%" on:wheel={scrolled}>
+		<svg viewBox="0 0 975 610" width="100%" height="100%" onwheel={scrolled}>
 			<path d={path({ type: 'Sphere' })} fill="#335" stroke="none" />
 
 			{#each countries as country, i}
@@ -202,12 +211,16 @@
 
 		<div class="absolute right-3 top-3 flex flex-col gap-2 [&>*]:z-20">
 			{#if settingsOpen}
-				<button class="fixed inset-0 z-10 cursor-auto" on:click={() => (settingsOpen = false)} />
+				<button
+					aria-label="Close settings"
+					class="fixed inset-0 z-10 cursor-auto"
+					onclick={() => (settingsOpen = false)}
+				></button>
 			{/if}
 
 			<button
 				class="btn btn-circle btn-sm"
-				on:click={mapExpanded
+				onclick={mapExpanded
 					? () => history.back()
 					: () => pushState('', { showExpandedMap: true })}
 			>
@@ -215,7 +228,7 @@
 			</button>
 
 			<div class="relative">
-				<button class="btn btn-circle btn-sm" on:click={() => (settingsOpen = !settingsOpen)}>
+				<button class="btn btn-circle btn-sm" onclick={() => (settingsOpen = !settingsOpen)}>
 					<Fa icon={faCog} />
 				</button>
 
@@ -224,19 +237,19 @@
 						<div class="flex gap-2">
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.Mercator ? 'btn-primary' : ''}`}
-								on:click={() => setProjection(Projection.Mercator)}
+								onclick={() => setProjection(Projection.Mercator)}
 							>
 								Mercator
 							</button>
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEquidistant ? 'btn-primary' : ''}`}
-								on:click={() => setProjection(Projection.AzimuthalEquidistant)}
+								onclick={() => setProjection(Projection.AzimuthalEquidistant)}
 							>
 								Azimuthal ED
 							</button>
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEqualArea ? 'btn-primary' : ''}`}
-								on:click={() => setProjection(Projection.AzimuthalEqualArea)}
+								onclick={() => setProjection(Projection.AzimuthalEqualArea)}
 							>
 								Azimuthal EA
 							</button>
@@ -258,7 +271,7 @@
 								<input
 									type="checkbox"
 									checked={showGridsquares}
-									on:input={() => setShowGridsquares(!showGridsquares)}
+									oninput={() => setShowGridsquares(!showGridsquares)}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>
@@ -269,7 +282,7 @@
 								<input
 									type="checkbox"
 									checked={showNight}
-									on:input={() => setShowNight(!showNight)}
+									oninput={() => setShowNight(!showNight)}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>
@@ -278,11 +291,11 @@
 				</div>
 			</div>
 
-			<button class="btn btn-circle btn-sm" on:click={() => zoomIn()}>
+			<button class="btn btn-circle btn-sm" onclick={() => zoomIn()}>
 				<Fa icon={faPlus} />
 			</button>
 
-			<button class="btn btn-circle btn-sm" on:click={() => zoomOut()}>
+			<button class="btn btn-circle btn-sm" onclick={() => zoomOut()}>
 				<Fa icon={faMinus} />
 			</button>
 		</div>
