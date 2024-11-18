@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { createTelnetStore } from '$lib/stores/telnet-store';
-	import { onDestroy } from 'svelte';
-
-	const telnetStore = createTelnetStore('telnet-cluster');
+	import { clusterStore } from '$lib/stores/telnet-store';
+	import { isTauri } from '@tauri-apps/api/core';
 
 	let textArea: HTMLTextAreaElement;
 
@@ -28,49 +26,49 @@
 	};
 
 	function send() {
-		telnetStore.send(sendMessage);
+		clusterStore.send(sendMessage);
 		sendMessage = '';
 	}
 
 	function connect() {
-		unlisten = telnetStore.addListener(onMessage);
-		telnetStore.connect(url);
+		unlisten = clusterStore.addListener(onMessage);
+		clusterStore.connect(url);
 	}
 
 	function disconnect() {
 		unlisten?.();
-		telnetStore.disconnect();
+		clusterStore.disconnect();
 	}
-
-	onDestroy(() => disconnect);
 </script>
 
-<div class="flex flex-col gap-3 rounded-lg bg-base-200 p-4">
-	<div class="flex flex-row gap-2">
-		<input
-			type="text"
-			bind:value={url}
-			placeholder="URL"
-			disabled={$telnetStore.connected}
-			class="input input-sm grow"
-		/>
-		{#if !$telnetStore.connected}
-			<button on:click={connect} class="btn btn-outline btn-sm">Connect</button>
-		{:else}
-			<button on:click={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
-		{/if}
-	</div>
+{#if isTauri()}
+	<div class="flex flex-col gap-3 rounded-lg bg-base-200 p-4">
+		<div class="flex flex-row gap-2">
+			<input
+				type="text"
+				bind:value={url}
+				placeholder="URL"
+				disabled={$clusterStore.connected}
+				class="input input-sm grow"
+			/>
+			{#if !$clusterStore.connected}
+				<button on:click={connect} class="btn btn-outline btn-sm">Connect</button>
+			{:else}
+				<button on:click={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
+			{/if}
+		</div>
 
-	<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea" />
+		<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea" />
 
-	<div class="flex flex-row gap-2">
-		<input
-			type="text"
-			bind:value={sendMessage}
-			placeholder="Message"
-			class="input input-sm grow"
-			on:keypress={(e) => (e.key === 'Enter' ? send() : null)}
-		/>
-		<button on:click={send} class="btn btn-outline btn-sm">Send</button>
+		<div class="flex flex-row gap-2">
+			<input
+				type="text"
+				bind:value={sendMessage}
+				placeholder="Message"
+				class="input input-sm grow"
+				on:keypress={(e) => (e.key === 'Enter' ? send() : null)}
+			/>
+			<button on:click={send} class="btn btn-outline btn-sm">Send</button>
+		</div>
 	</div>
-</div>
+{/if}

@@ -67,3 +67,5 @@ export function createTelnetStore(label: string) {
 		send
 	};
 }
+
+export const clusterStore = createTelnetStore('telnet-cluster');
