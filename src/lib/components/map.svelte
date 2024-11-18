@@ -4,8 +4,7 @@
 		geoMercator,
 		geoAzimuthalEquidistant,
 		geoCircle,
-		geoAzimuthalEqualArea,
-		type GeoProjection
+		geoAzimuthalEqualArea
 	} from 'd3-geo';
 	import { feature } from 'topojson-client';
 	import type { Topology, GeometryCollection } from 'topojson-specification';
@@ -47,16 +46,6 @@
 		countries = e.data[0];
 		_countries = countries50;
 	});
-
-	let hqTimeout: ReturnType<typeof setTimeout>;
-	function setT() {
-		if (!hqTimeout) clearTimeout(hqTimeout);
-		lastRender = Date.now();
-		if (scale < 2.5) return;
-		hqTimeout = setTimeout(() => {
-			mapWorker?.postMessage([projection, center, scale, countries50, lastRender]);
-		}, 100);
-	}
 
 	let countries110 = feature(
 		world110 as Topology<any>,
@@ -107,33 +96,41 @@
 	let showGridsquares = $derived($mapStore.showGridsquares ?? true);
 	let showNight = $derived($mapStore.showNight ?? true);
 	let mapExpanded = $derived($page.state.showExpandedMap);
-	let _projection: GeoProjection = geoMercator();
-	let path = $state(geoPath(_projection));
 
-	$effect(() => {
-		_projection = (
+	let _projection = $derived.by(() => {
+		const p = (
 			projection === Projection.Mercator
 				? geoMercator
 				: projection === Projection.AzimuthalEquidistant
 					? geoAzimuthalEquidistant
 					: geoAzimuthalEqualArea
 		)();
-	});
-	$effect(() => {
-		if (center) {
-			switch (projection) {
-				case Projection.AzimuthalEquidistant:
-				case Projection.AzimuthalEqualArea:
-					_projection.rotate([-center[0], -center[1]]);
-					break;
-				case Projection.Mercator:
-					_projection.center([0, center[1]]).rotate([-center[0], 0]);
-					break;
-			}
+		switch (projection) {
+			case Projection.AzimuthalEquidistant:
+			case Projection.AzimuthalEqualArea:
+				p.rotate([-center[0], -center[1]]);
+				break;
+			case Projection.Mercator:
+				p.center([0, center[1]]).rotate([-center[0], 0]);
+				break;
 		}
-		_projection = _projection.scale(Math.pow(10, scale));
-		// path = geoPath(_projection);
-		setT();
+		p.scale(Math.pow(10, scale));
+		return p;
+	});
+	let path = $derived(geoPath(_projection));
+
+	let hqTimeout: ReturnType<typeof setTimeout> | undefined;
+	$effect(() => {
+		if (!hqTimeout) {
+			clearTimeout(hqTimeout);
+			hqTimeout = undefined;
+		}
+		lastRender = Date.now();
+		if (scale >= 2.5) {
+			hqTimeout = setTimeout(() => {
+				mapWorker?.postMessage([projection, center, scale, countries50, lastRender]);
+			}, 100);
+		}
 		countries = countries110.map((e) => path(e)!);
 		_countries = countries110;
 	});
