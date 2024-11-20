@@ -2,7 +2,7 @@
 	import { callsignInput } from '$lib/helpers/input-helpers';
 	import { Band } from '$lib/models/band';
 	import { Mode } from '$lib/models/mode';
-	import { logbookStore, refreshLogbook, setLimit, updateFilter } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import {
 		faChevronDown,
 		faClose,
@@ -12,21 +12,20 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
+	let logbook = getLogbookContext();
+
 	let callsignInputElement = $state<HTMLInputElement>();
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
 	function setCallsign(v: string) {
 		if (v === callsign) return;
 		clearTimeout(callTimer);
-		callTimer = setTimeout(() => updateFilter({ callsign: v }), 500);
+		callTimer = setTimeout(() => (logbook.filter.callsign = v), 500);
 	}
 
-	let callsign = $derived($logbookStore.params.filter.callsign ?? '');
-	let limit = $derived($logbookStore.params.limit);
+	let callsign = $derived(logbook.filter.callsign ?? '');
 	let filterOpen = $state(false);
-	let band = $derived($logbookStore.params.filter.band ?? '');
-	let mode = $derived($logbookStore.params.filter.mode ?? '');
-	let filterCount = $derived([band, mode].filter((v) => !!v).length);
+	let filterCount = $derived([logbook.filter.band, logbook.filter.mode].filter((v) => !!v).length);
 </script>
 
 <div class="rounded-lg bg-base-300 p-4">
@@ -45,7 +44,7 @@
 			<button
 				class="btn btn-circle btn-ghost btn-sm -mr-2 disabled:hidden"
 				onclick={() => {
-					updateFilter({ callsign: '' });
+					logbook.filter.callsign = '';
 					callsignInputElement?.focus();
 				}}
 				disabled={!callsign}
@@ -56,7 +55,7 @@
 
 		<label class="form-control flex-row items-center gap-2">
 			<span class="label-text">Limit</span>
-			<select class="select" value={limit} onchange={(e) => setLimit(+e.currentTarget.value)}>
+			<select class="select" bind:value={logbook.limit}>
 				<option value={10}>10</option>
 				<option value={25}>25</option>
 				<option value={50}>50</option>
@@ -95,12 +94,8 @@
 
 				<label class="a form-control">
 					<span class="label-text">Band</span>
-					<select
-						class="select select-bordered"
-						value={band}
-						onchange={(e) => updateFilter({ band: e.currentTarget.value })}
-					>
-						<option value="">All</option>
+					<select class="select select-bordered" bind:value={logbook.filter.band}>
+						<option value={undefined}>All</option>
 						{#each Band.ALL_BANDS.values() as band}
 							<option value={band.name}>{band.name}</option>
 						{/each}
@@ -109,12 +104,8 @@
 
 				<label class="a form-control">
 					<span class="label-text">Mode</span>
-					<select
-						class="select select-bordered"
-						value={mode}
-						onchange={(e) => updateFilter({ mode: e.currentTarget.value })}
-					>
-						<option value="">All</option>
+					<select class="select select-bordered" bind:value={logbook.filter.mode}>
+						<option value={undefined}>All</option>
 						{#each Mode.ALL_MODES.values() as mode}
 							<option value={mode.name}>{mode.name}</option>
 							{#each mode.subModes as subMode}
@@ -127,7 +118,8 @@
 				<button
 					class="btn btn-sm"
 					onclick={() => {
-						updateFilter({ band: '', mode: '' });
+						logbook.filter.band = undefined;
+						logbook.filter.mode = undefined;
 						filterOpen = false;
 					}}
 				>
@@ -136,7 +128,7 @@
 			</div>
 		</div>
 
-		<button class="btn btn-circle" onclick={refreshLogbook}>
+		<button class="btn btn-circle" onclick={logbook.refresh}>
 			<Fa icon={faRefresh} />
 		</button>
 

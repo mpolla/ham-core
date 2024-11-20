@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';
 
-	let logbookId = $derived($logbookStore.params.logId);
+	const logbook = getLogbookContext();
 
 	let missingCont: Map<string, IQso[]> | undefined = $state(undefined);
 	let conflictCont: { qso: IQso; conts: string[] }[] | undefined = $state(undefined);
@@ -14,7 +14,7 @@
 
 	$effect(() => {
 		let contReq = getQsos().is('cont', null);
-		if (logbookId) contReq = contReq.eq('log_id', logbookId);
+		if (logbook.logId) contReq = contReq.eq('log_id', logbook.logId);
 		contReq.then(({ data }) => {
 			missingCont = new Map();
 			conflictCont = [];

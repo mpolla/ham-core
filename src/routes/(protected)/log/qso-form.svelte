@@ -8,15 +8,16 @@
 	import FrequencyInput from '$lib/components/inputs/frequency-input.svelte';
 	import { Mode } from '$lib/models/mode';
 	import { Band } from '$lib/models/band';
-	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import {
 		getDistanceBetweenLocators,
 		locatorRegex,
 		locatorToLongLat
 	} from '$lib/utils/locator-util';
 	import { getDistance } from '$lib/utils/geo-util';
-	import { logsStore } from '$lib/stores/logs-store';
 	import type { IQso } from '$lib/supabase';
+
+	const logbook = getLogbookContext();
 
 	let callsignInputElement = $state<HTMLInputElement>();
 	let callsign = $state('');
@@ -36,39 +37,41 @@
 	let gridsquare = $state('');
 
 	function getDist(gridsquare: string, dxcc: DxccEntity | undefined) {
-		if (!log?.grid) return;
+		if (!selectedLog?.grid) return;
 		if (gridsquareValid) {
-			return getDistanceBetweenLocators(gridsquare, log.grid);
+			return getDistanceBetweenLocators(gridsquare, selectedLog.grid);
 		}
 		if (dxcc?.lat && dxcc.long) {
-			const [long, lat] = locatorToLongLat(log.grid, true);
+			const [long, lat] = locatorToLongLat(selectedLog.grid, true);
 			return getDistance(lat, long, dxcc.lat!, dxcc.long!);
 		}
 	}
 
 	function submit() {
 		if (!canSubmit) return;
-		insertQso({
-			log_id: selectedLog,
-			datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
-			call: callsign,
-			mode,
-			frequency: parseFloat(freq) * 1000000,
-			band: band || null,
-			rst_sent: rstSent,
-			rst_rcvd: rstRcv,
-			dxcc: dxcc?.dxcc,
-			country: dxcc?.name || null,
-			power: power ? parseInt(power) : null,
-			gridsquare: gridsquare || null,
-			cont: dxcc?.cont || null,
-			other: {
-				CQZ: dxcc?.cqz,
-				ITUZ: dxcc?.ituz
-			}
-		}).then((r) => {
-			if (r) clear();
-		});
+		logbook
+			.insert({
+				log_id: selectedLog?.id,
+				datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
+				call: callsign,
+				mode,
+				frequency: parseFloat(freq) * 1000000,
+				band: band || null,
+				rst_sent: rstSent,
+				rst_rcvd: rstRcv,
+				dxcc: dxcc?.dxcc,
+				country: dxcc?.name || null,
+				power: power ? parseInt(power) : null,
+				gridsquare: gridsquare || null,
+				cont: dxcc?.cont || null,
+				other: {
+					CQZ: dxcc?.cqz,
+					ITUZ: dxcc?.ituz
+				}
+			})
+			.then((r) => {
+				if (r) clear();
+			});
 	}
 
 	function setDateTimeNow() {
@@ -111,8 +114,7 @@
 		setDateTimeNow();
 		toggleDateTimeTimer();
 	});
-	let selectedLog = $derived($logbookStore.params.logId);
-	let log = $derived($logsStore?.find((l) => l.id === selectedLog));
+	const selectedLog = $derived(logbook.selectedLog);
 	let isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
 	let dxcc = $state<DxccEntity>();
 	$effect(() => {
@@ -121,7 +123,7 @@
 	let isValidCall = $derived(!!callsign.match(advancedCallsignRe));
 	let gridsquareValid = $derived(gridsquare.match(locatorRegex));
 	let distance = $derived(getDist(gridsquare, dxcc));
-	let lastQso = $derived($logbookStore.result?.qsos[0]);
+	let lastQso = $derived(logbook.qsos[0]);
 	$effect(() => {
 		if (isPure && lastQso) {
 			mode = lastQso.mode;
@@ -146,9 +148,9 @@
 >
 	<div class="flex items-start gap-4">
 		<div class="font-light">New QSO</div>
-		{#if log}
+		{#if selectedLog}
 			<h1 class="mx-auto text-2xl font-semibold">
-				{log.call}
+				{selectedLog.call}
 			</h1>
 		{/if}
 		<button type="button" class="btn btn-xs" onclick={clear} disabled={isPure}>Clear</button>

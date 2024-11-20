@@ -1,47 +1,37 @@
 <script lang="ts">
 	import { callsignInput, gridsquareInput, numberInput } from '$lib/helpers/input-helpers';
-	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
+	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import { locatorRegex } from '$lib/utils/locator-util';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
-	import {
-		copyFrom,
-		logbookFields as f,
-		setCall,
-		setCqz,
-		setDxcc,
-		setGrid,
-		setItuz,
-		setName,
-		setTitle
-	} from './logbook-fields';
-	import { onMount } from 'svelte';
+	import { createLogbookFields } from './logbook-fields.svelte';
 	import { supabase } from '$lib/supabase';
+
+	const logs = getLogsContext();
+	const logbook = getLogbookContext();
 
 	let { mode }: { mode: 'new' | 'edit' } = $props();
 
-	let log = $derived(
-		mode === 'new' ? undefined : $logsStore?.find((l) => l.id === $logbookStore.params.logId)
-	);
+	const f = createLogbookFields(mode === 'new' ? undefined : logbook.selectedLog);
 
-	let parsedDxcc = $derived(findDxcc($f.call.value)?.entity);
+	let parsedDxcc = $derived(findDxcc(f.call)?.entity);
 	const dxccs = [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name));
 
-	let dxcc = $derived(dxccEntities.get($f.dxcc.value));
+	let dxcc = $derived(dxccEntities.get(f.dxcc));
 
-	let canSave = $derived($f.call.value && $f.dxcc.value && !$f.isPure);
+	let canSave = $derived(f.call && f.dxcc && !f.isPure);
 
 	let data = $derived(
 		canSave
 			? {
-					call: $f.call.value,
-					title: $f.title.value || null,
+					call: f.call,
+					title: f.title || null,
 					dxcc: dxcc!.dxcc!,
 					country: dxcc!.name,
-					cqz: +$f.cqz.value || null,
-					ituz: +$f.ituz.value || null,
-					name: $f.name.value || null,
-					grid: $f.grid.value || null
+					cqz: +f.cqz || null,
+					ituz: +f.ituz || null,
+					name: f.name || null,
+					grid: f.grid || null
 				}
 			: undefined
 	);
@@ -55,8 +45,8 @@
 			.single()
 			.then((res) => {
 				if (res.error) return console.error(res.error);
-				logsStore.update((logs) => [...logs!, res.data!]);
-				selectLog(res.data!.id);
+				logs.refresh();
+				logbook.logId = res.data!.id;
 				history.back();
 			});
 	}
@@ -66,17 +56,15 @@
 		supabase
 			.from('log')
 			.update(data!)
-			.eq('id', $logbookStore.params.logId!)
+			.eq('id', logbook.logId!)
 			.select()
 			.single()
 			.then((res) => {
 				if (res.error) return console.error(res.error);
-				logsStore.update((logs) => logs!.map((l) => (l.id === res.data!.id ? res.data : l)));
+				logs.refresh();
 				history.back();
 			});
 	}
-
-	onMount(() => copyFrom(log));
 </script>
 
 <div class="flex flex-col gap-4">
@@ -89,20 +77,14 @@
 				type="text"
 				class="input input-bordered font-mono placeholder:font-sans"
 				use:callsignInput
-				value={$f.call.value}
-				oninput={(e) => setCall(e.currentTarget.value)}
+				bind:value={f.call}
 			/>
 		</label>
 		<label class="form-control col-span-2">
 			<div class="label">
 				<span class="label-text">Title</span>
 			</div>
-			<input
-				type="text"
-				class="input input-bordered"
-				value={$f.title.value}
-				oninput={(e) => setTitle(e.currentTarget.value)}
-			/>
+			<input type="text" class="input input-bordered" bind:value={f.title} />
 		</label>
 
 		<label class="form-control col-span-2">
@@ -111,8 +93,7 @@
 			</div>
 			<select
 				class={`select select-bordered ${dxcc && parsedDxcc && parsedDxcc.id !== dxcc.id ? 'select-warning' : ''}`}
-				value={$f.dxcc.value}
-				onchange={(e) => setDxcc(+e.currentTarget.value)}
+				bind:value={f.dxcc}
 			>
 				<option disabled selected>Select Country</option>
 				{#each dxccs as { id, name }}
@@ -127,10 +108,9 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${$f.cqz.value && dxcc && +$f.cqz.value !== dxcc.cqz ? 'input-warning' : ''}`}
+				class={`input input-bordered ${f.cqz && dxcc && +f.cqz !== dxcc.cqz ? 'input-warning' : ''}`}
 				use:numberInput
-				value={$f.cqz.value}
-				oninput={(e) => setCqz(e.currentTarget.value)}
+				bind:value={f.cqz}
 			/>
 		</label>
 		<label class="form-control">
@@ -139,10 +119,9 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${$f.ituz.value && dxcc && +$f.ituz.value !== dxcc.ituz ? 'input-warning' : ''}`}
+				class={`input input-bordered ${f.ituz && dxcc && +f.ituz !== dxcc.ituz ? 'input-warning' : ''}`}
 				use:numberInput
-				value={$f.ituz.value}
-				oninput={(e) => setItuz(e.currentTarget.value)}
+				bind:value={f.ituz}
 			/>
 		</label>
 
@@ -150,12 +129,7 @@
 			<div class="label">
 				<span class="label-text">Name</span>
 			</div>
-			<input
-				type="text"
-				class="input input-bordered"
-				value={$f.name.value}
-				oninput={(e) => setName(e.currentTarget.value)}
-			/>
+			<input type="text" class="input input-bordered" bind:value={f.name} />
 		</label>
 		<label class="form-control col-span-2">
 			<div class="label">
@@ -163,10 +137,9 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${$f.grid.value && !$f.grid.value.match(locatorRegex) ? 'input-error' : ''}`}
+				class={`input input-bordered ${f.grid && !f.grid.match(locatorRegex) ? 'input-error' : ''}`}
 				use:gridsquareInput
-				value={$f.grid.value}
-				oninput={(e) => setGrid(e.currentTarget.value)}
+				bind:value={f.grid}
 			/>
 		</label>
 	</div>

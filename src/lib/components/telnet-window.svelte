@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { clusterStore } from '$lib/stores/telnet-store';
+	import { getClusterContext } from '$lib/states/telnet-state.svelte';
 	import { isTauri } from '@tauri-apps/api/core';
+
+	const cluster = getClusterContext();
 
 	let textArea = $state<HTMLTextAreaElement>();
 
@@ -29,18 +31,19 @@
 	};
 
 	function send() {
-		clusterStore.send(sendMessage);
+		cluster.send(sendMessage);
 		sendMessage = '';
 	}
 
 	function connect() {
-		unlisten = clusterStore.addListener(onMessage);
-		clusterStore.connect(url);
+		unlisten = cluster.addListener(onMessage);
+		const [host, port] = url.split(':');
+		cluster.connect(host, parseInt(port));
 	}
 
 	function disconnect() {
 		unlisten?.();
-		clusterStore.disconnect();
+		cluster.disconnect();
 	}
 </script>
 
@@ -51,10 +54,10 @@
 				type="text"
 				bind:value={url}
 				placeholder="URL"
-				disabled={$clusterStore.connected}
+				disabled={cluster.connected}
 				class="input input-sm grow"
 			/>
-			{#if !$clusterStore.connected}
+			{#if !cluster.connected}
 				<button onclick={connect} class="btn btn-outline btn-sm">Connect</button>
 			{:else}
 				<button onclick={disconnect} class="btn btn-outline btn-sm">Disconnect</button>

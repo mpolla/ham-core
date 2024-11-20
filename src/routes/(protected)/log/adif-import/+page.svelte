@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { logbookStore, refreshLogbook } from '$lib/stores/logbook-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import Fa from 'svelte-fa';
-	import { adifFilesStore, ImportStatus, setFiles, uploadFiles } from './adif-files-store';
+	import { createAdifUploadState, ImportStatus } from './adif-files-state.svelte';
 	import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
 	import Loading from '$lib/components/loading.svelte';
 
-	$: selectedLog = $logbookStore.params.logId;
-
-	$: selectedCall = $logsStore?.find((l) => l.id === selectedLog)?.call;
+	const logbook = getLogbookContext();
+	const state = createAdifUploadState(logbook);
 
 	function upload() {
-		if (!selectedLog) return;
-		uploadFiles(selectedLog).then(() => refreshLogbook());
+		if (!logbook.selectedLog) return;
+		state.upload().then(() => logbook.refresh());
 	}
 </script>
 
@@ -30,17 +28,17 @@
 					multiple
 					type="file"
 					accept=".adi"
-					on:change={(e) => setFiles(e.currentTarget.files)}
+					bind:files={state.files}
 				/>
 			</label>
 		</div>
 	</div>
 
-	{#if $adifFilesStore}
+	{#if state.results}
 		<div>
 			<h2 class="mb-2">Selected files:</h2>
 			<div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
-				{#each $adifFilesStore as file}
+				{#each state.results as file}
 					<div class="rounded-lg bg-base-200 px-4 py-3">
 						<div class="text-lg font-bold">
 							{file.fileName}
@@ -55,7 +53,7 @@
 								<div>
 									Callsign{value.stationCallsigns.length > 1 ? 's' : ''} used:
 									{#each value.stationCallsigns as c}
-										<span class={selectedCall !== c ? 'text-warning' : ''}>{c}</span>
+										<span class={logbook.selectedLog?.call !== c ? 'text-warning' : ''}>{c}</span>
 									{/each}
 								</div>
 								<table>
@@ -90,14 +88,10 @@
 			</div>
 		</div>
 
-		{#if selectedLog}
-			{#await Promise.all($adifFilesStore.map((file) => file.result))}
-				<Loading />
-			{:then value}
-				{#if value.every((v) => v)}
-					<button class="btn btn-primary" on:click={upload}>Import</button>
-				{/if}
-			{/await}
-		{/if}
+		{#await state.uploadReady}
+			<Loading />
+		{:then value}
+			<button class="btn btn-primary" onclick={upload} disabled={!value}>Import</button>
+		{/await}
 	{/if}
 </div>

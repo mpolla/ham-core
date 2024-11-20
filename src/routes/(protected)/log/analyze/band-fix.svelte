@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import { Band } from '$lib/models/band';
 
-	let logbookId = $derived($logbookStore.params.logId);
+	const logbook = getLogbookContext();
 
 	let missingBand: Map<Band | null, IQso[]> | undefined = $state(undefined);
 
 	$effect(() => {
 		let contReq = getQsos().is('band', null);
-		if (logbookId) contReq = contReq.eq('log_id', logbookId);
+		if (logbook.logId) contReq = contReq.eq('log_id', logbook.logId);
 		contReq.then(({ data }) => {
 			missingBand = new Map();
 			for (const qso of data ?? []) {

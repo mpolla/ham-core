@@ -17,7 +17,9 @@
 	import { pushState } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Projection } from '$lib/models/projection';
-	import { mapStore, setProjection, setShowGridsquares, setShowNight } from '$lib/stores/map-store';
+	import { createMapState } from '$lib/states/map-state.svelte';
+
+	const mapState = createMapState();
 
 	interface Props {
 		center?: [number, number];
@@ -92,9 +94,9 @@
 	});
 
 	let settingsOpen = $state(false);
-	let projection = $derived($mapStore.projection ?? Projection.Mercator);
-	let showGridsquares = $derived($mapStore.showGridsquares ?? true);
-	let showNight = $derived($mapStore.showNight ?? true);
+	let projection = $derived(mapState.projection);
+	let showGridsquares = $derived(mapState.showGridsquares);
+	let showNight = $derived(mapState.showNight);
 	let mapExpanded = $derived($page.state.showExpandedMap);
 
 	let _projection = $derived.by(() => {
@@ -234,19 +236,19 @@
 						<div class="flex gap-2">
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.Mercator ? 'btn-primary' : ''}`}
-								onclick={() => setProjection(Projection.Mercator)}
+								onclick={() => (mapState.projection = Projection.Mercator)}
 							>
 								Mercator
 							</button>
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEquidistant ? 'btn-primary' : ''}`}
-								onclick={() => setProjection(Projection.AzimuthalEquidistant)}
+								onclick={() => (mapState.projection = Projection.AzimuthalEquidistant)}
 							>
 								Azimuthal ED
 							</button>
 							<button
 								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEqualArea ? 'btn-primary' : ''}`}
-								onclick={() => setProjection(Projection.AzimuthalEqualArea)}
+								onclick={() => (mapState.projection = Projection.AzimuthalEqualArea)}
 							>
 								Azimuthal EA
 							</button>
@@ -267,8 +269,7 @@
 								<span class="label-text">Show grid squares</span>
 								<input
 									type="checkbox"
-									checked={showGridsquares}
-									oninput={() => setShowGridsquares(!showGridsquares)}
+									bind:checked={mapState.showGridsquares}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>
@@ -278,8 +279,7 @@
 								<span class="label-text">Show Night</span>
 								<input
 									type="checkbox"
-									checked={showNight}
-									oninput={() => setShowNight(!showNight)}
+									bind:checked={mapState.showNight}
 									class="checkbox-primary checkbox checkbox-sm"
 								/>
 							</label>

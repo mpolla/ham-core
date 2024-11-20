@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { readable } from 'svelte/store';
+	import { onDestroy } from 'svelte';
 
-	const time = readable(new Date(), (set) => {
-		const interval = setInterval(() => {
-			set(new Date());
-		}, 500);
+	let time = $state(new Date());
 
-		return () => {
-			clearInterval(interval);
-		};
+	const interval = setInterval(() => {
+		time = new Date();
+	}, 1000);
+
+	onDestroy(() => {
+		clearInterval(interval);
 	});
 
 	function p2(n: number) {
@@ -18,9 +18,9 @@
 
 <div class="flex flex-col text-center">
 	<div class="text-sm">
-		{$time.getUTCDate()}. {$time.getUTCMonth() + 1}. {$time.getUTCFullYear()}
+		{time.getUTCDate()}. {time.getUTCMonth() + 1}. {time.getUTCFullYear()}
 	</div>
 	<div class="font-mono">
-		{p2($time.getUTCHours())}:{p2($time.getUTCMinutes())}:{p2($time.getUTCSeconds())}
+		{p2(time.getUTCHours())}:{p2(time.getUTCMinutes())}:{p2(time.getUTCSeconds())}
 	</div>
 </div>

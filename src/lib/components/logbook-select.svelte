@@ -1,9 +1,12 @@
 <script lang="ts">
-	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
+	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import type { ILog } from '$lib/supabase';
 
-	let selectedValue = $derived($logbookStore.params.logId ?? 0);
+	const logsState = getLogsContext();
+	const logbookState = getLogbookContext();
+
+	let selectedValue = $derived(logbookState.logId ?? 0);
 
 	interface Props {
 		class?: string;
@@ -30,11 +33,11 @@
 	</div>
 	<select
 		class={`select select-bordered w-full ${showError ? 'select-error' : ''}`}
-		onchange={(v) => selectLog(+v.currentTarget.value)}
+		onchange={(v) => (logbookState.logId = +v.currentTarget.value)}
 		value={selectedValue}
 	>
 		<option value={0} disabled={!canBeEmpty}>All</option>
-		{#each $logsStore ?? [] as log}
+		{#each logsState.logs ?? [] as log}
 			<option value={log.id}>
 				{buildLogTitle(log)}
 			</option>

@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { getDistanceBetweenLocators } from '$lib/utils/locator-util';
 	import Fa from 'svelte-fa';
 	import BandBadge from './band-badge.svelte';
 	import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+	const logbookState = getLogbookContext();
 
 	interface Props {
 		qso: IQso;
@@ -14,7 +16,7 @@
 
 	let { qso, onEdit = undefined, onDelete = undefined }: Props = $props();
 
-	let log = $derived($logsStore?.find((log) => log.id === qso.log_id));
+	const log = $derived(logbookState.selectedLog);
 
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();

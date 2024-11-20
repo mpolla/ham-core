@@ -2,17 +2,17 @@
 	import Error from '$lib/components/error.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import Success from '$lib/components/success.svelte';
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 
-	let logbookId = $derived($logbookStore.params.logId);
+	const logbook = getLogbookContext();
 
 	let missingDxcc: Map<number, IQso[]> | undefined = $state(undefined);
 
 	$effect(() => {
 		let dxccReq = getQsos().is('dxcc', null);
-		if (logbookId) dxccReq = dxccReq.eq('log_id', logbookId);
+		if (logbook.logId) dxccReq = dxccReq.eq('log_id', logbook.logId);
 		dxccReq.then(({ data }) => {
 			missingDxcc = new Map();
 			for (const qso of data ?? []) {

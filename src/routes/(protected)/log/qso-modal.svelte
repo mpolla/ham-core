@@ -5,8 +5,10 @@
 	import Loading from '$lib/components/loading.svelte';
 	import Modal from '$lib/components/modal.svelte';
 	import QsoView from '$lib/components/qso-view.svelte';
-	import { refreshLogbook } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase } from '$lib/supabase';
+
+	const logbook = getLogbookContext();
 
 	let qsoId = $derived($page.state.showQsoModal!);
 	let qsoPromise = $derived(getQsos().eq('id', qsoId).single());
@@ -21,7 +23,7 @@
 					console.error(res.error);
 					return;
 				}
-				refreshLogbook();
+				logbook.refresh();
 				replaceState('/', {});
 			});
 	}

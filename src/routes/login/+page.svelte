@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { signIn, userStore } from '$lib/stores/user-store';
+	import { getUserContext } from '$lib/states/user-state.svelte';
+
+	const user = getUserContext();
 
 	$effect(() => {
-		if ($userStore) {
+		if (user.loggedIn == true) {
 			const redirect = $page.url.searchParams.get('redirect');
 			if (redirect) {
 				goto(redirect);
@@ -16,10 +18,6 @@
 
 	let email = $state('');
 	let password = $state('');
-
-	function onSubmit() {
-		signIn(email, password);
-	}
 </script>
 
 <div class="py-16">
@@ -34,7 +32,7 @@
 		<form
 			onsubmit={(e) => {
 				e.preventDefault();
-				onSubmit();
+				user.login(email, password);
 			}}
 			class="flex flex-col gap-4"
 		>

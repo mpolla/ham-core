@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Map from '$lib/components/map.svelte';
-	import { logbookStore } from '$lib/stores/logbook-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { locatorToLongLat } from '$lib/utils/locator-util';
 	import { dxccEntities } from 'fast-dxcc';
+
+	const logbook = getLogbookContext();
 
 	function longLat(qso: IQso): [number, number] | undefined {
 		if (qso.gridsquare) {
@@ -20,13 +21,13 @@
 		return undefined;
 	}
 
-	let log = $derived($logsStore?.find((l) => l.id === $logbookStore.params.logId));
-
 	let center = $derived(
-		(log?.grid ? locatorToLongLat(log.grid) : undefined) as [number, number] | undefined
+		(logbook.selectedLog?.grid ? locatorToLongLat(logbook.selectedLog.grid) : undefined) as
+			| [number, number]
+			| undefined
 	);
 	let lastQsos = $derived(
-		($logbookStore.result?.qsos.map(longLat).filter((q) => !!q) ?? []) as [number, number][]
+		(logbook.qsos.map(longLat).filter((q) => !!q) ?? []) as [number, number][]
 	);
 </script>
 
