@@ -52,8 +52,6 @@
 				<tr><td colspan="8" class="text-center"><Loading /></td></tr>
 			{:else if qsos === null}
 				<tr><td colspan="8" class="text-center"><Error text="Error loading QSOs" /></td></tr>
-			{:else if qsos.length === 0}
-				<tr><td colspan="8" class="text-center">No QSOs found</td></tr>
 			{:else}
 				{#each qsos as qso}
 					{@const dt = new Date(qso.datetime)}
@@ -67,6 +65,8 @@
 						<td>{qso.rst_sent}</td>
 						<td>{qso.power ?? '?'} W</td>
 					</tr>
+				{:else}
+					<tr><td colspan="8" class="text-center">No QSOs found</td></tr>
 				{/each}
 			{/if}
 		</tbody>

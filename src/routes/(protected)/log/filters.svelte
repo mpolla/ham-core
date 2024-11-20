@@ -56,13 +56,9 @@
 		<label class="form-control flex-row items-center gap-2">
 			<span class="label-text">Limit</span>
 			<select class="select" bind:value={logbook.limit}>
-				<option value={10}>10</option>
-				<option value={25}>25</option>
-				<option value={50}>50</option>
-				<option value={100}>100</option>
-				<option value={250}>250</option>
-				<option value={500}>500</option>
-				<option value={1000}>1000</option>
+				{#each [10, 25, 50, 100, 250, 500, 1000] as val}
+					<option value={val}>{val}</option>
+				{/each}
 			</select>
 		</label>
 
