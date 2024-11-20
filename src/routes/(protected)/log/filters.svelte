@@ -10,6 +10,7 @@
 		faRefresh,
 		faSearch
 	} from '@fortawesome/free-solid-svg-icons';
+	import { onDestroy } from 'svelte';
 	import Fa from 'svelte-fa';
 
 	let logbook = getLogbookContext();
@@ -20,8 +21,15 @@
 	function setCallsign(v: string) {
 		if (v === callsign) return;
 		clearTimeout(callTimer);
-		callTimer = setTimeout(() => (logbook.filter.callsign = v), 500);
+		callTimer = setTimeout(() => {
+			logbook.filter.callsign = v;
+			callTimer = undefined;
+		}, 500);
 	}
+
+	onDestroy(() => {
+		if (callTimer) clearTimeout(callTimer);
+	});
 
 	let callsign = $derived(logbook.filter.callsign ?? '');
 	let filterOpen = $state(false);

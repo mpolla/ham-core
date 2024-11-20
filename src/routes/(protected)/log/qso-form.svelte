@@ -16,6 +16,7 @@
 	} from '$lib/utils/locator-util';
 	import { getDistance } from '$lib/utils/geo-util';
 	import type { IQso } from '$lib/supabase';
+	import { createTimeState } from '$lib/states/time-state.svelte';
 
 	const logbook = getLogbookContext();
 
@@ -27,7 +28,10 @@
 
 	let date = $state('');
 	let time = $state('');
-	let dateTimeTimer: ReturnType<typeof setInterval> | null = $state(null);
+	const timeState = createTimeState(1000, true, (t) => {
+		date = t.toISOString().slice(0, 10);
+		time = `${t.getUTCHours().toString().padStart(2, '0')}${t.getUTCMinutes().toString().padStart(2, '0')}`;
+	});
 
 	let mode = $state('');
 	let freq = $state('');
@@ -74,19 +78,11 @@
 			});
 	}
 
-	function setDateTimeNow() {
-		const now = new Date();
-		date = now.toISOString().slice(0, 10);
-		time = `${now.getUTCHours().toString().padStart(2, '0')}${now.getUTCMinutes().toString().padStart(2, '0')}`;
-	}
-
 	function toggleDateTimeTimer() {
-		if (dateTimeTimer) {
-			clearInterval(dateTimeTimer);
-			dateTimeTimer = null;
+		if (timeState.isStopped) {
+			timeState.start();
 		} else {
-			setDateTimeNow();
-			dateTimeTimer = setInterval(setDateTimeNow, 1000);
+			timeState.stop();
 		}
 	}
 
@@ -96,7 +92,7 @@
 		rstSent = '';
 		rstRcv = '';
 		gridsquare = '';
-		if (!dateTimeTimer) toggleDateTimeTimer();
+		timeState.start();
 		callsignInputElement?.focus();
 	}
 
@@ -111,9 +107,8 @@
 
 	onMount(() => {
 		callsignInputElement?.focus();
-		setDateTimeNow();
-		toggleDateTimeTimer();
 	});
+
 	const selectedLog = $derived(logbook.selectedLog);
 	let isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
 	let dxcc = $state<DxccEntity>();
@@ -162,21 +157,21 @@
 			bind:value={date}
 			class="input w-full max-w-44 disabled:input-sm"
 			placeholder="Date"
-			disabled={!!dateTimeTimer}
+			disabled={!timeState.isStopped}
 		/>
 		<TimeInput
 			label="Time"
 			bind:value={time}
 			class={`input w-full max-w-24 disabled:input-sm ${isTimeValid ? '' : 'input-error'}`}
-			disabled={!!dateTimeTimer}
+			disabled={!timeState.isStopped}
 		/>
-		{#if !dateTimeTimer}
-			<button class="btn btn-outline btn-xs my-auto" type="button" onclick={setDateTimeNow}>
+		{#if timeState.isStopped}
+			<button class="btn btn-outline btn-xs my-auto" type="button" onclick={timeState.tick}>
 				Now
 			</button>
 		{/if}
 		<button class="btn btn-outline btn-xs my-auto" type="button" onclick={toggleDateTimeTimer}>
-			{#if dateTimeTimer}Manual{:else}Auto{/if} time
+			{#if timeState.isStopped}Auto{:else}Manual{/if} time
 		</button>
 	</div>
 

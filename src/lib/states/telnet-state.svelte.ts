@@ -4,14 +4,14 @@ import { getContext, onDestroy, setContext } from 'svelte';
 
 function createTelnetState(label: string) {
 	let connected = $state(false);
-	let listeners: ((msg: string) => void)[] = [];
+	const listeners: { [key: string]: (msg: string) => void } = {};
 	let unlistenPromise: Promise<UnlistenFn> | undefined;
 
-	function connect(host: string, port: number) {
+	async function connect(host: string, port: number) {
 		if (connected || !isTauri()) return;
 		connected = true;
 
-		const isConnected = invoke('is_telnet_running', { label });
+		const isConnected = await invoke('is_telnet_running', { label });
 		if (!isConnected) {
 			invoke('telnet_start', { host, port, label });
 		}
@@ -20,7 +20,7 @@ function createTelnetState(label: string) {
 			const payload = event.payload.filter((v) => (v >= 32 && v <= 126) || v === 10);
 			const msg = String.fromCharCode(...payload);
 
-			listeners.forEach((l) => l(msg));
+			Object.values(listeners).forEach((l) => l(msg));
 		});
 	}
 
@@ -32,10 +32,9 @@ function createTelnetState(label: string) {
 	}
 
 	function addListener(listener: (msg: string) => void) {
-		listeners.push(listener);
-		return () => {
-			listeners = listeners.filter((l) => l == listener);
-		};
+		const key = Math.random().toString(36).slice(2);
+		listeners[key] = listener;
+		return () => delete listeners[key];
 	}
 
 	function send(message: string) {

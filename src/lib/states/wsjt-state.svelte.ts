@@ -7,13 +7,13 @@ const PORT = 2237;
 
 function createWsjtState() {
 	let connected = $state(false);
-	let listeners: ((m: WsjtMessage) => void)[] = [];
+	const listeners: { [key: string]: (m: WsjtMessage) => void } = {};
 
 	function addListener(listener: (m: WsjtMessage) => void) {
-		listeners.push(listener);
-		return () => {
-			listeners = listeners.filter((l) => l !== listener);
-		};
+		const key = Math.random().toString(36).slice(2);
+		listeners[key] = listener;
+		console.log(Object.values(listeners).length, 'listener added');
+		return () => delete listeners[key];
 	}
 
 	function connect() {
@@ -28,7 +28,7 @@ function createWsjtState() {
 
 		const unlistenPromise = listen<Array<number>>('wsjt-listener', (event) => {
 			const msg = parseWsjtMessage(new Uint8Array(event.payload));
-			if (msg) listeners.forEach((l) => l(msg));
+			if (msg) Object.values(listeners).forEach((l) => l(msg));
 		});
 
 		const statusChecker = setInterval(() => {

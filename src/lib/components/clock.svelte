@@ -1,15 +1,8 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { createTimeState } from '$lib/states/time-state.svelte';
 
-	let time = $state(new Date());
-
-	const interval = setInterval(() => {
-		time = new Date();
-	}, 1000);
-
-	onDestroy(() => {
-		clearInterval(interval);
-	});
+	const state = createTimeState();
+	const time = $derived(state.time);
 
 	function p2(n: number) {
 		return n.toString().padStart(2, '0');

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getClusterContext } from '$lib/states/telnet-state.svelte';
 	import { isTauri } from '@tauri-apps/api/core';
+	import { tick } from 'svelte';
 
 	const cluster = getClusterContext();
 
@@ -24,9 +25,8 @@
 		if (!textArea) return;
 		const ta = textArea;
 
-		const isOnBottom = ta.scrollTop + ta.clientHeight >= ta.scrollHeight;
-		if (isOnBottom) {
-			setTimeout(() => (ta.scrollTop = ta.scrollHeight), 0);
+		if (ta.scrollTop + ta.clientHeight >= ta.scrollHeight) {
+			tick().then(() => (ta.scrollTop = ta.scrollHeight));
 		}
 	};
 

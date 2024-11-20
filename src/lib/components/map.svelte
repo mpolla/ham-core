@@ -15,9 +15,9 @@
 	import MapWorker from '$lib/helpers/map-worker?worker';
 	import { page } from '$app/stores';
 	import { pushState } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import { Projection } from '$lib/models/projection';
 	import { createMapState } from '$lib/states/map-state.svelte';
+	import { createTimeState } from '$lib/states/time-state.svelte';
 
 	const mapState = createMapState();
 
@@ -86,12 +86,7 @@
 	};
 	let sun = $state(getSun(new Date()));
 
-	onMount(() => {
-		const interval = setInterval(() => {
-			sun = getSun(new Date());
-		}, 60000);
-		return () => clearInterval(interval);
-	});
+	createTimeState(60000, true, (t) => (sun = getSun(t)));
 
 	let settingsOpen = $state(false);
 	let projection = $derived(mapState.projection);
@@ -131,6 +126,7 @@
 		if (scale >= 2.5) {
 			hqTimeout = setTimeout(() => {
 				mapWorker?.postMessage([projection, center, scale, countries50, lastRender]);
+				hqTimeout = undefined;
 			}, 100);
 		}
 		countries = countries110.map((e) => path(e)!);
