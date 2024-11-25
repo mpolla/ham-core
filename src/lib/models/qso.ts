@@ -1,3 +1,4 @@
+import type { Json } from '$lib/database.types';
 import type { ILog, IQso } from '$lib/supabase';
 
 export class Qso implements IQso {
@@ -15,7 +16,7 @@ export class Qso implements IQso {
 	public id: number;
 	public log_id: number | null;
 	public mode: string;
-	public other: { [field: string]: string };
+	public other: { [field: string]: Json };
 	public power: number | null;
 	public rst_rcvd: string | null;
 	public rst_sent: string | null;
@@ -49,7 +50,7 @@ export class Qso implements IQso {
 		let time = this.datetime.substring(11, 19).replace(/:/g, '');
 		if (time.substring(4) === '00') time = time.substring(0, 4);
 		const ret = {
-			...this.other,
+			...Object.fromEntries(Object.entries(this.other).map(([k, v]) => [k, JSON.stringify(v)])),
 			BAND: this.band || undefined,
 			CALL: this.call,
 			COMMENT: this.comment || undefined,
