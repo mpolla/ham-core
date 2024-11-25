@@ -60,8 +60,6 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 		return true;
 	}
 
-	refresh();
-
 	return {
 		get offset() {
 			return offset;
