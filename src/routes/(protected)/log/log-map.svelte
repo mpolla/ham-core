@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Map from '$lib/components/map.svelte';
+	import Map from '$lib/components/map/map.svelte';
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { locatorToLongLat } from '$lib/utils/locator-util';
@@ -17,22 +17,24 @@
 				const dxcc = dxccs[0];
 				if (dxcc.lat && dxcc.long) return [dxcc.long, dxcc.lat];
 			}
+			const dxccs2 = dxccs.filter((r) => r.name === qso.country);
+			if (dxccs2.length === 1) {
+				const dxcc = dxccs2[0];
+				if (dxcc.lat && dxcc.long) return [dxcc.long, dxcc.lat];
+			}
 		}
 		return undefined;
 	}
 
 	let center = $derived(
-		(logbook.selectedLog?.grid ? locatorToLongLat(logbook.selectedLog.grid) : undefined) as
-			| [number, number]
-			| undefined
+		logbook.selectedLog?.grid ? locatorToLongLat(logbook.selectedLog.grid) : undefined
 	);
-	let lastQsos = $derived(
-		(logbook.qsos.map(longLat).filter((q) => !!q) ?? []) as [number, number][]
-	);
+	let lastQsos = $derived(logbook.qsos.map(longLat).filter((q) => !!q));
 </script>
 
 <Map
 	{center}
-	points={[...(lastQsos ? lastQsos : []), ...(center ? [center] : [])]}
+	points={[...lastQsos, ...(center ? [center] : [])]}
 	lines={center && lastQsos ? lastQsos.map((p) => [p, center]) : []}
+	class="max-h-80 lg:max-h-none"
 />
