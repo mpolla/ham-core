@@ -1,10 +1,4 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
-
-	export let value = '';
-	export let label = '';
-
 	function handleInput(val: string): string {
 		val = val.replaceAll(',', '.');
 		val = val.replaceAll(/[^0-9.]/g, '');
@@ -14,14 +8,21 @@
 		return `${int}${dec.replaceAll('.', '')}`;
 	}
 
-	export let onChange: ((value: string) => void) | undefined = undefined;
+	interface Props {
+		class?: string;
+		value?: string;
+		label?: string;
+		onChange?: (value: string) => void;
+	}
+
+	let { class: className = '', value = $bindable(''), label = '', onChange }: Props = $props();
 </script>
 
 <label class={`${className} flex items-center gap-2`}>
 	<input
 		type="text"
 		class="w-full"
-		on:keydown={(e) => {
+		onkeydown={(e) => {
 			const t = e.currentTarget;
 			const selStart = t.selectionStart;
 			const selEnd = t.selectionEnd;
@@ -39,7 +40,7 @@
 				t.dispatchEvent(new Event('input', { bubbles: true }));
 			}
 		}}
-		on:input={(e) => {
+		oninput={(e) => {
 			// TODO handle dot and comma
 			const t = e.currentTarget;
 			const sel = t.selectionStart ?? 0;
@@ -47,7 +48,7 @@
 			t.value = handleInput(t.value);
 			t.setSelectionRange(ns, ns);
 		}}
-		on:change={(e) => {
+		onchange={(e) => {
 			const t = e.currentTarget;
 			onChange?.(t.value);
 		}}

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
-	import { selectedStore, setSelected, setSelectedAll } from './selected-store';
+	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import Error from '$lib/components/error.svelte';
 	import Fa from 'svelte-fa';
@@ -12,6 +12,9 @@
 	import { pushState } from '$app/navigation';
 	import BandBadge from '$lib/components/band-badge.svelte';
 
+	const logbook = getLogbookContext();
+	const selected = getSelectedQsosContext();
+
 	function formatDT(dt: string): string {
 		const dtp = new Date(dt).toISOString();
 		const date = dtp.slice(0, 10);
@@ -19,9 +22,8 @@
 		return `${date} ${time}`;
 	}
 
-	$: someSelected = $logbookStore.result?.qsos.some((q) => $selectedStore.has(q.id));
-	$: allSelected =
-		someSelected && $logbookStore.result?.qsos.every((q) => $selectedStore.has(q.id));
+	const someSelected = $derived(logbook.qsos.some((q) => selected.state.has(q.id)));
+	const allSelected = $derived(someSelected && logbook.qsos.every((q) => selected.state.has(q.id)));
 
 	function getCountry(qso: IQso): string {
 		if (qso.country) {
@@ -33,12 +35,10 @@
 		}
 		return findDxcc(qso.call)?.entity.name ?? '';
 	}
-
-	$: qsoLimit = $logbookStore.params.limit;
 </script>
 
 <div class="relative">
-	{#if $logbookStore.result?.isLoading}
+	{#if logbook.isLoading}
 		<div
 			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
 		>
@@ -47,7 +47,7 @@
 			</div>
 		</div>
 	{/if}
-	{#if $logbookStore.result?.hasError}
+	{#if logbook.hasError}
 		<div
 			class="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-black/60 px-10 py-14"
 		>
@@ -61,15 +61,15 @@
 			<thead>
 				<tr>
 					<th>
-						{#if $logbookStore.result?.qsos.length}
+						{#if logbook.qsos.length}
 							<input
 								type="checkbox"
 								class="checkbox"
 								indeterminate={someSelected && !allSelected}
 								checked={allSelected}
-								on:change={(v) =>
-									setSelectedAll(
-										$logbookStore.result?.qsos.map((q) => q.id),
+								onchange={(v) =>
+									selected.setMany(
+										logbook.qsos.map((q) => q.id),
 										v.currentTarget.checked
 									)}
 							/>
@@ -84,18 +84,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $logbookStore.result?.qsos ?? [] as qso, i}
+				{#each logbook.qsos as qso, i}
 					<tr>
 						<th class="relative text-center">
 							<span>{i + 1}</span>
 							<div
-								class={`absolute inset-0 transition-opacity hover:opacity-100 ${$selectedStore.size ? 'opacity-100' : 'opacity-0'}`}
+								class={`absolute inset-0 transition-opacity hover:opacity-100 ${selected.state.size ? 'opacity-100' : 'opacity-0'}`}
 							>
 								<input
 									type="checkbox"
 									class="checkbox absolute inset-0 m-auto bg-base-100"
-									checked={$selectedStore.has(qso.id)}
-									on:change={(v) => setSelected(qso.id, v.currentTarget.checked)}
+									checked={selected.state.has(qso.id)}
+									onchange={(v) => selected.setOne(qso.id, v.currentTarget.checked)}
 								/>
 							</div>
 						</th>
@@ -114,14 +114,14 @@
 						<td>
 							<button
 								class="btn btn-circle btn-ghost btn-sm"
-								on:click={() => pushState('', { showQsoModal: qso.id })}
+								onclick={() => pushState('', { showQsoModal: qso.id })}
 							>
 								<Fa icon={faInfoCircle} />
 							</button>
 						</td>
 					</tr>
 				{/each}
-				{#each Array(Math.max(qsoLimit - ($logbookStore.result?.qsos.length ?? 0), 0)) as _}
+				{#each Array(Math.max(logbook.limit - logbook.qsos.length, 0)) as _}
 					<tr><td colspan="7">&ZeroWidthSpace;</td></tr>
 				{/each}
 			</tbody>

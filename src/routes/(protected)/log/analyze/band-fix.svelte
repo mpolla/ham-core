@@ -1,27 +1,29 @@
 <script lang="ts">
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import { Band } from '$lib/models/band';
 
-	$: logbookId = $logbookStore.params.logId;
+	const logbook = getLogbookContext();
 
-	let missingBand: Map<Band | null, IQso[]> | undefined = undefined;
+	let missingBand: Map<Band | null, IQso[]> | undefined = $state(undefined);
 
-	let contReq = getQsos().is('band', null);
-	if (logbookId) contReq = contReq.eq('log_id', logbookId);
-	contReq.then(({ data }) => {
-		missingBand = new Map();
-		for (const qso of data ?? []) {
-			const band = Band.getBand(qso.frequency);
-			if (!missingBand.has(band)) missingBand.set(band, []);
-			missingBand.get(band)!.push(qso);
-		}
+	$effect(() => {
+		let contReq = getQsos().is('band', null);
+		if (logbook.logId) contReq = contReq.eq('log_id', logbook.logId);
+		contReq.then(({ data }) => {
+			missingBand = new Map();
+			for (const qso of data ?? []) {
+				const band = Band.getBand(qso.frequency);
+				if (!missingBand.has(band)) missingBand.set(band, []);
+				missingBand.get(band)!.push(qso);
+			}
+		});
 	});
 
-	let contFix: 'ready' | 'inProgress' | 'done' | 'error' = 'ready';
+	let contFix: 'ready' | 'inProgress' | 'done' | 'error' = $state('ready');
 	function fixCont() {
 		if (!missingBand) return;
 		contFix = 'inProgress';
@@ -80,6 +82,6 @@
 	{:else if contFix === 'error'}
 		<Error text="Error fixing bands" />
 	{:else if contFix === 'ready'}
-		<button class="btn btn-primary" on:click={fixCont}>Fix now</button>
+		<button class="btn btn-primary" onclick={fixCont}>Fix now</button>
 	{/if}
 {/if}

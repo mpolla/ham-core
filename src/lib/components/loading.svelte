@@ -1,8 +1,8 @@
 <script lang="ts">
-	export let text: string = 'Loading';
+	let { text = 'Loading' }: { text?: string } = $props();
 </script>
 
 <div class="flex items-center justify-center gap-4">
-	<div class="loading loading-spinner loading-lg" />
+	<div class="loading loading-spinner loading-lg"></div>
 	<span>{text}</span>
 </div>

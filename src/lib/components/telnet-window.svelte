@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { clusterStore } from '$lib/stores/telnet-store';
+	import { getClusterContext } from '$lib/states/telnet-state.svelte';
 	import { isTauri } from '@tauri-apps/api/core';
+	import { tick } from 'svelte';
 
-	let textArea: HTMLTextAreaElement;
+	const cluster = getClusterContext();
 
-	let url: string = 'sv2hrt.ath.cx:7300';
-	let messages: string = '';
-	let sendMessage: string = '';
+	let textArea = $state<HTMLTextAreaElement>();
+
+	let url: string = $state('sv2hrt.ath.cx:7300');
+	let messages: string = $state('');
+	let sendMessage: string = $state('');
 	let endsWithNL = false;
 	let unlisten: (() => void) | undefined;
 
@@ -19,25 +22,28 @@
 		if (messages.length > 5000)
 			messages = messages.substring(messages.length - 5000, messages.length);
 
-		const isOnBottom = textArea.scrollTop + textArea.clientHeight >= textArea.scrollHeight;
-		if (isOnBottom) {
-			setTimeout(() => (textArea.scrollTop = textArea.scrollHeight), 0);
+		if (!textArea) return;
+		const ta = textArea;
+
+		if (ta.scrollTop + ta.clientHeight >= ta.scrollHeight) {
+			tick().then(() => (ta.scrollTop = ta.scrollHeight));
 		}
 	};
 
 	function send() {
-		clusterStore.send(sendMessage);
+		cluster.send(sendMessage);
 		sendMessage = '';
 	}
 
 	function connect() {
-		unlisten = clusterStore.addListener(onMessage);
-		clusterStore.connect(url);
+		unlisten = cluster.addListener(onMessage);
+		const [host, port] = url.split(':');
+		cluster.connect(host, parseInt(port));
 	}
 
 	function disconnect() {
 		unlisten?.();
-		clusterStore.disconnect();
+		cluster.disconnect();
 	}
 </script>
 
@@ -48,17 +54,18 @@
 				type="text"
 				bind:value={url}
 				placeholder="URL"
-				disabled={$clusterStore.connected}
+				disabled={cluster.connected}
 				class="input input-sm grow"
 			/>
-			{#if !$clusterStore.connected}
-				<button on:click={connect} class="btn btn-outline btn-sm">Connect</button>
+			{#if !cluster.connected}
+				<button onclick={connect} class="btn btn-outline btn-sm">Connect</button>
 			{:else}
-				<button on:click={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
+				<button onclick={disconnect} class="btn btn-outline btn-sm">Disconnect</button>
 			{/if}
 		</div>
 
-		<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea" />
+		<textarea bind:this={textArea} bind:value={messages} rows="10" readonly class="textarea"
+		></textarea>
 
 		<div class="flex flex-row gap-2">
 			<input
@@ -66,9 +73,9 @@
 				bind:value={sendMessage}
 				placeholder="Message"
 				class="input input-sm grow"
-				on:keypress={(e) => (e.key === 'Enter' ? send() : null)}
+				onkeypress={(e) => (e.key === 'Enter' ? send() : null)}
 			/>
-			<button on:click={send} class="btn btn-outline btn-sm">Send</button>
+			<button onclick={send} class="btn btn-outline btn-sm">Send</button>
 		</div>
 	</div>
 {/if}

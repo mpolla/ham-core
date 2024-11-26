@@ -27,12 +27,10 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col gap-6 lg:flex-row lg:items-center [&>*]:flex-1">
+	<div class="flex flex-col gap-6 lg:flex-row lg:items-start [&>*]:flex-1">
 		<QsoForm />
 
-		<div class="bg-base-200">
-			<LogMap />
-		</div>
+		<LogMap />
 	</div>
 
 	<div class="flex w-full flex-col gap-4">

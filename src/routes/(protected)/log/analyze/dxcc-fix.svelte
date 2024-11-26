@@ -2,37 +2,39 @@
 	import Error from '$lib/components/error.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import Success from '$lib/components/success.svelte';
-	import { logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from 'fast-dxcc';
 
-	$: logbookId = $logbookStore.params.logId;
+	const logbook = getLogbookContext();
 
-	let missingDxcc: Map<number, IQso[]> | undefined = undefined;
+	let missingDxcc: Map<number, IQso[]> | undefined = $state(undefined);
 
-	let dxccReq = getQsos().is('dxcc', null);
-	if (logbookId) dxccReq = dxccReq.eq('log_id', logbookId);
-	dxccReq.then(({ data }) => {
-		missingDxcc = new Map();
-		for (const qso of data ?? []) {
-			const other = qso.other as { DXCC?: number } | undefined;
-			if (other?.DXCC) {
-				const dxcc = [...dxccEntities.values()].filter((d) => d.dxcc === other.DXCC);
-				if (dxcc.length === 1) {
-					if (!missingDxcc.has(other.DXCC)) missingDxcc.set(other.DXCC, []);
-					missingDxcc.get(other.DXCC)!.push(qso);
-					continue;
+	$effect(() => {
+		let dxccReq = getQsos().is('dxcc', null);
+		if (logbook.logId) dxccReq = dxccReq.eq('log_id', logbook.logId);
+		dxccReq.then(({ data }) => {
+			missingDxcc = new Map();
+			for (const qso of data ?? []) {
+				const other = qso.other as { DXCC?: number } | undefined;
+				if (other?.DXCC) {
+					const dxcc = [...dxccEntities.values()].filter((d) => d.dxcc === other.DXCC);
+					if (dxcc.length === 1) {
+						if (!missingDxcc.has(other.DXCC)) missingDxcc.set(other.DXCC, []);
+						missingDxcc.get(other.DXCC)!.push(qso);
+						continue;
+					}
 				}
-			}
 
-			const dxcc = findDxcc(qso.call)?.entity.id;
-			if (!dxcc) continue;
-			if (!missingDxcc.has(dxcc)) missingDxcc.set(dxcc, []);
-			missingDxcc.get(dxcc)!.push(qso);
-		}
+				const dxcc = findDxcc(qso.call)?.entity.id;
+				if (!dxcc) continue;
+				if (!missingDxcc.has(dxcc)) missingDxcc.set(dxcc, []);
+				missingDxcc.get(dxcc)!.push(qso);
+			}
+		});
 	});
 
-	let dxccFix: 'ready' | 'inProgress' | 'done' | 'error' = 'ready';
+	let dxccFix: 'ready' | 'inProgress' | 'done' | 'error' = $state('ready');
 	function fixDxcc() {
 		if (!missingDxcc) return;
 		dxccFix = 'inProgress';
@@ -89,6 +91,6 @@
 	{:else if dxccFix === 'error'}
 		<Error text="Error fixing DXCC entities" />
 	{:else if dxccFix === 'ready'}
-		<button class="btn btn-primary" on:click={fixDxcc}>Fix now</button>
+		<button class="btn btn-primary" onclick={fixDxcc}>Fix now</button>
 	{/if}
 {/if}

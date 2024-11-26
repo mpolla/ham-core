@@ -1,7 +1,7 @@
 <script lang="ts">
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
-	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
-	import { setDefaultLog, userStore } from '$lib/stores/user-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
+	import { getUserContext } from '$lib/states/user-state.svelte';
 	import {
 		faEdit,
 		faHeart,
@@ -15,28 +15,29 @@
 	import { pushState, replaceState } from '$app/navigation';
 	import Modal from '$lib/components/modal.svelte';
 	import { supabase } from '$lib/supabase';
-	import { logsStore, refreshLogs } from '$lib/stores/logs-store';
+	import { getLogsContext } from '$lib/states/logs-state.svelte';
 
-	$: defaultLog = $userStore?.info?.default_log_id;
-	$: selectedLog = $logbookStore.params.logId;
-	$: log = $logsStore?.find((log) => log.id === selectedLog);
-	$: logbookModal = $page.state.logbookModal;
-	$: deleteConfirmation = $page.state.showConfirmModal;
+	const user = getUserContext();
+	const logsState = getLogsContext();
+	const logbook = getLogbookContext();
+
+	const logbookModal = $derived($page.state.logbookModal);
+	const deleteConfirmation = $derived($page.state.showConfirmModal);
 
 	function deleteLog() {
-		if (!selectedLog) return;
+		if (!logbook.selectedLog) return;
 		supabase
 			.from('log')
 			.update({ deleted_at: new Date().toISOString() })
-			.eq('id', selectedLog)
+			.eq('id', logbook.selectedLog.id)
 			.then((res) => {
 				if (res.error) {
 					console.error(res.error);
 					return;
 				}
-				refreshLogs();
+				logsState.refresh();
 				replaceState('', {});
-				selectLog(0);
+				logbook.logId = undefined;
 			});
 	}
 </script>
@@ -51,8 +52,8 @@
 			<LogbookSelect class="w-full min-w-60 sm:max-w-xs" />
 
 			<button
-				on:click={() => selectedLog && setDefaultLog(selectedLog)}
-				disabled={!selectedLog || defaultLog === selectedLog}
+				onclick={() => logbook.logId && (user.defaultLogId = logbook.logId)}
+				disabled={!logbook.logId || user.defaultLogId === logbook.logId}
 				class="btn"
 			>
 				<Fa icon={faHeart} />
@@ -60,18 +61,18 @@
 			</button>
 
 			<button
-				on:click={() => pushState('', { logbookModal: 'edit' })}
+				onclick={() => pushState('', { logbookModal: 'edit' })}
 				class="btn"
-				disabled={!selectedLog}
+				disabled={!logbook.selectedLog}
 			>
 				<Fa icon={faEdit} />
 				<span>Edit Log</span>
 			</button>
 
 			<button
-				on:click={() => pushState('', { showConfirmModal: true })}
+				onclick={() => pushState('', { showConfirmModal: true })}
 				class="btn"
-				disabled={!selectedLog}
+				disabled={!logbook.selectedLog}
 			>
 				<Fa icon={faTrash} />
 				<span>Delete Log</span>
@@ -82,7 +83,7 @@
 				<span>Analyze</span>
 			</a>
 
-			<button on:click={() => pushState('', { logbookModal: 'new' })} class="btn">
+			<button onclick={() => pushState('', { logbookModal: 'new' })} class="btn">
 				<Fa icon={faPlus} />
 				<span>New Log</span>
 			</button>
@@ -101,12 +102,14 @@
 					<!-- TODO Get qso count in log -->
 					<p>
 						Are you sure you want to delete the log
-						<span class="rounded bg-base-300 px-2 py-1 font-bold">{log?.title} ({log?.call})</span>
+						<span class="rounded bg-base-300 px-2 py-1 font-bold"
+							>{logbook.selectedLog?.title} ({logbook.selectedLog?.call})</span
+						>
 						and all containing QSOs?
 					</p>
 					<div class="mt-4 flex justify-end gap-2">
-						<button class="btn" on:click={() => history.back()}>Cancel</button>
-						<button class="btn btn-error" on:click={deleteLog}>Delete</button>
+						<button class="btn" onclick={() => history.back()}>Cancel</button>
+						<button class="btn btn-error" onclick={deleteLog}>Delete</button>
 					</div>
 				</Modal>
 			{/if}

@@ -28,6 +28,6 @@ export default [
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib/data/geo/']
+		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib/data/geo/', 'src-tauri/']
 	}
 ];

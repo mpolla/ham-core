@@ -1,15 +1,21 @@
 <script lang="ts">
-	import { logbookStore, selectLog } from '$lib/stores/logbook-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
+	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import type { ILog } from '$lib/supabase';
 
-	$: selectedValue = $logbookStore.params.logId ?? 0;
+	const logsState = getLogsContext();
+	const logbookState = getLogbookContext();
 
-	let className = '';
-	export { className as class };
-	export let canBeEmpty = true;
+	const selectedValue = $derived(logbookState.logId ?? 0);
 
-	$: showError = !canBeEmpty && !selectedValue;
+	interface Props {
+		class?: string;
+		canBeEmpty?: boolean;
+	}
+
+	let { class: className = '', canBeEmpty = true }: Props = $props();
+
+	const showError = $derived(!canBeEmpty && !selectedValue);
 
 	function buildLogTitle(log: ILog) {
 		if (!log.title) return log.call;
@@ -27,11 +33,11 @@
 	</div>
 	<select
 		class={`select select-bordered w-full ${showError ? 'select-error' : ''}`}
-		on:change={(v) => selectLog(+v.currentTarget.value)}
+		onchange={(v) => (logbookState.logId = +v.currentTarget.value)}
 		value={selectedValue}
 	>
 		<option value={0} disabled={!canBeEmpty}>All</option>
-		{#each $logsStore ?? [] as log}
+		{#each logsState.logs ?? [] as log}
 			<option value={log.id}>
 				{buildLogTitle(log)}
 			</option>

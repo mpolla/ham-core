@@ -2,6 +2,11 @@ import { getDistance } from './geo-util';
 
 export const locatorRegex = /^[A-R]{2}(?:\d{2}[A-X]{2})*(?:\d{2})?$/i;
 
+/**
+ * @param locator Pattern: `/^[A-R]{2}(?:\d{2}[A-X]{2})*(?:\d{2})?$/i`
+ * @param center Return center of field / square
+ * @returns [Longitude, Latitude]
+ */
 export function locatorToLongLat(locator: string, center: boolean = false): [number, number] {
 	locator = locator.toUpperCase();
 	if (!locatorRegex.test(locator)) {

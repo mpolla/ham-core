@@ -1,33 +1,36 @@
 <script lang="ts">
 	import { getQsos, type IQso } from '$lib/supabase';
-	import { writable } from 'svelte/store';
-	import { selectedStore } from '../selected-store';
-	import { logsStore } from '$lib/stores/logs-store';
+	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import { generateText, generateUrl } from '.';
 	import Fa from 'svelte-fa';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Loading from '$lib/components/loading.svelte';
 	import Error from '$lib/components/error.svelte';
+	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
 
-	type QsoStore = IQso[] | null | undefined;
+	const logs = getLogsContext();
+	const selected = getSelectedQsosContext();
 
-	const qsosStore = writable<QsoStore>(undefined);
+	let qsos = $state<IQso[] | null | undefined>(undefined);
 
-	$: getQsos()
-		.in('id', [...$selectedStore])
-		.then(({ data, error }) => {
-			if (error) {
-				console.error('Error loading QSOs', error);
-				qsosStore.set(null);
-			} else {
-				qsosStore.set(data);
-			}
-		});
+	$effect(() => {
+		getQsos()
+			.in('id', [...selected.state])
+			.then(({ data, error }) => {
+				if (error) {
+					console.error('Error loading QSOs', error);
+					qsos = null;
+				} else {
+					qsos = data;
+				}
+			});
+	});
 
-	$: downloadUrl =
-		$qsosStore && $logsStore && $selectedStore.size > 0
-			? generateUrl(generateText($qsosStore, $logsStore))
-			: undefined;
+	const downloadUrl = $derived(
+		qsos && logs.logs && selected.state.size > 0
+			? generateUrl(generateText(qsos, logs.logs))
+			: undefined
+	);
 </script>
 
 <div class="max-h-80 overflow-auto rounded-lg bg-base-300">
@@ -45,17 +48,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#if $qsosStore === undefined}
+			{#if qsos === undefined}
 				<tr><td colspan="8" class="text-center"><Loading /></td></tr>
-			{:else if $qsosStore === null}
+			{:else if qsos === null}
 				<tr><td colspan="8" class="text-center"><Error text="Error loading QSOs" /></td></tr>
-			{:else if $qsosStore.length === 0}
-				<tr><td colspan="8" class="text-center">No QSOs found</td></tr>
 			{:else}
-				{#each $qsosStore as qso}
+				{#each qsos as qso}
 					{@const dt = new Date(qso.datetime)}
 					<tr>
-						<td>{$logsStore?.find((l) => l.id === qso.log_id)?.call}</td>
+						<td>{logs.logs?.find((l) => l.id === qso.log_id)?.call}</td>
 						<td>{qso.call}</td>
 						<td>{dt.toISOString().slice(0, 10)}</td>
 						<td>{dt.toISOString().slice(11, 16)}</td>
@@ -64,6 +65,8 @@
 						<td>{qso.rst_sent}</td>
 						<td>{qso.power ?? '?'} W</td>
 					</tr>
+				{:else}
+					<tr><td colspan="8" class="text-center">No QSOs found</td></tr>
 				{/each}
 			{/if}
 		</tbody>

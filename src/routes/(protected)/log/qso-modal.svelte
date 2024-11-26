@@ -5,11 +5,13 @@
 	import Loading from '$lib/components/loading.svelte';
 	import Modal from '$lib/components/modal.svelte';
 	import QsoView from '$lib/components/qso-view.svelte';
-	import { refreshLogbook } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase } from '$lib/supabase';
 
-	$: qsoId = $page.state.showQsoModal!;
-	$: qsoPromise = getQsos().eq('id', qsoId).single();
+	const logbook = getLogbookContext();
+
+	const qsoId = $derived($page.state.showQsoModal!);
+	const qsoPromise = $derived(getQsos().eq('id', qsoId).single());
 
 	function deleteQso() {
 		supabase
@@ -21,7 +23,7 @@
 					console.error(res.error);
 					return;
 				}
-				refreshLogbook();
+				logbook.refresh();
 				replaceState('/', {});
 			});
 	}
@@ -41,8 +43,8 @@
 				<Modal onClose={() => history.back()} title="Delete QSO">
 					<p>Are you sure you want to delete this QSO?</p>
 					<div class="mt-2 flex justify-end gap-4">
-						<button class="btn" on:click={() => history.back()}>Cancel</button>
-						<button class="btn btn-error" on:click={deleteQso}> Delete </button>
+						<button class="btn" onclick={() => history.back()}>Cancel</button>
+						<button class="btn btn-error" onclick={deleteQso}> Delete </button>
 					</div>
 				</Modal>
 			{/if}

@@ -8,95 +8,81 @@
 	import FrequencyInput from '$lib/components/inputs/frequency-input.svelte';
 	import { Mode } from '$lib/models/mode';
 	import { Band } from '$lib/models/band';
-	import { insertQso, logbookStore } from '$lib/stores/logbook-store';
+	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import {
 		getDistanceBetweenLocators,
 		locatorRegex,
 		locatorToLongLat
 	} from '$lib/utils/locator-util';
 	import { getDistance } from '$lib/utils/geo-util';
-	import { logsStore } from '$lib/stores/logs-store';
 	import type { IQso } from '$lib/supabase';
+	import { createTimeState } from '$lib/states/time-state.svelte';
 
-	$: selectedLog = $logbookStore.params.logId;
-	$: log = $logsStore?.find((l) => l.id === selectedLog);
+	const logbook = getLogbookContext();
 
-	let callsignInputElement: HTMLInputElement;
-	let callsign = '';
+	let callsignInputElement = $state<HTMLInputElement>();
+	let callsign = $state('');
 
-	let rstSent = '';
-	let rstRcv = '';
+	let rstSent = $state('');
+	let rstRcv = $state('');
 
-	let date = '';
-	let time = '';
-	let dateTimeTimer: ReturnType<typeof setInterval> | null = null;
+	let date = $state('');
+	let time = $state('');
+	const timeState = createTimeState(1000, true, (t) => {
+		date = t.toISOString().slice(0, 10);
+		time = `${t.getUTCHours().toString().padStart(2, '0')}${t.getUTCMinutes().toString().padStart(2, '0')}`;
+	});
 
-	$: isTimeValid = time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60;
+	let mode = $state('');
+	let freq = $state('');
+	let band: string | undefined = $state('');
 
-	let mode = '';
-	let freq = '';
-	let band: string | undefined = '';
-
-	let power = '';
-	let gridsquare = '';
-
-	$: dxcc = findDxcc(callsign)?.entity;
-	$: isValidCall = !!callsign.match(advancedCallsignRe);
-
-	$: gridsquareValid = gridsquare.match(locatorRegex);
-	$: distance = getDist(gridsquare, dxcc);
+	let power = $state('');
+	let gridsquare = $state('');
 
 	function getDist(gridsquare: string, dxcc: DxccEntity | undefined) {
-		if (!log?.grid) return;
+		if (!selectedLog?.grid) return;
 		if (gridsquareValid) {
-			return getDistanceBetweenLocators(gridsquare, log.grid);
+			return getDistanceBetweenLocators(gridsquare, selectedLog.grid);
 		}
 		if (dxcc?.lat && dxcc.long) {
-			const [long, lat] = locatorToLongLat(log.grid, true);
+			const [long, lat] = locatorToLongLat(selectedLog.grid, true);
 			return getDistance(lat, long, dxcc.lat!, dxcc.long!);
 		}
 	}
 
-	$: canSubmit = callsign.length >= 3 && freq && !!selectedLog;
-
 	function submit() {
 		if (!canSubmit) return;
-		insertQso({
-			log_id: selectedLog,
-			datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
-			call: callsign,
-			mode,
-			frequency: parseFloat(freq) * 1000000,
-			band: band || null,
-			rst_sent: rstSent,
-			rst_rcvd: rstRcv,
-			dxcc: dxcc?.dxcc,
-			country: dxcc?.name || null,
-			power: power ? parseInt(power) : null,
-			gridsquare: gridsquare || null,
-			cont: dxcc?.cont || null,
-			other: {
-				CQZ: dxcc?.cqz,
-				ITUZ: dxcc?.ituz
-			}
-		}).then((r) => {
-			if (r) clear();
-		});
-	}
-
-	function setDateTimeNow() {
-		const now = new Date();
-		date = now.toISOString().slice(0, 10);
-		time = `${now.getUTCHours().toString().padStart(2, '0')}${now.getUTCMinutes().toString().padStart(2, '0')}`;
+		logbook
+			.insert({
+				log_id: selectedLog?.id,
+				datetime: `${date}T${time.slice(0, 2)}:${time.slice(2, 4)}Z`,
+				call: callsign,
+				mode,
+				frequency: parseFloat(freq) * 1000000,
+				band: band || null,
+				rst_sent: rstSent,
+				rst_rcvd: rstRcv,
+				dxcc: dxcc?.dxcc,
+				country: dxcc?.name || null,
+				power: power ? parseInt(power) : null,
+				gridsquare: gridsquare || null,
+				cont: dxcc?.cont || null,
+				other: {
+					CQZ: dxcc?.cqz,
+					ITUZ: dxcc?.ituz
+				}
+			})
+			.then((r) => {
+				if (r) clear();
+			});
 	}
 
 	function toggleDateTimeTimer() {
-		if (dateTimeTimer) {
-			clearInterval(dateTimeTimer);
-			dateTimeTimer = null;
+		if (timeState.isStopped) {
+			timeState.start();
 		} else {
-			setDateTimeNow();
-			dateTimeTimer = setInterval(setDateTimeNow, 1000);
+			timeState.stop();
 		}
 	}
 
@@ -106,18 +92,11 @@
 		rstSent = '';
 		rstRcv = '';
 		gridsquare = '';
-		if (!dateTimeTimer) toggleDateTimeTimer();
-		callsignInputElement.focus();
+		timeState.start();
+		callsignInputElement?.focus();
 	}
 
-	let isPure = true;
-	$: lastQso = $logbookStore.result?.qsos[0];
-	$: if (isPure && lastQso) {
-		mode = lastQso.mode;
-		freq = getFreq(lastQso);
-		band = lastQso.band ?? undefined;
-		power = lastQso.power?.toString() ?? '';
-	}
+	let isPure = $state(true);
 
 	function getFreq(qso: IQso) {
 		const f = qso.frequency / 1000000;
@@ -127,28 +106,49 @@
 	}
 
 	onMount(() => {
-		callsignInputElement.focus();
-		setDateTimeNow();
-		toggleDateTimeTimer();
+		callsignInputElement?.focus();
 	});
+
+	const selectedLog = $derived(logbook.selectedLog);
+	const isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
+	let dxcc = $state<DxccEntity>();
+	$effect(() => {
+		dxcc = findDxcc(callsign)?.entity;
+	});
+	const isValidCall = $derived(!!callsign.match(advancedCallsignRe));
+	const gridsquareValid = $derived(gridsquare.match(locatorRegex));
+	const distance = $derived(getDist(gridsquare, dxcc));
+	const lastQso = $derived(logbook.qsos[0]);
+	$effect(() => {
+		if (isPure && lastQso) {
+			mode = lastQso.mode;
+			freq = getFreq(lastQso);
+			band = lastQso.band ?? undefined;
+			power = lastQso.power?.toString() ?? '';
+		}
+	});
+	const canSubmit = $derived(callsign.length >= 3 && freq && !!selectedLog);
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form
-	on:submit|preventDefault={submit}
-	on:beforeinput={() => (isPure = false)}
-	on:input={() => (isPure = false)}
-	on:keydown={({ key, altKey }) => key === 'w' && altKey && clear()}
+	onsubmit={(e) => {
+		e.preventDefault();
+		submit();
+	}}
+	onbeforeinput={() => (isPure = false)}
+	oninput={() => (isPure = false)}
+	onkeydown={({ key, altKey }) => key === 'w' && altKey && clear()}
 	class="flex min-w-80 flex-col gap-6 rounded-xl bg-base-300 p-6 @container"
 >
 	<div class="flex items-start gap-4">
 		<div class="font-light">New QSO</div>
-		{#if log}
+		{#if selectedLog}
 			<h1 class="mx-auto text-2xl font-semibold">
-				{log.call}
+				{selectedLog.call}
 			</h1>
 		{/if}
-		<button type="button" class="btn btn-xs" on:click={clear} disabled={isPure}>Clear</button>
+		<button type="button" class="btn btn-xs" onclick={clear} disabled={isPure}>Clear</button>
 	</div>
 
 	<div class="flex flex-wrap justify-start gap-4">
@@ -157,21 +157,21 @@
 			bind:value={date}
 			class="input w-full max-w-44 disabled:input-sm"
 			placeholder="Date"
-			disabled={!!dateTimeTimer}
+			disabled={!timeState.isStopped}
 		/>
 		<TimeInput
 			label="Time"
 			bind:value={time}
 			class={`input w-full max-w-24 disabled:input-sm ${isTimeValid ? '' : 'input-error'}`}
-			disabled={!!dateTimeTimer}
+			disabled={!timeState.isStopped}
 		/>
-		{#if !dateTimeTimer}
-			<button class="btn btn-outline btn-xs my-auto" type="button" on:click={setDateTimeNow}>
+		{#if timeState.isStopped}
+			<button class="btn btn-outline btn-xs my-auto" type="button" onclick={timeState.tick}>
 				Now
 			</button>
 		{/if}
-		<button class="btn btn-outline btn-xs my-auto" type="button" on:click={toggleDateTimeTimer}>
-			{#if dateTimeTimer}Manual{:else}Auto{/if} time
+		<button class="btn btn-outline btn-xs my-auto" type="button" onclick={toggleDateTimeTimer}>
+			{#if timeState.isStopped}Auto{:else}Manual{/if} time
 		</button>
 	</div>
 
@@ -180,7 +180,7 @@
 			<select
 				class="select flex-1"
 				bind:value={band}
-				on:change={() => {
+				onchange={() => {
 					const b = Band.ALL_BANDS.get(band ?? '');
 					if (!b) return;
 					const f = parseFloat(freq) * 1000000;
@@ -253,10 +253,10 @@
 		<div class="flex flex-1 flex-wrap items-end gap-4">
 			<select
 				class="select select-sm max-w-60"
-				value={dxcc?.id}
-				on:change={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
+				value={dxcc?.id ?? 0}
+				onchange={(e) => (dxcc = dxccEntities.get(+e.currentTarget.value))}
 			>
-				<option value="">NON-DXCC</option>
+				<option value="0"></option>
 				{#each [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name)) as dxcc}
 					<option value={dxcc.id}>{dxcc.name}</option>
 				{/each}
@@ -280,14 +280,7 @@
 			{#if !selectedLog}
 				<div class="text-error">Please select logbook</div>
 			{/if}
-			<button
-				type="submit"
-				on:click|preventDefault={submit}
-				class="btn btn-primary"
-				disabled={!canSubmit}
-			>
-				Save
-			</button>
+			<button class="btn btn-primary" disabled={!canSubmit}>Save</button>
 		</div>
 	</div>
 </form>

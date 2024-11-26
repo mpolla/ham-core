@@ -1,13 +1,21 @@
 <script lang="ts">
-	export let value = '';
-	export let label = '';
-	export let mode: string | undefined = undefined;
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	$: [defaultValue, defaultStartSel, defaultEndSel] = ((): [string, number, number] | [] => {
+	type Props = {
+		value?: string;
+		label?: string;
+		mode?: string;
+	} & HTMLInputAttributes;
+
+	let { value = $bindable(''), label = '', mode, ...rest }: Props = $props();
+
+	const [defaultValue, defaultStartSel, defaultEndSel] = $derived.by(() => {
 		switch (mode) {
 			case 'SSB':
 			case 'LSB':
 			case 'USB':
+			case 'FM':
+			case 'AM':
 				return ['59', 1, 2];
 			case 'CW':
 			case 'RTTY':
@@ -15,21 +23,24 @@
 			default:
 				return [];
 		}
-	})();
+	});
 
-	$: canFillDefault = defaultValue !== undefined && (value === '' || value === defaultValue);
+	const canFill = $derived(defaultValue && value === '');
+	const canSelect = $derived(
+		defaultValue &&
+			defaultValue.substring(0, defaultStartSel) === value.substring(0, defaultStartSel) &&
+			defaultValue.substring(defaultEndSel ?? 0) === value.substring(defaultEndSel ?? 0)
+	);
 </script>
 
 <input
 	type="text"
-	on:focus={(e) => {
-		if (!canFillDefault) return;
+	onfocus={(e) => {
 		const field = e.currentTarget;
-		field.value = defaultValue ?? '';
-		field.setSelectionRange(defaultStartSel ?? 0, defaultEndSel ?? 0);
-		value = defaultValue ?? '';
+		if (canFill) field.value = defaultValue ?? '';
+		if (canSelect) field.setSelectionRange(defaultStartSel ?? 0, defaultEndSel ?? 0);
 	}}
 	bind:value
 	placeholder={label}
-	{...$$restProps}
+	{...rest}
 />
