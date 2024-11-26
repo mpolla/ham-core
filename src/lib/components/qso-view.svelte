@@ -10,11 +10,11 @@
 
 	interface Props {
 		qso: IQso;
-		onEdit?: (() => void) | undefined;
-		onDelete?: (() => void) | undefined;
+		onEdit?: () => void;
+		onDelete?: () => void;
 	}
 
-	let { qso, onEdit = undefined, onDelete = undefined }: Props = $props();
+	let { qso, onEdit, onDelete }: Props = $props();
 
 	const log = $derived(logbookState.selectedLog);
 

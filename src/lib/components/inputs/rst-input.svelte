@@ -4,10 +4,10 @@
 	type Props = {
 		value?: string;
 		label?: string;
-		mode?: string | undefined;
+		mode?: string;
 	} & HTMLInputAttributes;
 
-	let { value = $bindable(''), label = '', mode = undefined, ...rest }: Props = $props();
+	let { value = $bindable(''), label = '', mode, ...rest }: Props = $props();
 
 	const [defaultValue, defaultStartSel, defaultEndSel] = $derived(
 		((): [string, number, number] | [] => {

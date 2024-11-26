@@ -12,15 +12,10 @@
 		class?: string;
 		value?: string;
 		label?: string;
-		onChange?: ((value: string) => void) | undefined;
+		onChange?: (value: string) => void;
 	}
 
-	let {
-		class: className = '',
-		value = $bindable(''),
-		label = '',
-		onChange = undefined
-	}: Props = $props();
+	let { class: className = '', value = $bindable(''), label = '', onChange }: Props = $props();
 </script>
 
 <label class={`${className} flex items-center gap-2`}>
