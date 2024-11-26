@@ -1,0 +1,5 @@
+supabase/
+src-tauri/
+build/
+node_modules/
+.svelte-kit/
