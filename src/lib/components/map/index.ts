@@ -1,4 +1,36 @@
-import { geoGraticule } from 'd3-geo';
+import { Projection } from '$lib/models/projection';
+import {
+	geoAzimuthalEqualArea,
+	geoAzimuthalEquidistant,
+	geoGraticule,
+	geoMercator,
+	type GeoProjection
+} from 'd3-geo';
+
+export function createProjection(projection: Projection, center: [number, number]) {
+	let p: GeoProjection;
+	switch (projection) {
+		case Projection.AzimuthalEquidistant:
+			p = geoAzimuthalEquidistant();
+			break;
+		case Projection.AzimuthalEqualArea:
+			p = geoAzimuthalEqualArea();
+			break;
+		case Projection.Mercator:
+			p = geoMercator();
+			break;
+	}
+	switch (projection) {
+		case Projection.AzimuthalEquidistant:
+		case Projection.AzimuthalEqualArea:
+			p.rotate([-center[0], -center[1]]);
+			break;
+		case Projection.Mercator:
+			p.center([0, center[1]]).rotate([-center[0], 0]);
+			break;
+	}
+	return p.translate([400, 400]).scale(1000);
+}
 
 export function getSun(date: Date) {
 	const start = new Date(date.getUTCFullYear(), 0, 0);

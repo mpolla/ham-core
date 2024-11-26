@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		geoPath,
-		geoMercator,
-		geoAzimuthalEquidistant,
-		geoCircle,
-		geoAzimuthalEqualArea,
-		type GeoProjection
-	} from 'd3-geo';
+	import { geoPath, geoCircle } from 'd3-geo';
 	import { zoom } from 'd3-zoom';
 	import { select } from 'd3-selection';
 	import { feature } from 'topojson-client';
@@ -19,7 +12,7 @@
 	import { Projection } from '$lib/models/projection';
 	import { createMapState } from '$lib/states/map-state.svelte';
 	import { createTimeState } from '$lib/states/time-state.svelte';
-	import { getSun, gridFields, gridSquares } from '.';
+	import { createProjection, getSun, gridFields, gridSquares } from '.';
 
 	const mapState = createMapState();
 
@@ -48,36 +41,10 @@
 	const sun = $derived(getSun(timeState.time));
 
 	let settingsOpen = $state(false);
-	let projection = $derived(mapState.projection);
-	let showGridsquares = $derived(mapState.showGridsquares);
-	let showNight = $derived(mapState.showNight);
-	let mapExpanded = $derived($page.state.showExpandedMap);
+	const mapExpanded = $derived($page.state.showExpandedMap);
 
-	let _projection = $derived.by(() => {
-		let p: GeoProjection;
-		switch (projection) {
-			case Projection.AzimuthalEquidistant:
-				p = geoAzimuthalEquidistant();
-				break;
-			case Projection.AzimuthalEqualArea:
-				p = geoAzimuthalEqualArea();
-				break;
-			case Projection.Mercator:
-				p = geoMercator();
-				break;
-		}
-		switch (projection) {
-			case Projection.AzimuthalEquidistant:
-			case Projection.AzimuthalEqualArea:
-				p.rotate([-center[0], -center[1]]);
-				break;
-			case Projection.Mercator:
-				p.center([0, center[1]]).rotate([-center[0], 0]);
-				break;
-		}
-		return p.translate([400, 400]).scale(1000);
-	});
-	let path = $derived(geoPath(_projection));
+	const projection = $derived(createProjection(mapState.projection, center));
+	const path = $derived(geoPath(projection));
 
 	let countries = $state<{ path: string; name: string }[]>([]);
 
@@ -132,7 +99,7 @@
 				{/each}
 
 				<!-- Night / dark overlay -->
-				{#if showNight}
+				{#if mapState.showNight}
 					<path
 						d={path(
 							geoCircle()
@@ -145,7 +112,7 @@
 				{/if}
 
 				<!-- Gridsquares -->
-				{#if showGridsquares}
+				{#if mapState.showGridsquares}
 					{@const precice = transform.k > 2}
 					{#if precice}
 						<path d={path(gridSquares)} fill="none" stroke="#6664" stroke-width={1 / transform.k} />
@@ -170,16 +137,18 @@
 
 				<!-- Points -->
 				{#each points as point}
-					{@const [x, y] = _projection(point) ?? [0, 0]}
-					<g transform="translate({x} {y}) scale({1 / transform.k}) translate(0, -2)">
-						<path
-							d="M 0 0 L -8 -16 A 10 10 0 1 1 8 -16 Z"
-							fill="#f80"
-							stroke="#653600"
-							stroke-width="2"
-						/>
-						<circle cy="-22" r="3" fill="#653600" />
-					</g>
+					{@const p = projection(point)}
+					{#if p}
+						<g transform="translate({p[0]} {p[1]}) scale({1 / transform.k}) translate(0, -2)">
+							<path
+								d="M 0 0 L -8 -16 A 10 10 0 1 1 8 -16 Z"
+								fill="#f80"
+								stroke="#653600"
+								stroke-width="2"
+							/>
+							<circle cy="-22" r="3" fill="#653600" />
+						</g>
+					{/if}
 				{/each}
 			</g>
 		</svg>
@@ -212,7 +181,7 @@
 						<div class="flex gap-2">
 							{#each Object.values(Projection) as p}
 								<button
-									class={`btn btn-sm flex-1 ${projection === p ? 'btn-primary' : ''}`}
+									class={`btn btn-sm flex-1 ${mapState.projection === p ? 'btn-primary' : ''}`}
 									onclick={() => (mapState.projection = p)}
 								>
 									{p}

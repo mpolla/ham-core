@@ -3,15 +3,15 @@
 	import type { IQso } from '$lib/supabase';
 
 	interface Props {
-		qso?: IQso | undefined;
-		freq?: number | undefined;
-		band?: string | undefined;
+		qso?: IQso;
+		freq?: number;
+		band?: string;
 	}
 
-	let { qso = undefined, freq = undefined, band = undefined }: Props = $props();
+	let { qso, freq, band }: Props = $props();
 
-	let _freq = $derived(freq ?? qso?.frequency);
-	let _band = $derived(band ?? (_freq ? Band.getBand(_freq)?.name : undefined));
+	const _freq = $derived(freq ?? qso?.frequency);
+	const _band = $derived(band ?? (_freq ? Band.getBand(_freq)?.name : undefined));
 </script>
 
 <span class={`badge font-medium text-black band${_band}`}>{_band}</span>

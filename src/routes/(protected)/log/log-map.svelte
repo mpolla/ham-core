@@ -26,10 +26,10 @@
 		return undefined;
 	}
 
-	let center = $derived(
+	const center = $derived(
 		logbook.selectedLog?.grid ? locatorToLongLat(logbook.selectedLog.grid) : undefined
 	);
-	let lastQsos = $derived(logbook.qsos.map(longLat).filter((q) => !!q));
+	const lastQsos = $derived(logbook.qsos.map(longLat).filter((q) => !!q));
 </script>
 
 <Map

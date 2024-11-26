@@ -21,8 +21,8 @@
 	const logsState = getLogsContext();
 	const logbook = getLogbookContext();
 
-	let logbookModal = $derived($page.state.logbookModal);
-	let deleteConfirmation = $derived($page.state.showConfirmModal);
+	const logbookModal = $derived($page.state.logbookModal);
+	const deleteConfirmation = $derived($page.state.showConfirmModal);
 
 	function deleteLog() {
 		if (!logbook.selectedLog) return;

@@ -10,8 +10,8 @@
 
 	const logbook = getLogbookContext();
 
-	let qsoId = $derived($page.state.showQsoModal!);
-	let qsoPromise = $derived(getQsos().eq('id', qsoId).single());
+	const qsoId = $derived($page.state.showQsoModal!);
+	const qsoPromise = $derived(getQsos().eq('id', qsoId).single());
 
 	function deleteQso() {
 		supabase

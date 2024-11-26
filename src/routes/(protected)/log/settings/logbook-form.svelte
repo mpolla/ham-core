@@ -14,14 +14,14 @@
 
 	const f = createLogbookFields(mode === 'new' ? undefined : logbook.selectedLog);
 
-	let parsedDxcc = $derived(findDxcc(f.call)?.entity);
+	const parsedDxcc = $derived(findDxcc(f.call)?.entity);
 	const dxccs = [...dxccEntities.values()].sort((a, b) => a.name.localeCompare(b.name));
 
-	let dxcc = $derived(dxccEntities.get(f.dxcc));
+	const dxcc = $derived(dxccEntities.get(f.dxcc));
 
-	let canSave = $derived(f.call && f.dxcc && !f.isPure);
+	const canSave = $derived(f.call && f.dxcc && !f.isPure);
 
-	let data = $derived(
+	const data = $derived(
 		canSave
 			? {
 					call: f.call,

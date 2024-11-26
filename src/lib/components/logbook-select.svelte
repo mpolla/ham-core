@@ -6,7 +6,7 @@
 	const logsState = getLogsContext();
 	const logbookState = getLogbookContext();
 
-	let selectedValue = $derived(logbookState.logId ?? 0);
+	const selectedValue = $derived(logbookState.logId ?? 0);
 
 	interface Props {
 		class?: string;
@@ -15,7 +15,7 @@
 
 	let { class: className = '', canBeEmpty = true }: Props = $props();
 
-	let showError = $derived(!canBeEmpty && !selectedValue);
+	const showError = $derived(!canBeEmpty && !selectedValue);
 
 	function buildLogTitle(log: ILog) {
 		if (!log.title) return log.call;

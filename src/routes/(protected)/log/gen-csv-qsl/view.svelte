@@ -26,7 +26,7 @@
 			});
 	});
 
-	let downloadUrl = $derived(
+	const downloadUrl = $derived(
 		qsos && logs.logs && selected.state.size > 0
 			? generateUrl(generateText(qsos, logs.logs))
 			: undefined

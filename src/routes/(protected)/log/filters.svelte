@@ -13,7 +13,7 @@
 	import { onDestroy } from 'svelte';
 	import Fa from 'svelte-fa';
 
-	let logbook = getLogbookContext();
+	const logbook = getLogbookContext();
 
 	let callsignInputElement = $state<HTMLInputElement>();
 
@@ -31,9 +31,11 @@
 		if (callTimer) clearTimeout(callTimer);
 	});
 
-	let callsign = $derived(logbook.filter.callsign ?? '');
+	const callsign = $derived(logbook.filter.callsign ?? '');
 	let filterOpen = $state(false);
-	let filterCount = $derived([logbook.filter.band, logbook.filter.mode].filter((v) => !!v).length);
+	const filterCount = $derived(
+		[logbook.filter.band, logbook.filter.mode].filter((v) => !!v).length
+	);
 </script>
 
 <div class="rounded-lg bg-base-300 p-4">

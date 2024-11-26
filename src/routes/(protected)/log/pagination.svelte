@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 
-	let logbook = getLogbookContext();
+	const logbook = getLogbookContext();
+
 	const offset = $derived(logbook.offset);
 	const limit = $derived(logbook.limit);
 	const qsos = $derived(logbook.qsos);

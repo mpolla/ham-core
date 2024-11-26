@@ -22,8 +22,8 @@
 		return `${date} ${time}`;
 	}
 
-	let someSelected = $derived(logbook.qsos.some((q) => selected.state.has(q.id)));
-	let allSelected = $derived(someSelected && logbook.qsos.every((q) => selected.state.has(q.id)));
+	const someSelected = $derived(logbook.qsos.some((q) => selected.state.has(q.id)));
+	const allSelected = $derived(someSelected && logbook.qsos.every((q) => selected.state.has(q.id)));
 
 	function getCountry(qso: IQso): string {
 		if (qso.country) {
@@ -35,8 +35,6 @@
 		}
 		return findDxcc(qso.call)?.entity.name ?? '';
 	}
-
-	let qsoLimit = $derived(logbook.limit);
 </script>
 
 <div class="relative">
@@ -123,7 +121,7 @@
 						</td>
 					</tr>
 				{/each}
-				{#each Array(Math.max(qsoLimit - logbook.qsos.length, 0)) as _}
+				{#each Array(Math.max(logbook.limit - logbook.qsos.length, 0)) as _}
 					<tr><td colspan="7">&ZeroWidthSpace;</td></tr>
 				{/each}
 			</tbody>

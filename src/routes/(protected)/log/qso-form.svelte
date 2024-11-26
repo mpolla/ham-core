@@ -110,15 +110,15 @@
 	});
 
 	const selectedLog = $derived(logbook.selectedLog);
-	let isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
+	const isTimeValid = $derived(time.length === 4 && +time.slice(0, 2) < 24 && +time.slice(2) < 60);
 	let dxcc = $state<DxccEntity>();
 	$effect(() => {
 		dxcc = findDxcc(callsign)?.entity;
 	});
-	let isValidCall = $derived(!!callsign.match(advancedCallsignRe));
-	let gridsquareValid = $derived(gridsquare.match(locatorRegex));
-	let distance = $derived(getDist(gridsquare, dxcc));
-	let lastQso = $derived(logbook.qsos[0]);
+	const isValidCall = $derived(!!callsign.match(advancedCallsignRe));
+	const gridsquareValid = $derived(gridsquare.match(locatorRegex));
+	const distance = $derived(getDist(gridsquare, dxcc));
+	const lastQso = $derived(logbook.qsos[0]);
 	$effect(() => {
 		if (isPure && lastQso) {
 			mode = lastQso.mode;
@@ -127,7 +127,7 @@
 			power = lastQso.power?.toString() ?? '';
 		}
 	});
-	let canSubmit = $derived(callsign.length >= 3 && freq && !!selectedLog);
+	const canSubmit = $derived(callsign.length >= 3 && freq && !!selectedLog);
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
