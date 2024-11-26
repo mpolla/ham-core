@@ -6,13 +6,13 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
 
 1. Prepare the Supabase database with the schema from [`schema.sql`](supabase/schema.sql)
 2. Clone the repository
-3. Install dependencies: `yarn install`
+3. Install dependencies: `pnpm i`
 4. Create a `.env` file in the root of the project with the following content:
    ```
    PUBLIC_SUPABASE_URL=https://<your-supabase-url>.supabase.co
    PUBLIC_SUPABASE_ANON=<your-supabase-anon-key>
    ```
-5. Run the development server: `yarn dev`
+5. Run the development server: `pnpm dev` (or `pnpm tauri dev` for a desktop app)
 
 ### TODOS
 
@@ -49,7 +49,7 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [x] Locator grid
     - [ ] Grid labels
     - [ ] 4 and 6 digit grid squares
-  - [ ] Better zoom and pan
+  - [x] Better zoom and pan
   - [x] Night/day overlay
   - [ ] Sun position?
   - [x] Persist map settings
