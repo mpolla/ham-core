@@ -9,23 +9,21 @@
 
 	let { value = $bindable(''), label = '', mode, ...rest }: Props = $props();
 
-	const [defaultValue, defaultStartSel, defaultEndSel] = $derived(
-		((): [string, number, number] | [] => {
-			switch (mode) {
-				case 'SSB':
-				case 'LSB':
-				case 'USB':
-				case 'FM':
-				case 'AM':
-					return ['59', 1, 2];
-				case 'CW':
-				case 'RTTY':
-					return ['599', 1, 2];
-				default:
-					return [];
-			}
-		})()
-	);
+	const [defaultValue, defaultStartSel, defaultEndSel] = $derived.by(() => {
+		switch (mode) {
+			case 'SSB':
+			case 'LSB':
+			case 'USB':
+			case 'FM':
+			case 'AM':
+				return ['59', 1, 2];
+			case 'CW':
+			case 'RTTY':
+				return ['599', 1, 2];
+			default:
+				return [];
+		}
+	});
 
 	const canFill = $derived(defaultValue && value === '');
 	const canSelect = $derived(
