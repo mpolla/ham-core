@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import { getQsos, type IQso } from '$lib/supabase';
-	import { getSelectedQsosContext } from '../../../../lib/states/selected-state.svelte';
+	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
 	import { generateText, generateUrl } from '.';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
