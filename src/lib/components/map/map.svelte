@@ -210,24 +210,14 @@
 				<div class={`absolute right-[calc(100%+.5rem)] top-0 ${settingsOpen ? '' : 'hidden'}`}>
 					<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
 						<div class="flex gap-2">
-							<button
-								class={`btn btn-sm flex-1 ${projection === Projection.Mercator ? 'btn-primary' : ''}`}
-								onclick={() => (mapState.projection = Projection.Mercator)}
-							>
-								Mercator
-							</button>
-							<button
-								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEquidistant ? 'btn-primary' : ''}`}
-								onclick={() => (mapState.projection = Projection.AzimuthalEquidistant)}
-							>
-								Azimuthal ED
-							</button>
-							<button
-								class={`btn btn-sm flex-1 ${projection === Projection.AzimuthalEqualArea ? 'btn-primary' : ''}`}
-								onclick={() => (mapState.projection = Projection.AzimuthalEqualArea)}
-							>
-								Azimuthal EA
-							</button>
+							{#each Object.values(Projection) as p}
+								<button
+									class={`btn btn-sm flex-1 ${projection === p ? 'btn-primary' : ''}`}
+									onclick={() => (mapState.projection = p)}
+								>
+									{p}
+								</button>
+							{/each}
 						</div>
 						<div>
 							<div class="text-sm">Zoom</div>

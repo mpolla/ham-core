@@ -1,5 +1,5 @@
 export enum Projection {
-	Mercator,
-	AzimuthalEquidistant,
-	AzimuthalEqualArea
+	Mercator = 'Mercator',
+	AzimuthalEquidistant = 'Azimuthal ED',
+	AzimuthalEqualArea = 'Azimuthal EA'
 }
