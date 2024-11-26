@@ -9,11 +9,21 @@ interface MapStore {
 const LOCAL_STORAGE_KEY = 'map-store';
 
 export function createMapState() {
-	const state = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}') as MapStore;
+	let state: MapStore;
+	try {
+		state = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+	} catch {
+		state = {};
+	}
 
 	let projection = $state<Projection>(state.projection ?? Projection.Mercator);
 	let showGridsquares = $state<boolean>(state.showGridsquares ?? false);
 	let showNight = $state<boolean>(state.showNight ?? true);
+
+	// Type checking
+	if (Object.values(Projection).indexOf(projection) === -1) projection = Projection.Mercator;
+	if (typeof showGridsquares !== 'boolean') showGridsquares = false;
+	if (typeof showNight !== 'boolean') showNight = true;
 
 	$effect(() => {
 		localStorage.setItem(
