@@ -1,55 +1,44 @@
 import { Projection } from '$lib/models/projection';
+import { createPersistedState } from './persisted-state.svelte';
 
 interface MapStore {
-	projection?: Projection;
-	showGridsquares?: boolean;
-	showNight?: boolean;
+	projection: Projection;
+	showGridsquares: boolean;
+	showNight: boolean;
 }
 
-const LOCAL_STORAGE_KEY = 'map-store';
+const LOCAL_STORAGE_KEY = 'map-state';
 
 export function createMapState() {
-	let state: MapStore;
-	try {
-		state = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-	} catch {
-		state = {};
-	}
-
-	let projection = $state<Projection>(state.projection ?? Projection.Mercator);
-	let showGridsquares = $state<boolean>(state.showGridsquares ?? false);
-	let showNight = $state<boolean>(state.showNight ?? true);
-
-	// Type checking
-	if (Object.values(Projection).indexOf(projection) === -1) projection = Projection.Mercator;
-	if (typeof showGridsquares !== 'boolean') showGridsquares = false;
-	if (typeof showNight !== 'boolean') showNight = true;
-
-	$effect(() => {
-		localStorage.setItem(
-			LOCAL_STORAGE_KEY,
-			JSON.stringify({ projection, showGridsquares, showNight })
-		);
+	const { value: s } = createPersistedState<MapStore>(LOCAL_STORAGE_KEY, {
+		projection: Projection.Mercator,
+		showGridsquares: false,
+		showNight: true
 	});
+
+	// TODO on major typia version remove
+	if (Object.values(Projection).indexOf(s.projection) === -1) s.projection = Projection.Mercator;
+	if (typeof s.showGridsquares !== 'boolean') s.showGridsquares = false;
+	if (typeof s.showNight !== 'boolean') s.showNight = true;
 
 	return {
 		get projection() {
-			return projection;
+			return s.projection;
 		},
 		set projection(value) {
-			projection = value;
+			s.projection = value;
 		},
 		get showGridsquares() {
-			return showGridsquares;
+			return s.showGridsquares;
 		},
 		set showGridsquares(value) {
-			showGridsquares = value;
+			s.showGridsquares = value;
 		},
 		get showNight() {
-			return showNight;
+			return s.showNight;
 		},
 		set showNight(value) {
-			showNight = value;
+			s.showNight = value;
 		}
 	};
 }

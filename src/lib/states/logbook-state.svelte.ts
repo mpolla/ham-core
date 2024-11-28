@@ -3,6 +3,7 @@ import { getQsos, supabase, type IQso } from '$lib/supabase';
 import { getContext, setContext } from 'svelte';
 import type { UserState } from './user-state.svelte';
 import type { LogsState } from './logs-state.svelte';
+import { createPersistedState } from './persisted-state.svelte';
 
 interface Filter {
 	callsign?: string;
@@ -10,12 +11,25 @@ interface Filter {
 	mode?: string;
 }
 
+interface PersistedLogbook {
+	limit: number;
+	logId: number | undefined;
+}
+
+const LOGBOOK_KEY = 'logbook-state';
+
 function createLogbookState(user: UserState, logsState: LogsState) {
+	const { value: persisted } = createPersistedState<PersistedLogbook>(LOGBOOK_KEY, {
+		limit: 100,
+		logId: undefined
+	});
+	// TODO on major typia version remove
+	if (typeof persisted.limit !== 'number') persisted.limit = 100;
+	if (typeof persisted.logId !== 'number') persisted.logId = undefined;
+
 	let offset = $state(0);
-	let limit = $state(100);
 	let filter: Filter = $state({});
-	let _logId: number | undefined = $state();
-	const logId = $derived(_logId ?? user.defaultLogId ?? logsState.logs?.[0]?.id);
+	const logId = $derived(persisted.logId ?? user.defaultLogId ?? logsState.logs?.[0]?.id);
 	let qsos: IQso[] = $state([]);
 	let total_qsos: number = $state(0);
 	let isLoading: boolean = $state(false);
@@ -27,7 +41,7 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 
 		let q = getQsos('exact')
 			.order('datetime', { ascending: false })
-			.range(offset, offset + limit - 1);
+			.range(offset, offset + persisted.limit - 1);
 		if (logId) q = q.eq('log_id', logId);
 		if (filter.callsign) q = q.ilike('call', `%${filter.callsign}%`);
 		if (filter.band) q = q.eq('band', filter.band);
@@ -68,10 +82,10 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 			offset = Math.max(0, value);
 		},
 		get limit() {
-			return limit;
+			return persisted.limit;
 		},
 		set limit(value) {
-			limit = value;
+			persisted.limit = value;
 		},
 		get filter() {
 			return filter;
@@ -83,7 +97,7 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 			return logId;
 		},
 		set logId(value) {
-			_logId = value;
+			persisted.logId = value;
 			offset = 0;
 		},
 		get selectedLog() {
@@ -104,8 +118,8 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 		refresh,
 		insert,
 		lastPage: () => {
-			const pages = Math.ceil(total_qsos / limit);
-			offset = Math.max(0, (pages - 1) * limit);
+			const pages = Math.ceil(total_qsos / persisted.limit);
+			offset = Math.max(0, (pages - 1) * persisted.limit);
 			refresh();
 		}
 	};
