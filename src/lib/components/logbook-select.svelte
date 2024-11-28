@@ -24,7 +24,7 @@
 	}
 </script>
 
-<label class={`form-control ${className}`}>
+<label class={`form-control w-full sm:max-w-xs ${className}`}>
 	<div class="label">
 		<span class="label-text">Logbook</span>
 		{#if showError}

@@ -16,10 +16,11 @@
 
 	const mapState = createMapState();
 
+	type Point = [number, number];
 	interface Props {
-		center?: [number, number];
-		points?: [number, number][];
-		lines?: [[number, number], [number, number]][];
+		center?: Point;
+		points?: Point[];
+		lines?: [Point, Point][];
 		countryColors?: Record<string, string>;
 		class?: string;
 	}
@@ -50,11 +51,11 @@
 
 	$effect(() => {
 		countries = feature(
-			world50 as Topology<any>,
+			world50 as unknown as Topology,
 			world50.objects.countries as GeometryCollection
-		).features.map((e) => ({
+		).features.map((e, i) => ({
 			path: path(e)!,
-			name: (e.properties as any).name
+			name: world50.objects.countries.geometries[i].properties.name
 		}));
 	});
 
@@ -113,15 +114,15 @@
 
 				<!-- Gridsquares -->
 				{#if mapState.showGridsquares}
-					{@const precice = transform.k > 2}
-					{#if precice}
+					{@const precise = transform.k > 2}
+					{#if precise}
 						<path d={path(gridSquares)} fill="none" stroke="#6664" stroke-width={1 / transform.k} />
 					{/if}
 					<path
 						d={path(gridFields)}
 						fill="none"
 						stroke="#6669"
-						stroke-width={(precice ? 2 : 1) / Math.max(transform.k, 0.5)}
+						stroke-width={(precise ? 2 : 1) / Math.max(transform.k, 0.5)}
 					/>
 				{/if}
 

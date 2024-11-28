@@ -20,7 +20,7 @@
 
 	const logbook = getLogbookContext();
 
-	let callsignInputElement = $state<HTMLInputElement>();
+	let callsignInputElement: HTMLInputElement;
 	let callsign = $state('');
 
 	let rstSent = $state('');
@@ -93,7 +93,7 @@
 		rstRcv = '';
 		gridsquare = '';
 		timeState.start();
-		callsignInputElement?.focus();
+		callsignInputElement.focus();
 	}
 
 	let isPure = $state(true);
@@ -106,7 +106,7 @@
 	}
 
 	onMount(() => {
-		callsignInputElement?.focus();
+		callsignInputElement.focus();
 	});
 
 	const selectedLog = $derived(logbook.selectedLog);
@@ -143,11 +143,13 @@
 >
 	<div class="flex items-start gap-4">
 		<div class="font-light">New QSO</div>
-		{#if selectedLog}
-			<h1 class="mx-auto text-2xl font-semibold">
-				{selectedLog.call}
-			</h1>
-		{/if}
+		<h1 class="mx-auto text-2xl font-semibold">
+			{#if selectedLog}
+				{selectedLog?.call}
+			{:else}
+				&ZeroWidthSpace;
+			{/if}
+		</h1>
 		<button type="button" class="btn btn-xs" onclick={clear} disabled={isPure}>Clear</button>
 	</div>
 

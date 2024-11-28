@@ -13,6 +13,10 @@
 		if (!logbook.selectedLog) return;
 		state.upload().then(() => logbook.refresh());
 	}
+
+	function formatDate(date?: Date) {
+		return date?.toISOString().slice(0, 16).replace('T', ' ') ?? '?';
+	}
 </script>
 
 <div class="flex flex-col gap-6">
@@ -58,8 +62,8 @@
 								</div>
 								<table>
 									<tbody>
-										<tr><td class="pr-2">From</td><td>{value.minDate?.toLocaleString()}</td></tr>
-										<tr><td class="pr-2">To</td><td>{value.maxDate?.toLocaleString()}</td></tr>
+										<tr><td class="pr-2">From</td><td>{formatDate(value.minDate)}</td></tr>
+										<tr><td class="pr-2">To</td><td>{formatDate(value.maxDate)}</td></tr>
 									</tbody>
 								</table>
 								{#each value.warnings as w}

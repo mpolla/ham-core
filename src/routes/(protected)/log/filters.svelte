@@ -15,7 +15,7 @@
 
 	const logbook = getLogbookContext();
 
-	let callsignInputElement = $state<HTMLInputElement>();
+	let callsignInputElement: HTMLInputElement;
 
 	let callTimer: ReturnType<typeof setTimeout> | undefined;
 	function setCallsign(v: string) {
@@ -55,7 +55,7 @@
 				class="btn btn-circle btn-ghost btn-sm -mr-2 disabled:hidden"
 				onclick={() => {
 					logbook.filter.callsign = '';
-					callsignInputElement?.focus();
+					callsignInputElement.focus();
 				}}
 				disabled={!callsign}
 			>
