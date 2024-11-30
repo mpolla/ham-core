@@ -24,7 +24,7 @@
 	}
 </script>
 
-<label class={`form-control w-full sm:max-w-xs ${className}`}>
+<label class="form-control w-full sm:max-w-xs {className}">
 	<div class="label">
 		<span class="label-text">Logbook</span>
 		{#if showError}
@@ -32,7 +32,7 @@
 		{/if}
 	</div>
 	<select
-		class={`select select-bordered w-full ${showError ? 'select-error' : ''}`}
+		class="select select-bordered w-full {showError ? 'select-error' : ''}"
 		onchange={(v) => (logbookState.logId = +v.currentTarget.value)}
 		value={selectedValue}
 	>

@@ -89,7 +89,9 @@
 						<th class="relative text-center">
 							<span>{i + 1}</span>
 							<div
-								class={`absolute inset-0 transition-opacity hover:opacity-100 ${selected.state.size ? 'opacity-100' : 'opacity-0'}`}
+								class="absolute inset-0 transition-opacity hover:opacity-100 {selected.state.size
+									? 'opacity-100'
+									: 'opacity-0'}"
 							>
 								<input
 									type="checkbox"

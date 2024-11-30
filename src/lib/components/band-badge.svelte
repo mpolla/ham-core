@@ -14,7 +14,7 @@
 	const _band = $derived(band ?? (_freq ? Band.getBand(_freq)?.name : undefined));
 </script>
 
-<span class={`badge font-medium text-black band${_band}`}>{_band}</span>
+<span class="badge font-medium text-black band{_band}">{_band}</span>
 
 <style lang="postcss">
 	.band160m {

@@ -72,9 +72,9 @@
 			</select>
 		</label>
 
-		<div class={`dropdown relative w-64 ${filterOpen ? 'dropdown-open' : ''}`}>
+		<div class="dropdown relative w-64 {filterOpen ? 'dropdown-open' : ''}">
 			<button
-				class={`btn relative w-full ${filterOpen ? 'z-50' : ''}`}
+				class="btn relative w-full {filterOpen ? 'z-50' : ''}"
 				onclick={() => (filterOpen = !filterOpen)}
 			>
 				<Fa icon={faFilter} />
@@ -82,7 +82,7 @@
 				{#if filterCount > 0}
 					<span class="badge badge-primary">{filterCount}</span>
 				{/if}
-				<Fa class={`ml-auto transition ${filterOpen ? 'rotate-180' : ''}`} icon={faChevronDown} />
+				<Fa class="ml-auto transition {filterOpen ? 'rotate-180' : ''}" icon={faChevronDown} />
 			</button>
 
 			{#if filterOpen}
@@ -94,7 +94,9 @@
 			{/if}
 
 			<div
-				class={`dropdown-content left-0 right-0 top-0 z-40 -m-4 flex flex-col items-stretch gap-4 rounded-lg border border-white/10 bg-base-100 p-4 shadow-xl ${filterOpen ? '' : 'hidden'}`}
+				class="dropdown-content left-0 right-0 top-0 z-40 -m-4 flex flex-col items-stretch gap-4 rounded-lg border border-white/10 bg-base-100 p-4 shadow-xl {filterOpen
+					? ''
+					: 'hidden'}"
 			>
 				<div class="btn invisible"></div>
 

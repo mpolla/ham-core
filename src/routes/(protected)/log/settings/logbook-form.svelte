@@ -92,7 +92,9 @@
 				<span class="label-text">Country</span>
 			</div>
 			<select
-				class={`select select-bordered ${dxcc && parsedDxcc && parsedDxcc.id !== dxcc.id ? 'select-warning' : ''}`}
+				class="select select-bordered {dxcc && parsedDxcc && parsedDxcc.id !== dxcc.id
+					? 'select-warning'
+					: ''}"
 				bind:value={f.dxcc}
 			>
 				<option disabled selected>Select Country</option>
@@ -108,7 +110,7 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${f.cqz && dxcc && +f.cqz !== dxcc.cqz ? 'input-warning' : ''}`}
+				class="input input-bordered {f.cqz && dxcc && +f.cqz !== dxcc.cqz ? 'input-warning' : ''}"
 				use:numberInput
 				bind:value={f.cqz}
 			/>
@@ -119,7 +121,9 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${f.ituz && dxcc && +f.ituz !== dxcc.ituz ? 'input-warning' : ''}`}
+				class="input input-bordered {f.ituz && dxcc && +f.ituz !== dxcc.ituz
+					? 'input-warning'
+					: ''}"
 				use:numberInput
 				bind:value={f.ituz}
 			/>
@@ -137,7 +141,7 @@
 			</div>
 			<input
 				type="text"
-				class={`input input-bordered ${f.grid && !f.grid.match(locatorRegex) ? 'input-error' : ''}`}
+				class="input input-bordered {f.grid && !f.grid.match(locatorRegex) ? 'input-error' : ''}"
 				use:gridsquareInput
 				bind:value={f.grid}
 			/>

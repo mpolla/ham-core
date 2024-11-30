@@ -164,7 +164,7 @@
 		<TimeInput
 			label="Time"
 			bind:value={time}
-			class={`input w-full max-w-24 disabled:input-sm ${isTimeValid ? '' : 'input-error'}`}
+			class="input w-full max-w-24 disabled:input-sm {isTimeValid ? '' : 'input-error'}"
 			disabled={!timeState.isStopped}
 		/>
 		{#if timeState.isStopped}
@@ -233,7 +233,9 @@
 			use:callsignInput
 			bind:this={callsignInputElement}
 			bind:value={callsign}
-			class={`input w-full font-mono placeholder:font-sans @xl:w-80 ${isValidCall ? 'input-success' : ''}`}
+			class="input w-full font-mono placeholder:font-sans @xl:w-80 {isValidCall
+				? 'input-success'
+				: ''}"
 			placeholder="Callsign"
 		/>
 
@@ -247,7 +249,7 @@
 		type="text"
 		use:gridsquareInput
 		bind:value={gridsquare}
-		class={`input @xl:max-w-xs ${gridsquare && !gridsquareValid ? 'input-error' : ''}`}
+		class="input @xl:max-w-xs {gridsquare && !gridsquareValid ? 'input-error' : ''}"
 		placeholder="Gridsquare"
 	/>
 

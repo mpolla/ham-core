@@ -177,12 +177,12 @@
 					<Fa icon={faCog} />
 				</button>
 
-				<div class={`absolute right-[calc(100%+.5rem)] top-0 ${settingsOpen ? '' : 'hidden'}`}>
+				<div class="absolute right-[calc(100%+.5rem)] top-0 {settingsOpen ? '' : 'hidden'}">
 					<div class="flex flex-col gap-4 rounded-xl bg-base-300 p-3">
 						<div class="flex gap-2">
 							{#each Object.values(Projection) as p}
 								<button
-									class={`btn btn-sm flex-1 ${mapState.projection === p ? 'btn-primary' : ''}`}
+									class="btn btn-sm flex-1 {mapState.projection === p ? 'btn-primary' : ''}"
 									onclick={() => (mapState.projection = p)}
 								>
 									{p}

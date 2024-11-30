@@ -115,7 +115,9 @@
 								<div class="flex gap-2">
 									{#each conts.length ? conts : ['EU', 'AS', 'NA', 'SA', 'OC'] as cont}
 										<button
-											class={`btn btn-sm ${selectedCont[qso.id] === cont ? 'btn-primary' : ''} ${contFix !== 'ready' ? 'btn-disabled' : ''}`}
+											class="btn btn-sm {selectedCont[qso.id] === cont
+												? 'btn-primary'
+												: ''} {contFix !== 'ready' ? 'btn-disabled' : ''}"
 											onclick={() => (selectedCont[qso.id] = cont)}
 										>
 											{cont}

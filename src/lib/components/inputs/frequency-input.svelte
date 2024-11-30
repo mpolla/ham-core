@@ -18,7 +18,7 @@
 	let { class: className = '', value = $bindable(''), label = '', onChange }: Props = $props();
 </script>
 
-<label class={`${className} flex items-center gap-2`}>
+<label class="{className} flex items-center gap-2">
 	<input
 		type="text"
 		class="w-full"
