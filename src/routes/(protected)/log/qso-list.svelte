@@ -123,7 +123,7 @@
 						</td>
 					</tr>
 				{/each}
-				{#each Array(Math.max(logbook.limit - logbook.qsos.length, 0)) as _}
+				{#each { length: Math.max(logbook.limit - logbook.qsos.length, 0) }}
 					<tr><td colspan="7">&ZeroWidthSpace;</td></tr>
 				{/each}
 			</tbody>
