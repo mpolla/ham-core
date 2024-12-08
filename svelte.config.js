@@ -9,9 +9,11 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: process.argv.includes('--static') ? staticAdapter({
-			fallback: 'index.html'
-		}) : adapter()
+		adapter: process.argv.includes('--static')
+			? staticAdapter({
+					fallback: 'index.html'
+				})
+			: adapter()
 	}
 };
 
