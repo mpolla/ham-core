@@ -6,7 +6,7 @@
 	import type { Topology, GeometryCollection } from 'topojson-specification';
 	import Fa from 'svelte-fa';
 	import { faClose, faCog, faExpand, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-	import world50 from '$lib/data/geo/countries-50m.json';
+	import world110 from '$lib/data/geo/countries-110m.json';
 	import { page } from '$app/stores';
 	import { pushState } from '$app/navigation';
 	import { Projection } from '$lib/models/projection';
@@ -47,16 +47,21 @@
 	const projection = $derived(createProjection(mapState.projection, center));
 	const path = $derived(geoPath(projection));
 
-	let countries = $state<{ path: string; name: string }[]>([]);
-
-	$effect(() => {
-		countries = feature(
-			world50 as unknown as Topology,
-			world50.objects.countries as GeometryCollection
+	let world = $state(world110);
+	let countries = $derived.by(() =>
+		feature(
+			world as unknown as Topology,
+			world.objects.countries as GeometryCollection
 		).features.map((e, i) => ({
 			path: path(e)!,
-			name: world50.objects.countries.geometries[i].properties.name
-		}));
+			name: world.objects.countries.geometries[i].properties.name
+		}))
+	);
+
+	$effect(() => {
+		fetch(new URL('$lib/data/geo/countries-50m.json', import.meta.url).href)
+			.then((r) => r.json())
+			.then((r) => (world = r));
 	});
 
 	// Drag & zoom state
