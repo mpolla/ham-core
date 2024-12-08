@@ -12,7 +12,6 @@ function createWsjtState() {
 	function addListener(listener: (m: WsjtMessage) => void) {
 		const key = Math.random().toString(36).slice(2);
 		listeners[key] = listener;
-		console.log(Object.values(listeners).length, 'listener added');
 		return () => delete listeners[key];
 	}
 
