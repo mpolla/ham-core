@@ -13,6 +13,7 @@
 	import { WsjtQsoLogged } from '$lib/wsjt/wsjt-reader';
 	import { findDxcc } from 'fast-dxcc';
 	import { Band } from '$lib/models/band';
+	import SolarData from '$lib/components/solar-data.svelte';
 
 	const user = getUserContext();
 
@@ -60,6 +61,8 @@
 	<a href="/" class="btn btn-ghost text-xl">HAM Log</a>
 
 	<Clock />
+
+	<SolarData />
 
 	<div class="flex-none">
 		<div class="dropdown dropdown-end">

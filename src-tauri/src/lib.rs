@@ -9,6 +9,7 @@ mod udp;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
         .manage(AppState {
             udp_listeners: Arc::new(Mutex::new(HashMap::new())),
             telnet_connections: Arc::new(Mutex::new(HashMap::new())),
