@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { callsignInput } from '$lib/helpers/input-helpers';
+	import { filteredInput, uppercaseInput } from '$lib/helpers/input-helpers';
 	import { Band } from '$lib/models/band';
 	import { Mode } from '$lib/models/mode';
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
@@ -36,6 +36,8 @@
 	const filterCount = $derived(
 		[logbook.filter.band, logbook.filter.mode].filter((v) => !!v).length
 	);
+
+	const searchFilter = filteredInput(/[^A-Z0-9/%]/g);
 </script>
 
 <div class="rounded-lg bg-base-300 p-4">
@@ -44,7 +46,8 @@
 			<Fa icon={faSearch} class="opacity-70" />
 			<input
 				type="text"
-				use:callsignInput
+				use:uppercaseInput
+				use:searchFilter
 				class="min-w-0 grow font-mono placeholder:font-sans"
 				placeholder="Search Callsign"
 				value={callsign}

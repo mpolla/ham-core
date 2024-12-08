@@ -43,7 +43,7 @@ function createLogbookState(user: UserState, logsState: LogsState) {
 			.order('datetime', { ascending: false })
 			.range(offset, offset + persisted.limit - 1);
 		if (logId) q = q.eq('log_id', logId);
-		if (filter.callsign) q = q.ilike('call', `%${filter.callsign}%`);
+		if (filter.callsign) q = q.ilike('call', `${filter.callsign}%`);
 		if (filter.band) q = q.eq('band', filter.band);
 		if (filter.mode) q = q.eq('mode', filter.mode);
 
