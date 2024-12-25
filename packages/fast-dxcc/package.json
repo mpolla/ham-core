@@ -1,0 +1,29 @@
+{
+	"name": "fast-dxcc",
+	"version": "2.3.0",
+	"description": "Fast implementation for getting information about a callsign",
+	"main": "dist/lib/index.js",
+	"types": "dist/lib/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"author": "Jakob Kordež",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"build": "tsc",
+		"lint": "eslint . --ext .ts",
+		"test": "jest"
+	},
+	"devDependencies": {
+		"@jest/globals": "^29.7.0",
+		"@types/eslint": "^8.56.10",
+		"eslint": "^8",
+		"eslint-config-prettier": "^8",
+		"jest": "^29.7.0",
+		"prettier": "^3.3.2",
+		"ts-jest": "^29.2.2",
+		"typescript": "^5.5.3",
+		"typescript-eslint": "^7.16.0"
+	}
+}
