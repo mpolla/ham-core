@@ -22,43 +22,47 @@
 </div>
 <div>
 	<table class="mx-auto w-auto">
-		<tr><td>CQ Zone</td><td>{dxccEntity.cqz ?? '?'}</td></tr>
-		<tr><td>ITU Zone</td><td>{dxccEntity.ituz ?? '?'}</td></tr>
-		<tr><td>Continent</td><td>{dxccEntity.cont ?? '?'}</td></tr>
+		<tbody>
+			<tr><td>CQ Zone</td><td>{dxccEntity.cqz ?? '?'}</td></tr>
+			<tr><td>ITU Zone</td><td>{dxccEntity.ituz ?? '?'}</td></tr>
+			<tr><td>Continent</td><td>{dxccEntity.cont ?? '?'}</td></tr>
+		</tbody>
 	</table>
 </div>
 <div>
 	<table class="mx-auto w-auto">
-		<tr>
-			<td>Latitude</td>
-			<td>
-				{#if lat !== undefined}
-					{Math.abs(lat)}°{lat >= 0 ? 'N' : 'S'}
-				{:else}
-					?
-				{/if}
-			</td>
-		</tr>
-		<tr>
-			<td>Longitude</td>
-			<td>
-				{#if long !== undefined}
-					{Math.abs(long)}°{long < 0 ? 'W' : 'E'}
-				{:else}
-					?
-				{/if}
-			</td>
-		</tr>
-		<tr>
-			<td>TZ Offset</td>
-			<td>
-				{#if tz !== undefined}
-					{formatTz(tz)}
-				{:else}
-					?
-				{/if}
-			</td>
-		</tr>
+		<tbody>
+			<tr>
+				<td>Latitude</td>
+				<td>
+					{#if lat !== undefined}
+						{Math.abs(lat)}°{lat >= 0 ? 'N' : 'S'}
+					{:else}
+						?
+					{/if}
+				</td>
+			</tr>
+			<tr>
+				<td>Longitude</td>
+				<td>
+					{#if long !== undefined}
+						{Math.abs(long)}°{long < 0 ? 'W' : 'E'}
+					{:else}
+						?
+					{/if}
+				</td>
+			</tr>
+			<tr>
+				<td>TZ Offset</td>
+				<td>
+					{#if tz !== undefined}
+						{formatTz(tz)}
+					{:else}
+						?
+					{/if}
+				</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
 

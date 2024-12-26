@@ -8,55 +8,51 @@
 	import { browser } from '$app/environment';
 
 	let query = new URLSearchParams(browser ? $page.url.searchParams.toString() : '');
-	let callsign = query.get('c') ?? '';
+	let callsign = $state(query.get('c') ?? '');
 
-	$: callsignData = parseCallsign(callsign);
-	$: rawDxcc = findDxcc(callsign);
+	let callsignData = $derived(parseCallsign(callsign));
+	let rawDxcc = $derived(findDxcc(callsign));
 
-	$: updateUrl(callsign);
-
-	function updateUrl(callsign: string) {
+	$effect(() => {
 		if (!browser) return;
-		if (!callsign) goto('.', { keepFocus: true, replaceState: true });
-		else goto(`?c=${callsign}`, { keepFocus: true, replaceState: true });
-	}
-
-	function styleText(): string {
-		const baseClass = 'text-cyan-300';
-		const prefixClass = 'text-blue-400';
-		const suffixClass = 'text-green-400';
-
-		if (rawDxcc?.matchLength === callsign.length && rawDxcc.isExact) {
-			return `<span class="text-amber-400">${callsign}</span>`;
-		}
-
-		if (!callsignData) {
-			const dxcc = findDxcc(callsign);
-			if (!dxcc) return callsign;
-			return `<span class="text-cyan-300">${callsign.slice(0, dxcc.matchLength)}</span>${callsign.slice(dxcc.matchLength)}`;
-		}
-
-		const { base, basePrefix, baseSuffix, secondaryPrefix, secondarySuffixes } = callsignData;
-
-		// TODO Check if base and prefix same dxcc
-		return [
-			secondaryPrefix ? `<span class="${prefixClass}">${secondaryPrefix}/</span>` : '',
-			basePrefix ? `<span class="${baseClass}">${basePrefix}</span>${baseSuffix}` : base,
-			secondarySuffixes.length
-				? `<span class="${suffixClass}">/${secondarySuffixes.join('/')}</span>`
-				: ''
-		].join('');
-	}
+		const url = callsign ? `?c=${callsign}` : '.';
+		goto(url, { keepFocus: true, replaceState: true });
+	});
 </script>
 
 <div class="mb-4">
 	<StyledInput
 		bind:inputText={callsign}
 		inputRe={/^[A-Z\d/]*$/i}
-		generateStyledText={styleText}
 		autofocus
 		placeholder="Enter a callsign"
-	/>
+	>
+		{#if rawDxcc?.matchLength === callsign.length && rawDxcc.isExact}
+			<span class="text-amber-400">{callsign}</span>
+		{:else if !callsignData && !rawDxcc}
+			{callsign}
+		{:else if !callsignData}
+			<span class="text-cyan-300">{callsign.slice(0, rawDxcc!.matchLength)}</span>{callsign.slice(
+				rawDxcc!.matchLength
+			)}
+		{:else}
+			{@const { base, basePrefix, baseSuffix, secondaryPrefix, secondarySuffixes } = callsignData}
+			<div class="flex items-baseline justify-center">
+				{#if secondaryPrefix}
+					<span class="text-blue-400">{secondaryPrefix}/</span>
+				{/if}
+				{#if basePrefix}
+					<span class="text-cyan-300">{basePrefix}</span>
+					<span>{baseSuffix}</span>
+				{:else}
+					<span>{base}</span>
+				{/if}
+				{#if secondarySuffixes.length > 0}
+					<span class="text-green-400">/{secondarySuffixes.join('/')}</span>
+				{/if}
+			</div>
+		{/if}&ZeroWidthSpace;
+	</StyledInput>
 </div>
 
 {#if rawDxcc?.matchLength === callsign.length && rawDxcc.isExact}

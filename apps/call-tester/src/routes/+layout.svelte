@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
 	import '../app.css';
+	import type { Snippet } from 'svelte';
 	import Umami from '../components/umami.svelte';
+
+	let { children }: { children: Snippet } = $props();
 </script>
 
 <svelte:head>
@@ -19,7 +22,7 @@
 
 <div class="flex min-h-screen flex-col bg-[#333] text-[#eee]">
 	<div class="c flex-1 py-12">
-		<slot />
+		{@render children()}
 	</div>
 
 	<footer class="bg-[#444] py-3">

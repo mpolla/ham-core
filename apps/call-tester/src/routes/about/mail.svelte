@@ -5,7 +5,7 @@
 	export const prerender = false;
 	export const csr = true;
 
-	let mail = '';
+	let mail = $state('');
 
 	onMount(() => {
 		mail = ['si', '.', 'hamradio', '@', 's52kj'].reverse().join('');

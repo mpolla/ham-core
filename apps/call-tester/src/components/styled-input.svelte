@@ -1,17 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
-	export let inputText = '';
-	export let inputRe: RegExp = /.*/;
-	export let autofocus: boolean = false;
-	export let placeholder: string | undefined = undefined;
+	interface Props {
+		inputText?: string;
+		inputRe?: RegExp;
+		autofocus?: boolean;
+		placeholder?: string | undefined;
+		children?: Snippet;
+	}
 
-	let selectionStart: number | null = inputText.length;
-	let selectionEnd: number | null = inputText.length;
+	let {
+		inputText = $bindable(''),
+		inputRe = /.*/,
+		autofocus = false,
+		placeholder = undefined,
+		children
+	}: Props = $props();
 
-	export let generateStyledText: (text: string) => string = (text: string) => text;
-
-	$: styledText = generateStyledText(inputText) || '&ZeroWidthSpace;';
+	let selectionStart: number | null = $state(inputText.length);
+	let selectionEnd: number | null = $state(inputText.length);
 
 	onMount(() => {
 		// Set the initial selection
@@ -32,12 +39,12 @@
 	<input
 		id="callsign-input"
 		class="input shared"
-		on:keydown={(e) => {
+		onkeydown={(e) => {
 			const t = e.currentTarget;
 			selectionStart = t.selectionStart;
 			selectionEnd = t.selectionEnd;
 		}}
-		on:input={(e) => {
+		oninput={(e) => {
 			const t = e.currentTarget;
 			if (inputRe.test(t.value)) {
 				inputText = t.value.toUpperCase();
@@ -50,7 +57,9 @@
 		}}
 		{placeholder}
 	/>
-	<div class="styled-text shared" contenteditable="false" bind:innerHTML={styledText} />
+	<div class="styled-text shared" contenteditable="false">
+		{@render children?.()}
+	</div>
 </div>
 
 <style lang="postcss">
