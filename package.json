@@ -1,0 +1,16 @@
+{
+  "name": "ham-core",
+  "version": "1.0.0",
+  "description": "A monorepo with Ham radio packages and apps",
+  "keywords": [],
+  "author": "Jakob Kordež S52KJ",
+  "scripts": {
+    "build": "pnpm -r --filter=./packages/** run build",
+    "dev:ham-log": "pnpm --filter ham-log dev",
+    "dev:call-tester": "pnpm --filter call-tester dev",
+    "test": "pnpm -r test -- --run"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
