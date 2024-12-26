@@ -1,6 +1,6 @@
 {
 	"name": "fast-dxcc",
-	"version": "2.3.0",
+	"version": "2.4.0",
 	"description": "Fast implementation for getting information about a callsign",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
@@ -12,7 +12,7 @@
 	"license": "MIT",
 	"private": false,
 	"scripts": {
-		"build": "tsup src/lib/index.ts --dts --format esm,cjs --clean",
+		"build": "tsup",
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write .",
 		"test": "vitest"
