@@ -1,4 +1,4 @@
-import { writeAdifFile } from '$lib/adif-parser';
+import { writeAdifFile } from '@ham-core/adif';
 import { Qso } from '$lib/models/qso';
 import type { ILog, IQso } from '$lib/supabase';
 

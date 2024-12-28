@@ -1,15 +1,15 @@
-interface AdifParsingResult {
+export interface AdifParsingResult {
 	warnings: string[];
 	result: AdifFile;
 }
 
-interface AdifFile {
+export interface AdifFile {
 	header: { [field: string]: string } | undefined;
 	records: { [field: string]: string }[];
 }
 
 export function parseAdifFile(adi: string): AdifParsingResult {
-	const warnings = [];
+	const warnings: string[] = [];
 
 	let header: AdifFile['header'];
 	const records: AdifFile['records'] = [];

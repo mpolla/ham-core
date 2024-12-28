@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DxccEntity } from 'fast-dxcc';
+	import type { DxccEntity } from '@ham-core/fast-dxcc';
 
 	export let prefix: string;
 	export let dxccEntity: DxccEntity;

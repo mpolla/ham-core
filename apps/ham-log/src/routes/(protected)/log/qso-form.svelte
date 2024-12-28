@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { dxccEntities, findDxcc, type DxccEntity } from 'fast-dxcc';
+	import { dxccEntities, findDxcc, type DxccEntity } from '@ham-core/fast-dxcc';
 	import { advancedCallsignRe } from '$lib/callsign';
 	import { callsignInput, gridsquareInput } from '$lib/helpers/input-helpers';
 	import TimeInput from '$lib/components/inputs/time-input.svelte';

@@ -3,7 +3,7 @@
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import { locatorRegex } from '$lib/utils/locator-util';
-	import { dxccEntities, findDxcc } from 'fast-dxcc';
+	import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
 	import { createLogbookFields } from './logbook-fields.svelte';
 	import { supabase } from '$lib/supabase';
 

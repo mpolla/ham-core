@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseCallsign } from './callsign';
-import { dxccEntities } from 'fast-dxcc';
+import { getSecondarySuffixDescription, parseCallsign } from './callsign';
+import { dxccEntities } from '@ham-core/fast-dxcc';
 
 const s5 = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'S5');
 const sv = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV');
@@ -126,5 +126,18 @@ describe('parseCallsign', () => {
 		expect(data?.base).toBe('XX7KJ');
 		expect(data?.baseDxcc).toBe(null);
 		expect(data?.fullDxcc).toBe(null);
+	});
+});
+
+describe('getSecondarySuffixDescription', () => {
+	test.each([
+		['M', 'Mobile'],
+		['AM', 'Aeronautical mobile'],
+		['MM', 'Maritime mobile'],
+		['QRP', 'Low power'],
+		['P', 'Portable'],
+		['A', 'Alternative location']
+	])('Suffix %s', (suffix, description) => {
+		expect(getSecondarySuffixDescription(suffix)).toBe(description);
 	});
 });

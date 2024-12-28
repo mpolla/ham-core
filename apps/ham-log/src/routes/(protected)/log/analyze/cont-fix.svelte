@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
-	import { dxccEntities, findDxcc } from 'fast-dxcc';
+	import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
 	import Error from '$lib/components/error.svelte';
 	import Success from '$lib/components/success.svelte';
 	import Loading from '$lib/components/loading.svelte';

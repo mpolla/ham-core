@@ -17,6 +17,8 @@
 	},
 	"devDependencies": {
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
+		"@ham-core/adif": "workspace:*",
+		"@ham-core/fast-dxcc": "workspace:*",
 		"@supabase/supabase-js": "^2.47.10",
 		"@sveltejs/adapter-auto": "^3.3.1",
 		"@sveltejs/adapter-static": "^3.0.8",
@@ -41,7 +43,6 @@
 		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.46.1",
-		"fast-dxcc": "workspace:*",
 		"globals": "^15.14.0",
 		"postcss": "^8.4.49",
 		"prettier": "^3.4.2",

@@ -41,7 +41,7 @@ const out = root.encodeToString();
 fs.writeFileSync(path.join(outDir, 'dxcc-tree.txt'), out);
 
 // Format entities
-import type { DxccEntity } from 'fast-dxcc';
+import type { DxccEntity } from '@ham-core/fast-dxcc';
 
 const entities: DxccEntity[] = [];
 

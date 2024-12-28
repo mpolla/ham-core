@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { getSecondarySuffixDescription, parseCallsign } from '$lib/callsign';
-	import { findDxcc } from 'fast-dxcc';
+	import { findDxcc } from '@ham-core/fast-dxcc';
 	import StyledInput from '../components/styled-input.svelte';
 	import DxccEntityInfo from '../components/dxcc-entity-info.svelte';
 	import { browser } from '$app/environment';

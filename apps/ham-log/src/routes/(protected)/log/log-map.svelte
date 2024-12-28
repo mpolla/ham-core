@@ -3,7 +3,7 @@
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { locatorToLongLat } from '$lib/utils/locator-util';
-	import { dxccEntities } from 'fast-dxcc';
+	import { dxccEntities } from '@ham-core/fast-dxcc';
 
 	const logbook = getLogbookContext();
 

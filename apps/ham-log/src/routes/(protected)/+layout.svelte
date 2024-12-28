@@ -11,7 +11,7 @@
 	import { setWsjtContext } from '$lib/states/wsjt-state.svelte';
 	import { setSelectedQsosContext } from '$lib/states/selected-state.svelte';
 	import { WsjtQsoLogged } from '$lib/wsjt/wsjt-reader';
-	import { findDxcc } from 'fast-dxcc';
+	import { findDxcc } from '@ham-core/fast-dxcc';
 	import { Band } from '$lib/models/band';
 	import SolarData from '$lib/components/solar-data.svelte';
 

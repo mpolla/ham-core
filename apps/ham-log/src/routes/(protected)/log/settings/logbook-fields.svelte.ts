@@ -1,5 +1,5 @@
 import type { ILog } from '$lib/supabase';
-import { dxccEntities, findDxcc } from 'fast-dxcc';
+import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
 
 interface Field<T> {
 	value: T;

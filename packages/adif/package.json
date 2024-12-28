@@ -1,7 +1,7 @@
 {
-	"name": "@ham-core/fast-dxcc",
-	"version": "2.4.0",
-	"description": "Fast implementation for getting information about a callsign",
+	"name": "@ham-core/adif",
+	"version": "1.0.0",
+	"description": "ADIF decoder and encoder",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",

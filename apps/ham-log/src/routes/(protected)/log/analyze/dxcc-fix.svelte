@@ -4,7 +4,7 @@
 	import Success from '$lib/components/success.svelte';
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import { getQsos, supabase, type IQso } from '$lib/supabase';
-	import { dxccEntities, findDxcc } from 'fast-dxcc';
+	import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
 
 	const logbook = getLogbookContext();
 

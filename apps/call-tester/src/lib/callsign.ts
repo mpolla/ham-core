@@ -1,4 +1,4 @@
-import { findDxcc, type DxccEntity } from 'fast-dxcc';
+import { findDxcc, type DxccEntity } from '@ham-core/fast-dxcc';
 
 export const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)((?:\/[A-Z\d]+)*)$/i;
 

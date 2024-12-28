@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
-	import { dxccEntities, findDxcc } from 'fast-dxcc';
+	import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
 	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import Error from '$lib/components/error.svelte';

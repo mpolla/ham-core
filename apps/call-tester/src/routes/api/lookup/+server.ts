@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { findDxcc, type DxccEntity } from 'fast-dxcc';
+import { findDxcc, type DxccEntity } from '@ham-core/fast-dxcc';
 
 export const POST: RequestHandler = async ({ request }) => {
 	let req;

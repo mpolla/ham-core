@@ -1,4 +1,4 @@
-import { parseAdifFile } from '$lib/adif-parser';
+import { parseAdifFile } from '@ham-core/adif';
 import { Qso } from '$lib/models/qso';
 import { supabase } from '$lib/supabase';
 import type { LogbookState } from '$lib/states/logbook-state.svelte';
