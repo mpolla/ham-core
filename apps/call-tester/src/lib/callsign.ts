@@ -21,7 +21,7 @@ export function parseCallsign(callsign: string): CallsignData | null {
 
 	const secondaryPrefix = match[1]?.slice(0, -1) ?? null;
 	const base = match[2];
-	const secondarySuffixes = match[3]?.slice(1).split('/').filter(Boolean) ?? [];
+	const secondarySuffixes = match[3].slice(1).split('/').filter(Boolean);
 
 	const baseDxccResult = findDxcc(base);
 	const fullDxccResult = findDxcc(callsign);

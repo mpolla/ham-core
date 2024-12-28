@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { capitalize } from './string-util';
+import { capitalize, compactChars, rangeToString } from './string-util';
 
 describe('capitalize', () => {
 	test('Single word', () => {
@@ -37,4 +37,26 @@ describe('capitalize', () => {
 	test('Repeating substrings', () => {
 		expect(capitalize('hihihi hi')).toBe('Hihihi Hi');
 	});
+});
+
+test.each([
+	['', '', ''],
+	['a', 'a', 'a'],
+	['A', 'A', 'A'],
+	['A', 'B', 'AB'],
+	['C', 'E', 'C-E']
+])('rangeToString %s %s -> %s', (start, end, expected) => {
+	expect(rangeToString(start, end)).toBe(expected);
+});
+
+test.each([
+	['', ''],
+	['a', 'a'],
+	['A', 'A'],
+	['AB', 'AB'],
+	['ABCDE', 'A-E'],
+	['ABCE', 'A-CE'],
+	['ABCEFG', 'A-CE-G']
+])('compactChars %s -> %s', (s, expected) => {
+	expect(compactChars(s.split(''))).toBe(expected);
 });

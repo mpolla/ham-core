@@ -114,4 +114,17 @@ describe('parseCallsign', () => {
 		expect(data?.baseDxcc).toEqual(s5);
 		expect(data?.fullDxcc).toEqual(sv);
 	});
+
+	test('Invalid callsign', () => {
+		const data = parseCallsign('INVALID');
+		expect(data).toBe(null);
+	});
+
+	test('Invalid DXCC', () => {
+		const data = parseCallsign('XX7KJ');
+		expect(data).not.toBe(null);
+		expect(data?.base).toBe('XX7KJ');
+		expect(data?.baseDxcc).toBe(null);
+		expect(data?.fullDxcc).toBe(null);
+	});
 });
