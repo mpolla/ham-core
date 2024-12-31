@@ -132,6 +132,11 @@ describe('findDxcc', () => {
 		const result = findDxcc('S');
 		expect(result).toBe(null);
 	});
+
+	test('unknown dxcc', () => {
+		const result = findDxcc('XX7KJ');
+		expect(result).toBe(null);
+	});
 });
 
 describe('dxccEntities', () => {

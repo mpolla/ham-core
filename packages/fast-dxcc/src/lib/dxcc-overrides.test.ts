@@ -103,3 +103,123 @@ describe('toString', () => {
 		expect(ovr.toString()).toBe('');
 	});
 });
+
+describe('isEqual', () => {
+	test.each([
+		[{}, {}],
+		[{ cqz: 56 }, { cqz: 56 }],
+		[{ ituz: 27 }, { ituz: 27 }],
+		[{ cont: 'AF' }, { cont: 'AF' }],
+		[{ timez: -5.5 }, { timez: -5.5 }],
+		[
+			{ lat: 37.5, long: -122.5 },
+			{ lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		]
+	])('same %o == %o', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.isEqual(bObj)).toBe(true);
+	});
+
+	test('with null', () => {
+		const aObj = new DxccOverrides({ cont: 'AF' });
+		expect(aObj.isEqual(null)).toBe(false);
+	});
+
+	test.each([
+		[{}, { cqz: 56 }],
+		[{ cqz: 56 }, { cqz: 56, ituz: 27 }],
+		[{ ituz: 27 }, { cqz: 56, ituz: 27 }],
+		[{ cont: 'AF' }, { cqz: 56, ituz: 27, cont: 'AF' }],
+		[{ timez: -5.5 }, { cqz: 56, ituz: 27, cont: 'AF', timez: -5.5 }],
+		[
+			{ lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 2, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 2, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'SA', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.2, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.3, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.1 }
+		]
+	])('different %o != %o', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.isEqual(bObj)).toBe(false);
+	});
+});
+
+describe('isSubsetOf', () => {
+	test.each([
+		[{}, {}],
+		[{ cqz: 56 }, { cqz: 56 }],
+		[{ ituz: 27 }, { ituz: 27 }],
+		[{ cont: 'AF' }, { cont: 'AF' }],
+		[{ timez: -5.5 }, { timez: -5.5 }],
+		[
+			{ lat: 37.5, long: -122.5 },
+			{ lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[{}, { cqz: 56 }],
+		[{ cqz: 56 }, { cqz: 56, ituz: 27 }],
+		[{ ituz: 27 }, { cqz: 56, ituz: 27 }],
+		[{ cont: 'AF' }, { cqz: 56, ituz: 27, cont: 'AF' }],
+		[{ timez: -5.5 }, { cqz: 56, ituz: 27, cont: 'AF', timez: -5.5 }],
+		[
+			{ lat: 37.5, long: -122.5 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		]
+	])('is subset %o <= %o', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.isSubsetOf(bObj)).toBe(true);
+	});
+
+	test.each([
+		[{ cqz: 56 }, { cqz: 5 }],
+		[{ ituz: 27 }, { ituz: 2 }],
+		[{ cont: 'AF' }, { cont: 'SA' }],
+		[{ timez: -5.5 }, { timez: -5.2 }],
+		[{ lat: 37.5 }, { lat: 37.3 }],
+		[{ long: -122.5 }, { long: -122.1 }],
+		[{ cqz: 56 }, {}],
+		[{ cqz: 56, ituz: 27 }, { cqz: 56 }],
+		[{ cqz: 56, ituz: 27 }, { ituz: 27 }],
+		[{ cqz: 56, ituz: 27, cont: 'AF' }, { cont: 'AF' }],
+		[{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5 }, { timez: -5.5 }],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ lat: 37.5, long: -122.5 }
+		]
+	])('is not subset %o !<= %o', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.isSubsetOf(bObj)).toBe(false);
+	});
+});
