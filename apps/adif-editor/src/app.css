@@ -1,0 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.btn {
+	@apply rounded-md bg-[#444] px-4 py-2 text-sm font-medium text-[#eee] hover:bg-[#555];
+}

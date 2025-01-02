@@ -4,7 +4,7 @@ export interface AdifParsingResult {
 }
 
 export interface AdifFile {
-	header: { [field: string]: string } | undefined;
+	header?: { [field: string]: string };
 	records: { [field: string]: string }[];
 }
 
@@ -49,22 +49,27 @@ export function parseAdifFile(adi: string): AdifParsingResult {
 	};
 }
 
-export function writeAdifFile(adi: AdifFile, options: { fieldSep: string } = { fieldSep: '\n' }) {
-	const { fieldSep } = options;
+export function writeAdifFile(
+	adi: AdifFile,
+	options: { fieldSep: string; rowSep: string } = { fieldSep: '\n', rowSep: '\n\n' }
+) {
+	const { fieldSep, rowSep } = options;
 	let res = '';
 
 	if (adi.header) {
 		for (const [field, value] of Object.entries(adi.header)) {
-			res += `<${field}:${value.length}>${value}${fieldSep}`;
+			if (!value) continue;
+			res += `<${field.toUpperCase()}:${value.length}>${value}${fieldSep}`;
 		}
-		res += '<EOH>\n\n';
+		res += `<EOH>${rowSep}`;
 	}
 
 	for (const record of adi.records) {
 		for (const [field, value] of Object.entries(record)) {
-			res += `<${field}:${value.length}>${value}${fieldSep}`;
+			if (!value) continue;
+			res += `<${field.toUpperCase()}:${value.length}>${value}${fieldSep}`;
 		}
-		res += '<EOR>\n\n';
+		res += `<EOR>${rowSep}`;
 	}
 
 	return res;
