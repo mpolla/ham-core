@@ -34,7 +34,8 @@
 				Data by <a href="https://www.country-files.com/">AD1C</a>
 			</div>
 			<div>
-				Source code on <a href="https://github.com/jakobkordez/call-tester">GitHub</a>
+				Source code on
+				<a href="https://github.com/jakobkordez/ham-core/tree/main/apps/call-tester">GitHub</a>
 			</div>
 		</div>
 	</footer>
