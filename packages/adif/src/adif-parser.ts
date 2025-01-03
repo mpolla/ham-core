@@ -4,8 +4,28 @@ export interface AdifParsingResult {
 }
 
 export interface AdifFile {
-	header?: { [field: string]: string };
-	records: { [field: string]: string }[];
+	header?: {
+		ADIF_VER?: string;
+		CREATED_TIMESTAMP?: string;
+		PROGRAMID?: string;
+		PROGRAMVERSION?: string;
+		[field: string]: string | undefined;
+	};
+	records: {
+		BAND?: string;
+		BAND_RX?: string;
+		CALL?: string;
+		DXCC?: string;
+		FREQ?: string;
+		FREQ_RX?: string;
+		GRIDSQUARE?: string;
+		MODE?: string;
+		QSO_DATE?: string;
+		QSO_DATE_OFF?: string;
+		TIME_OFF?: string;
+		TIME_ON?: string;
+		[field: string]: string | undefined;
+	}[];
 }
 
 export function parseAdifFile(adi: string): AdifParsingResult {
@@ -49,26 +69,24 @@ export function parseAdifFile(adi: string): AdifParsingResult {
 	};
 }
 
-export function writeAdifFile(
-	adi: AdifFile,
-	options: { fieldSep: string; rowSep: string } = { fieldSep: '\n', rowSep: '\n\n' }
-) {
-	const { fieldSep, rowSep } = options;
+export function writeAdifFile(adi: AdifFile, options: { fieldSep?: string; rowSep?: string } = {}) {
+	const { fieldSep, rowSep } = { fieldSep: '\n', rowSep: '\n\n', ...options };
 	let res = '';
 
-	if (adi.header) {
-		for (const [field, value] of Object.entries(adi.header)) {
+	function write(fields: { [field: string]: string | undefined }) {
+		for (const [field, value] of Object.entries(fields)) {
 			if (!value) continue;
 			res += `<${field.toUpperCase()}:${value.length}>${value}${fieldSep}`;
 		}
+	}
+
+	if (adi.header) {
+		write(adi.header);
 		res += `<EOH>${rowSep}`;
 	}
 
 	for (const record of adi.records) {
-		for (const [field, value] of Object.entries(record)) {
-			if (!value) continue;
-			res += `<${field.toUpperCase()}:${value.length}>${value}${fieldSep}`;
-		}
+		write(record);
 		res += `<EOR>${rowSep}`;
 	}
 

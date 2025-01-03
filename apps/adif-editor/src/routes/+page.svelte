@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { callsignInput, getDefaultRST, numberInput } from '$lib';
+	import DownloadButton from '$lib/components/download-button.svelte';
 	import { createQsosState } from '$lib/qsos-state.svelte';
 
 	const state = createQsosState();
@@ -7,19 +8,19 @@
 	let adifField: HTMLTextAreaElement;
 </script>
 
-<div class="overflow-x-auto rounded-md bg-[#444] p-4">
+<div class="bg-base-200 overflow-x-auto rounded-md p-4">
 	{#if state.qsos}
 		<table class="w-full">
 			<thead>
 				<tr>
 					<th></th>
-					<th>Date <span class="font-light">(YYYYMMDD)</span></th>
-					<th>Time <span class="font-light">(HHmm)</span></th>
-					<th>Callsign</th>
-					<th>RST Sent</th>
-					<th>RST Recv</th>
-					<th>Band</th>
-					<th>Mode</th>
+					<th class="min-w-44">Date <span class="font-light">(YYYYMMDD)</span></th>
+					<th class="min-w-28">Time <span class="font-light">(HHmm)</span></th>
+					<th class="min-w-44">Callsign</th>
+					<th class="min-w-24">RST Sent</th>
+					<th class="min-w-24">RST Recv</th>
+					<th class="min-w-28">Band</th>
+					<th class="min-w-28">Mode</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -31,18 +32,18 @@
 						<td>
 							<input
 								use:numberInput
-								class="!w-44 {qso.qso_date && !/^\d{8}$/.test(qso.qso_date)
+								class={qso.qso_date && !/^\d{8}$/.test(qso.qso_date)
 									? 'border !border-amber-300'
-									: ''}"
+									: ''}
 								bind:value={qso.qso_date}
 							/>
 						</td>
 						<td>
 							<input
 								use:numberInput
-								class="!w-20 {qso.time_on && !/^\d{4}$/.test(qso.time_on)
+								class={qso.time_on && !/^\d{4}$/.test(qso.time_on)
 									? 'border !border-amber-300'
-									: ''}"
+									: ''}
 								bind:value={qso.time_on}
 							/>
 						</td>
@@ -55,23 +56,25 @@
 								bind:value={qso.call}
 							/>
 						</td>
-						<td><input class="!w-16" bind:value={qso.rst_sent} placeholder={defaultRst} /></td>
-						<td><input class="!w-16" bind:value={qso.rst_rcvd} placeholder={defaultRst} /></td>
+						<td><input bind:value={qso.rst_sent} placeholder={defaultRst} /></td>
+						<td><input bind:value={qso.rst_rcvd} placeholder={defaultRst} /></td>
 						<td>
-							<select class="w-16" bind:value={qso.band}>
+							<select bind:value={qso.band}>
 								{#each ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m', '6m', '4m', '2m', '70cm'] as band}
 									<option value={band}>{band}</option>
 								{/each}
 							</select>
 						</td>
 						<td>
-							<select class="w-16" bind:value={qso.mode}>
+							<select bind:value={qso.mode}>
 								{#each ['SSB', 'CW', 'FM', 'AM', 'RTTY'] as mode}
 									<option value={mode}>{mode}</option>
 								{/each}
 							</select>
 						</td>
-						<td><button onclick={() => state.removeRow(i)}>X</button></td>
+						<td>
+							<button class="btn btn-circle btn-xs" onclick={() => state.removeRow(i)}>X</button>
+						</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -89,7 +92,7 @@
 	bind:this={adifField}
 	readonly
 	value={state.adifString}
-	class="mt-6 h-60 w-full overflow-x-auto text-nowrap rounded-md bg-[#444] p-2 text-sm"
+	class="textarea bg-base-200 mt-6 h-60 w-full overflow-x-auto text-nowrap"
 ></textarea>
 
 <div class="mt-3 flex justify-center gap-2">
@@ -103,12 +106,23 @@
 	>
 		Copy to clipboard
 	</button>
+	<DownloadButton class="btn" content={state.adifString} filename="file.adi">
+		Download ADIF
+	</DownloadButton>
 </div>
 
 <style lang="postcss">
-	input,
+	input {
+		@apply input input-sm bg-transparent text-center;
+	}
+
 	select {
-		@apply w-auto rounded-md border-gray-400 bg-[#444] px-2 py-1 text-center;
+		@apply select select-sm bg-transparent;
+	}
+
+	td > input,
+	td > select {
+		@apply w-full;
 	}
 
 	td,

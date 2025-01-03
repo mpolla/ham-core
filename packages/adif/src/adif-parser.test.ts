@@ -12,7 +12,7 @@ describe('ADIF parser', () => {
 	});
 
 	test('Header', () => {
-		const res = parseAdifFile('<ADIF_VER:5>2.1.0<EOH>\n\n');
+		const res = parseAdifFile('<ADIF_VER:5>2.1.0<EOH>');
 		expect(res.warnings).toEqual([]);
 		expect(res.result).toEqual({
 			header: {
@@ -23,7 +23,7 @@ describe('ADIF parser', () => {
 	});
 
 	test('Record', () => {
-		const res = parseAdifFile('<CALL:4>N7AA<EOR>\n\n');
+		const res = parseAdifFile('<CALL:4>N7AA<EOR>');
 		expect(res.warnings).toEqual([]);
 		expect(res.result).toEqual({
 			header: undefined,
@@ -36,7 +36,7 @@ describe('ADIF parser', () => {
 	});
 
 	test('Duplicate field', () => {
-		const res = parseAdifFile('<CALL:4>N7AA<CALL:4>N7AA<EOR>\n\n');
+		const res = parseAdifFile('<CALL:4>N7AA<CALL:4>N7AA<EOR>');
 		expect(res.warnings).has.length(1);
 		expect(res.result).toEqual({
 			header: undefined,
@@ -49,7 +49,7 @@ describe('ADIF parser', () => {
 	});
 
 	test('Field length mismatch', () => {
-		const res = parseAdifFile('<CALL:5>N7AA<EOR>\n\n');
+		const res = parseAdifFile('<CALL:5>N7AA<EOR>');
 		expect(res.warnings).has.length(1);
 		expect(res.result).toEqual({
 			header: undefined,
@@ -65,7 +65,6 @@ describe('ADIF parser', () => {
 describe('ADIF writer', () => {
 	test('Empty', () => {
 		const res = writeAdifFile({
-			header: undefined,
 			records: []
 		});
 		expect(res).toEqual('');
@@ -83,7 +82,6 @@ describe('ADIF writer', () => {
 
 	test('Record', () => {
 		const res = writeAdifFile({
-			header: undefined,
 			records: [
 				{
 					CALL: 'N7AA'
@@ -96,7 +94,6 @@ describe('ADIF writer', () => {
 	test('Field separator', () => {
 		const res = writeAdifFile(
 			{
-				header: undefined,
 				records: [
 					{
 						CALL: 'N7AA'
@@ -106,5 +103,19 @@ describe('ADIF writer', () => {
 			{ fieldSep: '\r\n' }
 		);
 		expect(res).toEqual('<CALL:4>N7AA\r\n<EOR>\n\n');
+	});
+
+	test('Row separator', () => {
+		const res = writeAdifFile(
+			{
+				records: [
+					{
+						CALL: 'N7AA'
+					}
+				]
+			},
+			{ rowSep: '\r\n' }
+		);
+		expect(res).toEqual('<CALL:4>N7AA\n<EOR>\r\n');
 	});
 });

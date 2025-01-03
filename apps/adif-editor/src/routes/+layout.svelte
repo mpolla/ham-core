@@ -1,18 +1,50 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import '../app.css';
 	let { children } = $props();
+
+	const routes = [
+		{
+			name: 'QSO Entry',
+			subtitle: 'Mini QSO entry tool',
+			href: '/'
+		},
+		{
+			name: 'ADIF Viewer',
+			subtitle: 'Inspect ADIF files',
+			href: '/viewer'
+		},
+		{
+			name: 'ADIF Merger',
+			subtitle: 'Merge multiple ADIF files into one',
+			href: '/merger'
+		}
+	];
 </script>
 
 <svelte:head>
-	<title>ADIF Editor</title>
-	<meta name="description" content="ADIF Editor" />
+	<title>ADIF Tools</title>
+	<meta name="description" content="Online tool for working with ADIF files" />
 </svelte:head>
 
-<div class="h-full min-h-screen bg-[#333] text-[#eee]">
+<div class="h-full min-h-screen">
 	<div class="container mx-auto px-8 py-12">
-		<div class="mb-6 text-center">
-			<h1 class="text-3xl font-medium">ADIF Editor</h1>
-			<p class="mt-1 font-light">Mini QSO entry tool</p>
+		<div class="mb-10 flex flex-col gap-2 md:flex-row md:items-center">
+			<div class="md:mr-auto">
+				<h1 class="text-3xl font-medium">ADIF Editor</h1>
+				<p class="mt-1 font-light">{routes.find((r) => r.href === page.url.pathname)?.subtitle}</p>
+			</div>
+
+			{#each routes as route}
+				<a
+					class="btn btn-ghost rounded-lg px-4 py-2 font-medium {route.href === page.url.pathname
+						? 'btn-active'
+						: ''}"
+					href={route.href}
+				>
+					{route.name}
+				</a>
+			{/each}
 		</div>
 
 		{@render children()}
