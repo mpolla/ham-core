@@ -11,8 +11,8 @@ const config = {
 	kit: {
 		adapter: process.argv.includes('--static')
 			? staticAdapter({
-				fallback: 'index.html'
-			})
+					fallback: 'index.html'
+				})
 			: adapter()
 	}
 };

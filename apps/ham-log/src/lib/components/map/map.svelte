@@ -7,7 +7,7 @@
 	import Fa from 'svelte-fa';
 	import { faClose, faCog, faExpand, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 	import world110 from '$lib/data/geo/countries-110m.json';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { pushState } from '$app/navigation';
 	import { Projection } from '$lib/models/projection';
 	import { createMapState } from '$lib/states/map-state.svelte';
@@ -42,7 +42,7 @@
 	const sun = $derived(getSun(timeState.time));
 
 	let settingsOpen = $state(false);
-	const mapExpanded = $derived($page.state.showExpandedMap);
+	const mapExpanded = $derived(page.state.showExpandedMap);
 
 	const projection = $derived(createProjection(mapState.projection, center));
 	const path = $derived(geoPath(projection));

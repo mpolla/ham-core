@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pushState, replaceState } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Error from '$lib/components/error.svelte';
 	import Loading from '$lib/components/loading.svelte';
 	import Modal from '$lib/components/modal.svelte';
@@ -10,7 +10,7 @@
 
 	const logbook = getLogbookContext();
 
-	const qsoId = $derived($page.state.showQsoModal!);
+	const qsoId = $derived(page.state.showQsoModal!);
 	const qsoPromise = $derived(getQsos().eq('id', qsoId).single());
 
 	function deleteQso() {
@@ -36,10 +36,10 @@
 		{#if qso.data}
 			<QsoView
 				qso={qso.data}
-				onDelete={() => pushState('', { ...$page.state, showConfirmModal: true })}
+				onDelete={() => pushState('', { ...page.state, showConfirmModal: true })}
 			/>
 
-			{#if $page.state.showConfirmModal}
+			{#if page.state.showConfirmModal}
 				<Modal onClose={() => history.back()} title="Delete QSO">
 					<p>Are you sure you want to delete this QSO?</p>
 					<div class="mt-2 flex justify-end gap-4">

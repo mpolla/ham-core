@@ -11,7 +11,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import LogbookForm from './logbook-form.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { pushState, replaceState } from '$app/navigation';
 	import Modal from '$lib/components/modal.svelte';
 	import { supabase } from '$lib/supabase';
@@ -21,8 +21,8 @@
 	const logsState = getLogsContext();
 	const logbook = getLogbookContext();
 
-	const logbookModal = $derived($page.state.logbookModal);
-	const deleteConfirmation = $derived($page.state.showConfirmModal);
+	const logbookModal = $derived(page.state.logbookModal);
+	const deleteConfirmation = $derived(page.state.showConfirmModal);
 
 	function deleteLog() {
 		if (!logbook.selectedLog) return;

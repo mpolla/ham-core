@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getUserContext } from '$lib/states/user-state.svelte';
 
 	const user = getUserContext();
 
 	$effect(() => {
 		if (user.loggedIn == true) {
-			const redirect = $page.url.searchParams.get('redirect');
+			const redirect = page.url.searchParams.get('redirect');
 			if (redirect) {
 				goto(redirect);
 			} else {

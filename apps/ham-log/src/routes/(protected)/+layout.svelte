@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getUserContext } from '$lib/states/user-state.svelte';
 	import Fa from 'svelte-fa';
 	import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -50,7 +50,7 @@
 
 	$effect(() => {
 		if (user.loggedIn === false) {
-			const p = $page.url.pathname;
+			const p = page.url.pathname;
 			const r = p.match(/^\/(?:log)?$/) ? '' : `?redirect=${p}`;
 			goto(`/login${r}`);
 		}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getLogbookContext } from '$lib/states/logbook-state.svelte';
 	import type { IQso } from '$lib/supabase';
 	import { dxccEntities, findDxcc } from '@ham-core/fast-dxcc';
@@ -131,6 +131,6 @@
 	</div>
 </div>
 
-{#if $page.state.showQsoModal}
+{#if page.state.showQsoModal}
 	<QsoModal />
 {/if}

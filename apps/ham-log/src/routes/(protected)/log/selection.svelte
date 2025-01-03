@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
 	import ExportAdiModal from './adif-export/adif-export-modal.svelte';
 	import GenCsvModal from './gen-csv-qsl/gen-csv-modal.svelte';
@@ -38,10 +38,10 @@
 	</div>
 {/if}
 
-{#if $page.state.showQslModal}
+{#if page.state.showQslModal}
 	<GenCsvModal />
 {/if}
 
-{#if $page.state.showAdiModal}
+{#if page.state.showAdiModal}
 	<ExportAdiModal />
 {/if}

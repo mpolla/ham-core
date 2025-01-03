@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getSecondarySuffixDescription, parseCallsign } from '$lib/callsign';
 	import { findDxcc } from '@ham-core/fast-dxcc';
 	import StyledInput from '../components/styled-input.svelte';
 	import DxccEntityInfo from '../components/dxcc-entity-info.svelte';
 	import { browser } from '$app/environment';
 
-	let query = new URLSearchParams(browser ? $page.url.searchParams.toString() : '');
+	let query = new URLSearchParams(browser ? page.url.searchParams.toString() : '');
 	let callsign = $state(query.get('c') ?? '');
 
 	let callsignData = $derived(parseCallsign(callsign));
