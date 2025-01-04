@@ -2,11 +2,12 @@
 	import { getLogsContext } from '$lib/states/logs-state.svelte';
 	import { getQsos, type IQso } from '$lib/supabase';
 	import { getSelectedQsosContext } from '$lib/states/selected-state.svelte';
-	import { generateText, generateUrl } from '.';
+	import { generateText } from '.';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import Loading from '$lib/components/loading.svelte';
 	import Error from '$lib/components/error.svelte';
+	import DownloadButton from '$lib/components/download-button.svelte';
 
 	const logs = getLogsContext();
 	const selected = getSelectedQsosContext();
@@ -26,10 +27,8 @@
 			});
 	});
 
-	const downloadUrl = $derived(
-		qsos && logs.logs && selected.state.size > 0
-			? generateUrl(generateText(qsos, logs.logs))
-			: undefined
+	const downloadContent = $derived(
+		qsos && logs.logs && selected.state.size > 0 ? generateText(qsos, logs.logs) : undefined
 	);
 </script>
 
@@ -73,14 +72,7 @@
 	</table>
 </div>
 
-{#if downloadUrl}
-	<a href={downloadUrl} download="export.adi" class="btn btn-primary mt-4">
-		<Fa icon={faDownload} />
-		<span>Download ADI file</span>
-	</a>
-{:else}
-	<button class="btn btn-primary mt-4" disabled>
-		<Fa icon={faDownload} />
-		<span>Download ADI file</span>
-	</button>
-{/if}
+<DownloadButton content={downloadContent} filename="export.adi" class="btn btn-primary mt-4">
+	<Fa icon={faDownload} />
+	<span>Download ADI file</span>
+</DownloadButton>

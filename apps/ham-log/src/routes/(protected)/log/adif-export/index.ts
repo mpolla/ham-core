@@ -15,8 +15,3 @@ export function generateText(qsos: IQso[], logs: ILog[]): string {
 	};
 	return writeAdifFile({ header, records: res });
 }
-
-export function generateUrl(adi: string): string {
-	const blob = new Blob([adi], { type: 'text/plain' });
-	return URL.createObjectURL(blob);
-}

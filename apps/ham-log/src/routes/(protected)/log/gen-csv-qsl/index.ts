@@ -86,8 +86,3 @@ export function generateText(qsos: IQso[], logs: ILog[]): string {
 			.join('\n')
 	);
 }
-
-export function generateUrl(csv: string): string {
-	const blob = new Blob([csv], { type: 'text/csv' });
-	return URL.createObjectURL(blob);
-}
