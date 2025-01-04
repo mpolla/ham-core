@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
 	type Props = {
@@ -37,8 +38,9 @@
 	type="text"
 	onfocus={(e) => {
 		const field = e.currentTarget;
-		if (canFill) field.value = defaultValue ?? '';
-		if (canSelect) field.setSelectionRange(defaultStartSel ?? 0, defaultEndSel ?? 0);
+		if (canFill) value = defaultValue ?? '';
+		if (canSelect)
+			tick().then(() => field.setSelectionRange(defaultStartSel ?? 0, defaultEndSel ?? 0));
 	}}
 	bind:value
 	placeholder={label}
