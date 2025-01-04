@@ -49,37 +49,43 @@ export class Qso implements IQso {
 	toAdif(log?: ILog): { [field: string]: string } {
 		let time = this.datetime.substring(11, 19).replace(/:/g, '');
 		if (time.substring(4) === '00') time = time.substring(0, 4);
-		const ret = {
-			...Object.fromEntries(Object.entries(this.other).map(([k, v]) => [k, JSON.stringify(v)])),
-			BAND: this.band || undefined,
+		const ret: { [field: string]: string | null | undefined } = {
+			BAND: this.band,
 			CALL: this.call,
-			COMMENT: this.comment || undefined,
-			CONT: this.cont || undefined,
-			COUNTRY: this.country || undefined,
+			COMMENT: this.comment,
+			CONT: this.cont,
+			COUNTRY: this.country,
 			QSO_DATE: this.datetime.substring(0, 10).replace(/-/g, ''),
 			TIME_ON: time,
 			DXCC: this.dxcc?.toString(),
 			FREQ: (this.frequency / 1e6).toString(),
 			MODE: this.mode,
-			RST_RCVD: this.rst_rcvd || undefined,
-			RST_SENT: this.rst_sent || undefined,
+			RST_RCVD: this.rst_rcvd,
+			RST_SENT: this.rst_sent,
 			TX_PWR: this.power?.toString(),
-			GRIDSQUARE: this.gridsquare || undefined,
+			GRIDSQUARE: this.gridsquare,
 			// Log info
 			STATION_CALLSIGN: log?.call,
 			// TODO OPERATOR
 			// TODO OWNER_CALLSIGN
 			MY_COUNTRY: log?.country,
 			MY_DXCC: log?.dxcc.toString(),
-			MY_CQ_ZONE: log?.cqz?.toString() || undefined,
-			MY_ITU_ZONE: log?.ituz?.toString() || undefined,
-			MY_GRIDSQUARE: log?.grid || undefined,
-			MY_NAME: log?.name || undefined
+			MY_CQ_ZONE: log?.cqz?.toString(),
+			MY_ITU_ZONE: log?.ituz?.toString(),
+			MY_GRIDSQUARE: log?.grid,
+			MY_NAME: log?.name
 			// TODO MY_RIG
 		};
-		return Object.fromEntries(Object.entries(ret).filter(([, v]) => v !== undefined)) as {
-			[field: string]: string;
-		};
+
+		for (const [k, v] of Object.entries(this.other)) {
+			ret[k] ||= v?.toString();
+		}
+
+		return Object.fromEntries(
+			Object.entries(ret)
+				.map(([k, v]) => [k, v || undefined])
+				.filter(([, v]) => !!v)
+		);
 	}
 
 	static fromAdif(adif: { [field: string]: string }): Qso {
