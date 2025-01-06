@@ -12,7 +12,7 @@
 	import { Projection } from '$lib/models/projection';
 	import { createMapState } from '$lib/states/map-state.svelte';
 	import { createTimeState } from '$lib/states/time-state.svelte';
-	import { createProjection, getSun, gridFields, gridSquares } from '.';
+	import { createProjection, getSun, gridFields, gridSquares, mapGridsquare } from '.';
 
 	const mapState = createMapState();
 
@@ -21,7 +21,9 @@
 		center?: Point;
 		points?: Point[];
 		lines?: [Point, Point][];
+		gridSquareColors?: Record<string, string>;
 		countryColors?: Record<string, string>;
+		defaultCountryColor?: string;
 		class?: string;
 	}
 
@@ -29,12 +31,14 @@
 		center = [0, 0],
 		points = [],
 		lines = [],
+		gridSquareColors = {},
 		countryColors = {},
+		defaultCountryColor = '#9b9',
 		class: className = ''
 	}: Props = $props();
 
 	function getColor(name: string) {
-		return countryColors[name] ?? '#9b9';
+		return countryColors[name] ?? defaultCountryColor;
 	}
 
 	// Sun position
@@ -130,6 +134,11 @@
 						stroke-width={(precise ? 2 : 1) / Math.max(transform.k, 0.5)}
 					/>
 				{/if}
+
+				<!-- Gridsquare colors -->
+				{#each Object.entries(gridSquareColors ?? {}) as [k, v]}
+					<path d={path(mapGridsquare(k))} fill={v} stroke="none" />
+				{/each}
 
 				<!-- Lines -->
 				{#each lines as line}

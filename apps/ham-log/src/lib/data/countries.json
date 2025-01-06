@@ -155,7 +155,7 @@
 	["Nigeria"],
 	["Norway"],
 	["Oman"],
-	["Pakistan"],
+	["Pakistan", "Siachen Glacier"],
 	["Palestine"],
 	["Panama"],
 	["Papua New Guinea"],
@@ -233,8 +233,10 @@
 	["San Marino"],
 	["Scarborough Reef"],
 	["Seychelles"],
+	["Singapore"],
 	["Sint Maarten"],
 	["Spratly Islands", "Spratly Is."],
 	["Tonga"],
-	["Tuvalu"]
+	["Tuvalu"],
+	["Fr. S. Antarctic Lands", "Kerguelen Islands", "Crozet Island", "Amsterdam & St. Paul Is."]
 ]

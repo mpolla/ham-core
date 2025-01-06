@@ -42,6 +42,15 @@ export function locatorToLongLat(locator: string, center: boolean = false): [num
 	return [long, lat];
 }
 
+export function getResolution(locator: string): [number, number] {
+	let div = 1;
+	for (let i = 2; i < locator.length; i += 2) {
+		const mult = i % 4 != 0 ? 10 : 24;
+		div *= mult;
+	}
+	return [20 / div, 10 / div];
+}
+
 export function getDistanceBetweenLocators(loc1: string, loc2: string): number {
 	const [long1, lat1] = locatorToLongLat(loc1, true);
 	const [long2, lat2] = locatorToLongLat(loc2, true);

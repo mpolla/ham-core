@@ -1,9 +1,11 @@
 import { Projection } from '$lib/models/projection';
+import { getResolution, locatorToLongLat } from '$lib/utils/locator-util';
 import {
 	geoAzimuthalEqualArea,
 	geoAzimuthalEquidistant,
 	geoGraticule,
 	geoMercator,
+	type GeoPermissibleObjects,
 	type GeoProjection
 } from 'd3-geo';
 
@@ -50,3 +52,24 @@ export function getSun(date: Date) {
 
 export const gridFields = geoGraticule().step([20, 10])();
 export const gridSquares = geoGraticule().step([2, 1])();
+
+export function mapGridsquare(locator: string): GeoPermissibleObjects {
+	const [lon, lat] = locatorToLongLat(locator);
+	const [dLon, dLat] = getResolution(locator);
+	const ltr =
+		locator.length < 4 ? [...new Array(10)].map((_, i) => [lon + (dLon * i) / 10, lat + dLat]) : [];
+	const rtl =
+		locator.length < 4 ? [...new Array(10)].map((_, i) => [lon + dLon * (1 - i / 10), lat]) : [];
+	return {
+		type: 'LineString',
+		coordinates: [
+			[lon, lat],
+			[lon, lat + dLat],
+			...ltr,
+			[lon + dLon, lat + dLat],
+			[lon + dLon, lat],
+			...rtl,
+			[lon, lat]
+		]
+	};
+}

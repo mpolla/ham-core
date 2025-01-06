@@ -13,13 +13,17 @@
 
 <div class="mx-auto flex max-w-5xl flex-col gap-10">
 	<div>
-		<div class="flex flex-wrap items-end gap-4">
+		<div class="flex flex-wrap items-end justify-between gap-4">
 			<LogbookSelect />
-			<a href="/log/adif-import" class="btn btn-sm ml-auto">Import ADI</a>
-			<a href="/log/settings" class="btn btn-sm">
-				<Fa icon={faCog} />
-				<span>Settings</span>
-			</a>
+
+			<div class="flex flex-wrap gap-3">
+				<a href="/log/map" class="btn btn-sm">Map</a>
+				<a href="/log/adif-import" class="btn btn-sm">Import ADI</a>
+				<a href="/log/settings" class="btn btn-sm">
+					<Fa icon={faCog} />
+					<span>Settings</span>
+				</a>
+			</div>
 		</div>
 
 		<div class="flex justify-end gap-4">

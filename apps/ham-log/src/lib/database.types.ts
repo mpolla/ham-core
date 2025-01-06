@@ -46,15 +46,7 @@ export type Database = {
 					title?: string | null;
 					user_id?: string | null;
 				};
-				Relationships: [
-					{
-						foreignKeyName: 'profile_user_id_fkey';
-						columns: ['user_id'];
-						isOneToOne: false;
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					}
-				];
+				Relationships: [];
 			};
 			qso: {
 				Row: {
@@ -130,13 +122,6 @@ export type Database = {
 						isOneToOne: false;
 						referencedRelation: 'log';
 						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'qso_user_id_fkey';
-						columns: ['user_id'];
-						isOneToOne: false;
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -169,13 +154,6 @@ export type Database = {
 						isOneToOne: false;
 						referencedRelation: 'log';
 						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'user_info_user_id_fkey';
-						columns: ['user_id'];
-						isOneToOne: true;
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -207,6 +185,21 @@ export type Database = {
 					dxcc: number | null;
 				};
 				Relationships: [];
+			};
+			qso_grid_log_summary: {
+				Row: {
+					grid: string | null;
+					log_id: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'qso_profile_id_fkey';
+						columns: ['log_id'];
+						isOneToOne: false;
+						referencedRelation: 'log';
+						referencedColumns: ['id'];
+					}
+				];
 			};
 			qso_grid_summary: {
 				Row: {
@@ -306,4 +299,19 @@ export type Enums<
 	? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
 	: PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
 		? PublicSchema['Enums'][PublicEnumNameOrOptions]
+		: never;
+
+export type CompositeTypes<
+	PublicCompositeTypeNameOrOptions extends
+		| keyof PublicSchema['CompositeTypes']
+		| { schema: keyof Database },
+	CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+		schema: keyof Database;
+	}
+		? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+		: never = never
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+	? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+	: PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
+		? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
 		: never;
