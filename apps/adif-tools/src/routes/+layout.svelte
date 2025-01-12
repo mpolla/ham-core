@@ -31,7 +31,7 @@
 	<div class="container mx-auto px-8 py-12">
 		<div class="mb-10 flex flex-col gap-2 md:flex-row md:items-center">
 			<div class="md:mr-auto">
-				<h1 class="text-3xl font-medium">ADIF Editor</h1>
+				<h1 class="text-3xl font-medium">ADIF Tools</h1>
 				<p class="mt-1 font-light">{routes.find((r) => r.href === page.url.pathname)?.subtitle}</p>
 			</div>
 

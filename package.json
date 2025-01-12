@@ -9,7 +9,7 @@
     "build:all": "pnpm -r run build",
     "build:ham-log": "pnpm --filter ham-log build",
     "build:call-tester": "pnpm --filter call-tester build",
-    "dev:adif-editor": "pnpm --parallel --filter \"@ham-core/*\"  --filter adif-editor dev",
+    "dev:adif-tools": "pnpm --parallel --filter \"@ham-core/*\"  --filter adif-tools dev",
     "dev:ham-log": "pnpm --parallel --filter \"@ham-core/*\" --filter ham-log dev",
     "dev:call-tester": "pnpm --parallel --filter \"@ham-core/*\" --filter call-tester dev",
     "test": "pnpm -r test -- --run"

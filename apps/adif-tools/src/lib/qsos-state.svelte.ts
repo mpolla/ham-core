@@ -81,7 +81,7 @@ export function createQsosState() {
 				{
 					header: {
 						ADIF_VER: '3.1.5',
-						PROGRAMID: 'ADIF Editor'
+						PROGRAMID: 'ADIF Tools'
 					},
 					records: mapped
 				},

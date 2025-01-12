@@ -8,7 +8,7 @@
 	let adifField: HTMLTextAreaElement;
 </script>
 
-<div class="bg-base-200 overflow-x-auto rounded-md p-4">
+<div class="overflow-x-auto rounded-md bg-base-200 p-4">
 	{#if state.qsos}
 		<table class="w-full">
 			<thead>
@@ -92,7 +92,7 @@
 	bind:this={adifField}
 	readonly
 	value={state.adifString}
-	class="textarea bg-base-200 mt-6 h-60 w-full overflow-x-auto text-nowrap"
+	class="textarea mt-6 h-60 w-full overflow-x-auto text-nowrap bg-base-200"
 ></textarea>
 
 <div class="mt-3 flex justify-center gap-2">

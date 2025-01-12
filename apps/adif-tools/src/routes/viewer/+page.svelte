@@ -64,7 +64,7 @@
 			onclick={() => (qsoDetails = undefined)}
 		></button>
 
-		<div class="bg-base-100 relative m-10 max-h-[90vh] min-w-[60%] overflow-y-auto rounded-lg p-10">
+		<div class="relative m-10 max-h-[90vh] min-w-[60%] overflow-y-auto rounded-lg bg-base-100 p-10">
 			<h1 class="mb-8 text-2xl">QSO Details</h1>
 
 			<table class="table w-full">

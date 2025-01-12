@@ -48,7 +48,7 @@
 							.slice(0, 19)
 							.replace('T', ' ')
 							.replaceAll(/-|:/g, ''),
-						PROGRAMID: 'ADIF Editor'
+						PROGRAMID: 'ADIF Tools'
 					},
 					records: parsed.map((p) => p.result.records).flat()
 				},
