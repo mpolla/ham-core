@@ -18,12 +18,19 @@
 			name: 'ADIF Merger',
 			subtitle: 'Merge multiple ADIF files into one',
 			href: '/merger'
+		},
+		{
+			name: 'Dupe Checker',
+			subtitle: 'Check for duplicate QSOs',
+			href: '/dupes'
 		}
 	];
+
+	const current = $derived(routes.find((r) => r.href === page.url.pathname));
 </script>
 
 <svelte:head>
-	<title>ADIF Tools</title>
+	<title>{current?.name} | ADIF Tools</title>
 	<meta name="description" content="Online tool for working with ADIF files" />
 </svelte:head>
 
@@ -31,13 +38,13 @@
 	<div class="container mx-auto px-8 py-12">
 		<div class="mb-10 flex flex-col gap-2 md:flex-row md:items-center">
 			<div class="md:mr-auto">
-				<h1 class="text-3xl font-medium">ADIF Tools</h1>
-				<p class="mt-1 font-light">{routes.find((r) => r.href === page.url.pathname)?.subtitle}</p>
+				<h1 class="text-3xl font-medium">{current?.name}</h1>
+				<p class="mt-1 font-light">{current?.subtitle}</p>
 			</div>
 
 			{#each routes as route}
 				<a
-					class="btn btn-ghost rounded-lg px-4 py-2 font-medium {route.href === page.url.pathname
+					class="btn btn-ghost rounded-lg px-4 py-2 font-medium {route === current
 						? 'btn-active'
 						: ''}"
 					href={route.href}

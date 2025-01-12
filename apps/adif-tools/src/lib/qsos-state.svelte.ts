@@ -55,7 +55,12 @@ export function createQsosState() {
 	});
 
 	return {
-		qsos,
+		get qsos() {
+			return qsos;
+		},
+		clearAll() {
+			qsos = [];
+		},
 		addRow,
 		removeRow,
 		get adifString() {

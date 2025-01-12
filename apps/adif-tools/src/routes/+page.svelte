@@ -85,6 +85,16 @@
 </div>
 
 <div class="mt-3 flex justify-center">
+	<button
+		class="btn"
+		onclick={() => {
+			if (confirm('Are you sure you want to clear all qsos?')) {
+				state.clearAll();
+			}
+		}}
+	>
+		Clear all
+	</button>
 	<button class="btn" onclick={state.addRow}>+ Add row</button>
 </div>
 
