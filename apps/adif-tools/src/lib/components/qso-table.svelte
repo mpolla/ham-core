@@ -1,21 +1,11 @@
 <script lang="ts">
+	import { parseAdifDateTime } from '@ham-core/adif';
+
 	type Qso = { [key: string]: string | undefined };
 
 	let { qsos }: { qsos: Qso[] } = $props();
 
 	let qsoDetails = $state<Qso>();
-
-	function parseDateTime(date?: string, time?: string) {
-		if (!date || !time) return '';
-
-		const hh = time.slice(0, 2);
-		const mm = time.slice(2, 4);
-		const yyyy = date.slice(0, 4);
-		const mmm = date.slice(4, 6);
-		const dd = date.slice(6, 8);
-
-		return `${yyyy}-${mmm}-${dd} ${hh}:${mm}`;
-	}
 </script>
 
 <div class="overflow-x-auto">
@@ -34,7 +24,7 @@
 			{#each qsos as qso, i}
 				<tr>
 					<td>{i + 1}</td>
-					<td>{parseDateTime(qso.QSO_DATE, qso.TIME_ON)}</td>
+					<td>{parseAdifDateTime(qso)?.toISOString().slice(0, 16).replace('T', ' ')}</td>
 					<td>{qso.CALL}</td>
 					<td>{qso.FREQ ?? qso.BAND}</td>
 					<td>{qso.MODE}</td>

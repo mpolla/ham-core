@@ -91,6 +91,28 @@ describe('ADIF writer', () => {
 		expect(res).toEqual('<CALL:4>N7AA\n<EOR>\n\n');
 	});
 
+	test('Empty record field', () => {
+		const res = writeAdifFile({
+			records: [
+				{
+					CALL: ''
+				}
+			]
+		});
+		expect(res).toEqual('<EOR>\n\n');
+	});
+
+	test('Undefined record field', () => {
+		const res = writeAdifFile({
+			records: [
+				{
+					CALL: undefined
+				}
+			]
+		});
+		expect(res).toEqual('<EOR>\n\n');
+	});
+
 	test('Field separator', () => {
 		const res = writeAdifFile(
 			{

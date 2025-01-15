@@ -26,47 +26,47 @@
 			</thead>
 			<tbody>
 				{#each state.qsos as qso, i}
-					{@const defaultRst = getDefaultRST(qso.mode)}
+					{@const defaultRst = getDefaultRST(qso.MODE)}
 					<tr>
 						<td>{i + 1}</td>
 						<td>
 							<input
 								use:numberInput
-								class={qso.qso_date && !/^\d{8}$/.test(qso.qso_date)
+								class={qso.QSO_DATE && !/^\d{8}$/.test(qso.QSO_DATE)
 									? 'border !border-amber-300'
 									: ''}
-								bind:value={qso.qso_date}
+								bind:value={qso.QSO_DATE}
 							/>
 						</td>
 						<td>
 							<input
 								use:numberInput
-								class={qso.time_on && !/^\d{4}$/.test(qso.time_on)
+								class={qso.TIME_ON && !/^\d{4}$/.test(qso.TIME_ON)
 									? 'border !border-amber-300'
 									: ''}
-								bind:value={qso.time_on}
+								bind:value={qso.TIME_ON}
 							/>
 						</td>
 						<td>
 							<input
 								use:callsignInput
-								class="font-mono {!/^[\dA-Z/]{3,}$/.test(qso.call)
+								class="font-mono {!/^[\dA-Z/]{3,}$/.test(qso.CALL ?? '')
 									? 'border !border-amber-300'
 									: ''}"
-								bind:value={qso.call}
+								bind:value={qso.CALL}
 							/>
 						</td>
-						<td><input bind:value={qso.rst_sent} placeholder={defaultRst} /></td>
-						<td><input bind:value={qso.rst_rcvd} placeholder={defaultRst} /></td>
+						<td><input bind:value={qso.RST_SENT} placeholder={defaultRst} /></td>
+						<td><input bind:value={qso.RST_RCVD} placeholder={defaultRst} /></td>
 						<td>
-							<select bind:value={qso.band}>
+							<select bind:value={qso.BAND}>
 								{#each ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m', '6m', '4m', '2m', '70cm'] as band}
 									<option value={band}>{band}</option>
 								{/each}
 							</select>
 						</td>
 						<td>
-							<select bind:value={qso.mode}>
+							<select bind:value={qso.MODE}>
 								{#each ['SSB', 'CW', 'FM', 'AM', 'RTTY'] as mode}
 									<option value={mode}>{mode}</option>
 								{/each}

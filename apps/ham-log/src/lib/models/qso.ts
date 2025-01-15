@@ -1,5 +1,6 @@
 import type { Json } from '$lib/database.types';
 import type { ILog, IQso } from '$lib/supabase';
+import { formatAdifDateTime, parseAdifDateTime } from '@ham-core/adif';
 
 export class Qso implements IQso {
 	public band: string | null;
@@ -47,15 +48,14 @@ export class Qso implements IQso {
 	}
 
 	toAdif(log?: ILog): { [field: string]: string } {
-		let time = this.datetime.substring(11, 19).replace(/:/g, '');
-		if (time.substring(4) === '00') time = time.substring(0, 4);
+		const { date, time } = formatAdifDateTime(new Date(this.datetime));
 		const ret: { [field: string]: string | null | undefined } = {
 			BAND: this.band,
 			CALL: this.call,
 			COMMENT: this.comment,
 			CONT: this.cont,
 			COUNTRY: this.country,
-			QSO_DATE: this.datetime.substring(0, 10).replace(/-/g, ''),
+			QSO_DATE: date,
 			TIME_ON: time,
 			DXCC: this.dxcc?.toString(),
 			FREQ: (this.frequency / 1e6).toString(),
@@ -123,7 +123,7 @@ export class Qso implements IQso {
 			comment: adif.COMMENT,
 			cont: adif.CONT,
 			country: adif.COUNTRY,
-			datetime: this.formatAdifDateTime(adif.QSO_DATE, adif.TIME_ON),
+			datetime: parseAdifDateTime(adif)!.toISOString(),
 			deleted_at: null,
 			dxcc: adif.DXCC ? +adif.DXCC : null,
 			frequency: parseFloat(adif.FREQ) * 1e6,
@@ -139,11 +139,5 @@ export class Qso implements IQso {
 			created_at: '',
 			updated_at: ''
 		});
-	}
-
-	private static formatAdifDateTime(date: string, time: string): string {
-		date = `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)}`;
-		time = `${time.substring(0, 2)}:${time.substring(2, 4)}:${time.substring(4, 6) || '00'}`;
-		return `${date}T${time}Z`;
 	}
 }

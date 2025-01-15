@@ -48,7 +48,7 @@ export function numberInput(element: HTMLInputElement) {
 	return filteredInput(/[^0-9]/g)(element);
 }
 
-export function getDefaultRST(mode: string) {
+export function getDefaultRST(mode?: string) {
 	switch (mode) {
 		case 'SSB':
 		case 'AM':

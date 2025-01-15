@@ -1,3 +1,5 @@
+import { AdifRecord } from './adif-record';
+
 export interface AdifParsingResult {
 	warnings: string[];
 	result: AdifFile;
@@ -11,21 +13,7 @@ export interface AdifFile {
 		PROGRAMVERSION?: string;
 		[field: string]: string | undefined;
 	};
-	records: {
-		BAND?: string;
-		BAND_RX?: string;
-		CALL?: string;
-		DXCC?: string;
-		FREQ?: string;
-		FREQ_RX?: string;
-		GRIDSQUARE?: string;
-		MODE?: string;
-		QSO_DATE?: string;
-		QSO_DATE_OFF?: string;
-		TIME_OFF?: string;
-		TIME_ON?: string;
-		[field: string]: string | undefined;
-	}[];
+	records: AdifRecord[];
 }
 
 export function parseAdifFile(adi: string): AdifParsingResult {
