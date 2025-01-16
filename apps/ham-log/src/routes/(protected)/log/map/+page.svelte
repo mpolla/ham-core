@@ -6,17 +6,35 @@
 	import countriesDict from '$lib/data/countries.json';
 	import { MapMode } from './map-mode';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
+	import { createPskReporterState } from '$lib/states/psk-reporter-state.svelte';
 
 	const logbook = getLogbookContext();
+	const pskReporter = createPskReporterState(logbook);
 
-	let mode = $state(MapMode.none);
+	let mode = $state<MapMode>(MapMode.none);
 
 	let gridsquares = $state<string[]>([]);
 	let countries = $state<string[]>([]);
+	const reports = $derived.by(() => {
+		if (mode != MapMode.pskReports || !pskReporter.reports) return [];
+		const mapLoc = (locator: string) => locatorToLongLat(locator.split(' ')[0].slice(0, 6));
+		return pskReporter.reports.receptionReport
+			.map((r) => {
+				try {
+					const rx = mapLoc(r.receiverLocator);
+					const tx = mapLoc(r.senderLocator);
+					return [rx, tx] as [[number, number], [number, number]];
+				} catch (e) {
+					console.error(e);
+				}
+			})
+			.filter((r) => !!r);
+	});
 
 	$effect(() => {
 		if (mode == MapMode.grid) {
 			countries = [];
+			pskReporter.autoUpdate = false;
 			(async () => {
 				const result: string[] = [];
 				for (let i = 0; i < 3; i++) {
@@ -31,6 +49,7 @@
 			})();
 		} else if (mode == MapMode.country) {
 			gridsquares = [];
+			pskReporter.autoUpdate = false;
 			const req = supabase.from('qso').select('country, count()');
 			if (logbook.logId) req.eq('log_id', logbook.logId);
 			req.then(({ data }) => {
@@ -42,9 +61,14 @@
 					else countries.push(c);
 				}
 			});
+		} else if (mode == MapMode.pskReports) {
+			gridsquares = [];
+			countries = [];
+			pskReporter.autoUpdate = true;
 		} else if (mode == MapMode.none) {
 			gridsquares = [];
 			countries = [];
+			pskReporter.autoUpdate = false;
 		}
 	});
 
@@ -69,4 +93,6 @@
 	gridSquareColors={Object.fromEntries(gridsquares.map((k) => [k, '#00ff0044']))}
 	countryColors={Object.fromEntries(countries.map((k) => [k, '#33dd33']))}
 	defaultCountryColor={countries.length ? '#dd3333' : undefined}
+	points={reports.map((p) => p[1])}
+	lines={reports}
 />

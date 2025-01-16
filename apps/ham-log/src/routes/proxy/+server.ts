@@ -1,6 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
 
-const allowedOrigins = ['https://kp.gfz-potsdam.de'];
+const allowedOrigins = [
+	'https://kp.gfz-potsdam.de',
+	'https://pskreporter.info',
+	'https://retrieve.pskreporter.info'
+];
 
 export const GET: RequestHandler = async ({ url }) => {
 	const b64 = url.searchParams.get('url');
