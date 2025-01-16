@@ -1,0 +1,37 @@
+{
+  "vite.autoStart": false,
+  "cSpell.words": [
+    "adi",
+    "adif",
+    "beforeinput",
+    "callsign",
+    "callsigns",
+    "daisyui",
+    "datetime",
+    "dxcc",
+    "dxccs",
+    "fortawesome",
+    "gridsquare",
+    "gridsquares",
+    "ilike",
+    "ituz",
+    "qsos",
+    "rcvd",
+    "RTTY",
+    "supabase",
+    "topojson",
+    "typia",
+    "unlisten",
+    "faXmarkCircle"
+  ],
+  "cSpell.files": ["src/**/*.{js,ts,svelte}"],
+  "cSpell.ignorePaths": ["src/lib/database.types.ts"],
+  "workbench.editor.customLabels.patterns": {
+    "**/src/routes/+page.*": "Page /",
+    "**/src/routes/+layout.*": "Layout /",
+    "**/src/routes/+server.*": "Route /",
+    "**/src/routes/*/**/+page.*": "Page /${dirname}",
+    "**/src/routes/*/**/+layout.*": "Layout /${dirname}",
+    "**/src/routes/*/**/+server.*": "Route /${dirname}"
+  }
+}
