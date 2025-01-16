@@ -1,14 +1,12 @@
 <script lang="ts">
-	import { SolarClient, type CombinedSolarData } from '$lib/data/solar-client';
+	import { SolarClient, type CombinedSolarData } from '$lib/repositories/solar-client';
 	import { createTimeState } from '$lib/states/time-state.svelte';
-	import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 
 	let solarState = $state<CombinedSolarData>();
 	createTimeState(60 * 60 * 1000, true, (d) => {
-		fetch(`/solar?date=${d.toISOString()}`)
-			.then((r) => r.json())
-			.then((d) => (solarState = d))
-			.catch(() => new SolarClient(tauriFetch).getAll(d).then((res) => (solarState = res)));
+		SolarClient.create()
+			.getAll(d)
+			.then((res) => (solarState = res));
 	});
 </script>
 

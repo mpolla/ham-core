@@ -5,6 +5,11 @@
  * https://www.swpc.noaa.gov/sites/default/files/images/u2/TheK-index.pdf
  */
 
+import { browser } from '$app/environment';
+import { isTauri } from '@tauri-apps/api/core';
+import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
+import { fetch as proxyFetch } from '$lib/utils/proxy-fetch';
+
 type SolarIndex =
 	| 'Kp'
 	| 'ap'
@@ -33,7 +38,13 @@ export interface CombinedSolarData {
 }
 
 export class SolarClient {
-	constructor(private readonly fetcher: typeof fetch) {}
+	static create(): SolarClient {
+		if (browser && isTauri()) return new SolarClient(tauriFetch);
+		if (browser) return new SolarClient(proxyFetch);
+		return new SolarClient(fetch);
+	}
+
+	constructor(private readonly fetcher: typeof proxyFetch) {}
 
 	/**
 	 * Gets the latest planetary K (Kp) index
@@ -84,7 +95,7 @@ export class SolarClient {
 		]);
 		return {
 			time: new Date(
-				Math.max(...[Kp.time.valueOf(), Ap.time.valueOf(), SN.time.valueOf(), flux.time.valueOf()])
+				Math.max(Kp.time.valueOf(), Ap.time.valueOf(), SN.time.valueOf(), flux.time.valueOf())
 			),
 			Kp: Kp.value,
 			Ap: Ap.value,
