@@ -7,7 +7,7 @@ import { isTauri } from '@tauri-apps/api/core';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import { fetch as proxyFetch } from '$lib/utils/proxy-fetch';
 
-export interface RequestParameters {
+export interface PskRequestParameters {
 	/**
 	 * Specifies the sending callsign of interest.
 	 */
@@ -151,7 +151,7 @@ export class PskReporterClient {
 		// private readonly baseUrl: string = 'https://pskreporter.info/cgi-bin/pskquery5.pl'
 	) {}
 
-	async getPskReport(parameters: RequestParameters): Promise<PskResponse> {
+	async getPskReport(parameters: PskRequestParameters): Promise<PskResponse> {
 		if (!parameters.callsign) throw new Error('Callsign is required');
 		parameters = {
 			...parameters,

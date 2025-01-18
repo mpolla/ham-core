@@ -7,15 +7,22 @@
 	import { MapMode } from './map-mode';
 	import LogbookSelect from '$lib/components/logbook-select.svelte';
 	import { createPskReporterState } from '$lib/states/psk-reporter-state.svelte';
+	import { createRbnState } from '$lib/states/rbn-state.svelte';
 
 	const logbook = getLogbookContext();
-	const pskReporter = createPskReporterState(logbook);
+	const pskReporter = createPskReporterState();
+	const rbnReporter = createRbnState();
+
+	$effect(() => {
+		pskReporter.params.callsign = logbook.selectedLog?.call;
+		rbnReporter.params.callsign = logbook.selectedLog?.call;
+	});
 
 	let mode = $state<MapMode>(MapMode.none);
 
 	let gridsquares = $state<string[]>([]);
 	let countries = $state<string[]>([]);
-	const reports = $derived.by(() => {
+	const psk = $derived.by(() => {
 		if (mode != MapMode.pskReports || !pskReporter.reports) return [];
 		const mapLoc = (locator: string) => locatorToLongLat(locator.split(' ')[0].slice(0, 6));
 		return pskReporter.reports.receptionReport
@@ -30,11 +37,28 @@
 			})
 			.filter((r) => !!r);
 	});
+	const rbn = $derived.by(() => {
+		if (mode != MapMode.rbnReports || !rbnReporter.spots) return [];
+		return rbnReporter.spots
+			.map((r) => {
+				if (!r.spotter.lat || !r.spotter.long || !r.spotted.lat || !r.spotted.long) return;
+				const rx = [+r.spotter.long, +r.spotter.lat];
+				const tx = [+r.spotted.long, +r.spotted.lat];
+				return [rx, tx] as [[number, number], [number, number]];
+			})
+			.filter((r) => !!r);
+	});
+	const reports = $derived.by(() => {
+		if (mode == MapMode.pskReports) return psk;
+		if (mode == MapMode.rbnReports) return rbn;
+		return [];
+	});
 
 	$effect(() => {
 		if (mode == MapMode.grid) {
 			countries = [];
 			pskReporter.autoUpdate = false;
+			rbnReporter.autoUpdate = false;
 			(async () => {
 				const result: string[] = [];
 				for (let i = 0; i < 3; i++) {
@@ -50,6 +74,7 @@
 		} else if (mode == MapMode.country) {
 			gridsquares = [];
 			pskReporter.autoUpdate = false;
+			rbnReporter.autoUpdate = false;
 			const req = supabase.from('qso').select('country, count()');
 			if (logbook.logId) req.eq('log_id', logbook.logId);
 			req.then(({ data }) => {
@@ -65,10 +90,17 @@
 			gridsquares = [];
 			countries = [];
 			pskReporter.autoUpdate = true;
+			rbnReporter.autoUpdate = false;
+		} else if (mode == MapMode.rbnReports) {
+			gridsquares = [];
+			countries = [];
+			pskReporter.autoUpdate = false;
+			rbnReporter.autoUpdate = true;
 		} else if (mode == MapMode.none) {
 			gridsquares = [];
 			countries = [];
 			pskReporter.autoUpdate = false;
+			rbnReporter.autoUpdate = false;
 		}
 	});
 
@@ -93,6 +125,5 @@
 	gridSquareColors={Object.fromEntries(gridsquares.map((k) => [k, '#00ff0044']))}
 	countryColors={Object.fromEntries(countries.map((k) => [k, '#33dd33']))}
 	defaultCountryColor={countries.length ? '#dd3333' : undefined}
-	points={reports.map((p) => p[1])}
 	lines={reports}
 />

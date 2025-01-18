@@ -2,5 +2,6 @@ export enum MapMode {
 	none = 'Empty',
 	grid = 'Gridsquares',
 	country = 'DXCCs',
-	pskReports = 'PSK Reports'
+	pskReports = 'PSK Reports',
+	rbnReports = 'RBN Reports'
 }

@@ -1,5 +1,5 @@
 import { PskReporterClient, type PskResponse } from '$lib/repositories/psk-reporter-client';
-import type { LogbookState } from './logbook-state.svelte';
+import { createTimeState } from './time-state.svelte';
 
 interface PskReporterParams {
 	callsign?: string;
@@ -7,11 +7,10 @@ interface PskReporterParams {
 	updateInterval: number;
 }
 
-export function createPskReporterState(logbook: LogbookState) {
+export function createPskReporterState() {
 	const params: PskReporterParams = $state({
 		period: 15,
-		updateInterval: 1000 * 60 * 5,
-		callsign: logbook.selectedLog?.call
+		updateInterval: 1000 * 60 * 5
 	});
 	let reports = $state<PskResponse>();
 	let isLoading = $state(false);
@@ -40,15 +39,7 @@ export function createPskReporterState(logbook: LogbookState) {
 			});
 	}
 
-	let interval: ReturnType<typeof setInterval>;
-
-	$effect(() => {
-		if (autoUpdate && !interval) {
-			interval = setInterval(updateReports, params.updateInterval);
-		} else if (interval) {
-			clearInterval(interval);
-		}
-	});
+	const interval = createTimeState(params.updateInterval, autoUpdate, updateReports);
 
 	return {
 		params,
@@ -62,9 +53,8 @@ export function createPskReporterState(logbook: LogbookState) {
 			return autoUpdate;
 		},
 		set autoUpdate(value) {
-			if (value && !autoUpdate) {
-				updateReports();
-			}
+			if (value && interval.isStopped) interval.start();
+			if (!value && !interval.isStopped) interval.stop();
 			autoUpdate = value;
 		},
 		update: updateReports

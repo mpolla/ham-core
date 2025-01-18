@@ -1,9 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
 
 const allowedOrigins = [
-	'https://kp.gfz-potsdam.de',
-	'https://pskreporter.info',
-	'https://retrieve.pskreporter.info'
+	'https://kp.gfz-potsdam.de/',
+	'https://pskreporter.info/',
+	'https://retrieve.pskreporter.info/',
+	'https://www.reversebeacon.net/'
 ];
 
 export const GET: RequestHandler = async ({ url }) => {

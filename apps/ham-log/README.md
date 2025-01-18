@@ -53,8 +53,8 @@ A web-based ham radio logbook application in Svelte. Uses Supabase for authentic
   - [x] Night/day overlay
   - [ ] Sun position?
   - [x] Persist map settings
-  - [ ] Pskreporter integration
-  - [ ] Reverse beacon network integration
+  - [x] Pskreporter integration
+  - [x] Reverse beacon network integration
   - [ ] DXCC entities, CQ, ITU zones (maybe)
   - [ ] Find better map provider
 - [ ] QSO statistics

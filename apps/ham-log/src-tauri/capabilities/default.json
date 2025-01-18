@@ -10,7 +10,8 @@
 			"allow": [
 				{ "url": "https://kp.gfz-potsdam.de" },
 				{ "url": "https://pskreporter.info" },
-				{ "url": "https://retrieve.pskreporter.info" }
+				{ "url": "https://retrieve.pskreporter.info" },
+				{ "url": "https://www.reversebeacon.net" }
 			]
 		}
 	]

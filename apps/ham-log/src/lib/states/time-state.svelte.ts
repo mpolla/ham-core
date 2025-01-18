@@ -3,12 +3,30 @@ import { onDestroy } from 'svelte';
 export function createTimeState(
 	updateIntervalMs = 1000,
 	startNow = true,
-	onTick: ((time: Date) => void) | undefined = undefined
+	onTick: ((time: Date) => void) | undefined = undefined,
+	pauseOnBlur = true
 ) {
 	let time = $state(new Date());
 	let interval = $state<ReturnType<typeof setInterval>>();
+	let isRunning = $state(false);
 
 	function tick() {
+		// Check if browser tab is in focus
+		if (interval && pauseOnBlur && document.hidden) {
+			clearInterval(interval);
+			interval = undefined;
+			addEventListener(
+				'visibilitychange',
+				() => {
+					if (isRunning && !interval && !document.hidden) {
+						start();
+					}
+				},
+				{ once: true }
+			);
+			return;
+		}
+
 		time = new Date();
 		onTick?.(time);
 	}
@@ -16,12 +34,13 @@ export function createTimeState(
 	function start() {
 		if (interval) return;
 		tick();
+		isRunning = true;
 		interval = setInterval(tick, updateIntervalMs);
 	}
 
 	function stop() {
-		if (!interval) return;
-		clearInterval(interval);
+		if (interval) clearInterval(interval);
+		isRunning = false;
 		interval = undefined;
 	}
 
@@ -36,7 +55,7 @@ export function createTimeState(
 			return time;
 		},
 		get isStopped() {
-			return !interval;
+			return !isRunning;
 		},
 		tick,
 		start,
