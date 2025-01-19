@@ -1,6 +1,6 @@
 {
 	"name": "@ham-core/fast-dxcc",
-	"version": "2.4.0",
+	"version": "2.5.0",
 	"description": "Fast implementation for getting information about a callsign",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
@@ -20,12 +20,15 @@
 	},
 	"devDependencies": {
 		"@types/eslint": "^9.6.1",
+		"@types/node": "^22.10.2",
 		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^9.1.0",
+		"path": "^0.12.7",
 		"prettier": "^3.4.2",
 		"tsup": "^8.3.5",
 		"typescript": "^5.7.2",
 		"typescript-eslint": "^8.18.2",
+		"url": "^0.11.4",
 		"vitest": "^2.1.8"
 	}
 }
