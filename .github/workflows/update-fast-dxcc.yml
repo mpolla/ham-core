@@ -1,0 +1,47 @@
+name: Update Fast DXCC
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  update-fast-dxcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - name: Download and update CTY data
+        working-directory: packages/fast-dxcc
+        run: npx tsx scripts/auto-update.ts
+      - name: Commit and publish to NPM
+        working-directory: packages/fast-dxcc
+        run: |
+          # Check for changes
+          if git diff --quiet src/data; then
+            echo "No changes to commit"
+            exit 0
+          else
+            echo "Changes to commit"
+            
+            # Configure Git
+            git config --global user.name github-actions
+            git config --global user.email github-actions@github.com
+            
+            # Bump version
+            npm version minor
+            
+            # Commit and push changes
+            git add src/data
+            git add package.json
+            git commit -m "chore: Update fast-dxcc"
+            git push
+
+            # Publish to NPM
+            npm publish --provenance --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

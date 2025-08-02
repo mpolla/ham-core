@@ -15,7 +15,9 @@
     "test": "pnpm -r test -- --run"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@vitest/coverage-v8": "^2.1.8",
+    "jszip": "^3.10.1",
     "vitest": "^2.1.8"
   }
 }
