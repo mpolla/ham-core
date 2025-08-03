@@ -49,11 +49,9 @@ export class DxccOverrides {
 				case '~':
 					timez = parseFloat(value);
 					break;
-			}
-			if (match[1] === '<') {
-				const [latR, longR] = value.split('/');
-				lat = parseFloat(latR);
-				long = parseFloat(longR);
+				case '<':
+					[lat, long] = value.split('/').map(parseFloat);
+					break;
 			}
 		}
 		return new DxccOverrides({ cqz, ituz, lat, long, cont, timez });
