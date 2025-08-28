@@ -42,17 +42,17 @@ export const parseCty = async (data: string, type: 'dat' | 'csv') => {
 	// Check for invalid callsigns
 	const callsignPattern = /^([A-Z\d]+\/)?([A-Z\d]+\d+[A-Z]+)((?:\/[A-Z\d]+)*)$/i;
 
-	const calls: string[] = [];
+	const invalid_calls: string[] = [];
 	for (const callRaw of prefixes.keys()) {
 		if (!callRaw.startsWith('=')) continue;
-		const [, call] = callRaw.match(/^=?((?:[A-Z\d/])+)(.*)/)!;
+		const [, call] = callRaw.match(/^=?([A-Z\d/]+)(.*)$/)!;
 		if (call.match(/^VER(SION|\d{8})$/)) continue;
 		const result = call.match(callsignPattern);
 		if (!result) {
-			calls.push(call);
+			invalid_calls.push(call);
 		}
 	}
-	console.log('Invalid callsigns:', calls.join(', '));
+	console.log('Invalid callsigns:', invalid_calls.join(', '));
 
 	const root = fullBuildTrie([...prefixes.entries()]);
 

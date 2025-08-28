@@ -9,10 +9,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(__dirname, OUT_DIR);
 console.log('Outputting to', outDir);
 
-(async () => {
-	const data = await getBigCty();
+const TYPE = 'csv';
 
-	const { entities, root } = await parseCty(data, 'csv');
+(async () => {
+	const data = await getBigCty(undefined, TYPE);
+
+	const { entities, root } = await parseCty(data, TYPE);
 
 	// Output the trie
 	const out = root.encodeToString();

@@ -14,6 +14,7 @@ describe('findDxcc', () => {
 	const sv9 = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SV9');
 	const itu = [...dxccEntities.values()].find((e) => e.primaryPrefix === '4U1I');
 	const sp = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'SP');
+	const euRu = [...dxccEntities.values()].find((e) => e.primaryPrefix === 'UA');
 
 	test('S52KJ', () => {
 		const result = findDxcc('S52KJ');
@@ -115,6 +116,13 @@ describe('findDxcc', () => {
 		const result = findDxcc('SP1');
 		expect(result?.entity).toEqual(sp);
 		expect(result?.matchLength).toBe(2);
+		expect(result?.isExact).toBe(false);
+	});
+
+	test('UI9XA', () => {
+		const result = findDxcc('UI9XA');
+		expect(result?.entity).toEqual({ ...euRu, cqz: 17, ituz: 20 });
+		expect(result?.matchLength).toBe(4);
 		expect(result?.isExact).toBe(false);
 	});
 

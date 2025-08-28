@@ -16,7 +16,7 @@ const getZipUrl = async () => {
 	return zipMatch[0];
 };
 
-export const getBigCty = async (zipUrl?: string) => {
+export const getBigCty = async (zipUrl?: string, type: 'dat' | 'csv' = 'csv') => {
 	if (!zipUrl) {
 		zipUrl = await getZipUrl();
 	}
@@ -26,9 +26,9 @@ export const getBigCty = async (zipUrl?: string) => {
 
 	const zip = await JSZip.loadAsync(zipBuffer);
 
-	const bigcty = zip.file('cty.csv');
+	const bigcty = zip.file(`cty.${type}`);
 	if (!bigcty) {
-		console.error('No cty.csv found');
+		console.error(`No cty.${type} found`);
 		process.exit(1);
 	}
 

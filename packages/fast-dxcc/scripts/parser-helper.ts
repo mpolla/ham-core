@@ -14,7 +14,7 @@ export function fullBuildTrie(prefixes: [string, number][]): TrieNode {
 export function buildTrie(prefixes: [string, number][]): TrieNode {
 	const root = new TrieNode();
 	for (const [callRaw, entity] of prefixes) {
-		const [, call, overridesRaw] = callRaw.match(/^=?((?:[A-Z\d/])+)(.*)/)!;
+		const [, call, overridesRaw] = callRaw.match(/^=?([A-Z\d/]+)(.*)$/)!;
 		const isExact = callRaw.startsWith('=');
 		const overrides = DxccOverrides.fromString(overridesRaw);
 		root.insert(call, entity, isExact, overrides);
@@ -86,7 +86,7 @@ export function mergeNodes(root: TrieNode): void {
 
 export function validateTrie(root: TrieNode, prefixes: [string, number][]): void {
 	for (const [callRaw, entity] of prefixes) {
-		const [, call, overridesRaw] = callRaw.match(/^=?((?:[A-Z\d/])+)(.*)/)!;
+		const [, call, overridesRaw] = callRaw.match(/^=?([A-Z\d/]+)(.*)$/)!;
 		const isExact = callRaw.startsWith('=');
 
 		const node = root.findDxcc(call + (isExact ? '' : ' '));
