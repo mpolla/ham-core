@@ -238,10 +238,11 @@ export class TrieNode {
 
 	_encodeToString(): string {
 		const overrides = this.overrides?.toString() ?? '';
-		const s = [`${this.id}${overrides}`];
+		const s = [`${this.id}`];
 		if (this.entity) {
 			s[0] += `=${this.entity}`;
 		}
+		s[0] += overrides;
 		for (const c of new Set(this.children.values())) {
 			const chars = [];
 			for (const [k, v] of this.children) {
