@@ -13,19 +13,21 @@ export class TrieNode {
 		id,
 		entity,
 		overrides,
-		children
+		children,
+		shortcuts
 	}: {
 		id?: number | null;
 		entity?: number | null;
 		overrides?: DxccOverrides;
 		children?: Map<string, TrieNode>;
+		shortcuts?: Map<string, TrieNode>;
 	} = {}) {
 		if (id) this.id = id;
 		else this.id = ++nodeCounter;
 		this.entity = entity ?? null;
 		this.children = children ?? new Map();
+		this.shortcuts = shortcuts ?? new Map();
 		this.overrides = overrides ?? new DxccOverrides();
-		this.shortcuts = new Map();
 	}
 
 	/**
@@ -67,40 +69,11 @@ export class TrieNode {
 	}
 
 	/**
-	 * Traverse the trie to find the node that matches the prefix.
-	 */
-	findRaw(prefix: string): TrieNode | null {
-		if (!prefix) return this;
-		const next = this.children.get(prefix[0]);
-		return next ? next.findRaw(prefix.slice(1)) : null;
-	}
-
-	/**
-	 * Step through the trie to find the next node that matches the prefix.
-	 */
-	step(prefix: string): { node: TrieNode; length: number } | null {
-		// Check for exact match
-		if (!prefix) {
-			const exact = this.children.get('');
-			return exact ? { node: exact, length: 0 } : null;
-		}
-		// Check for children
-		const next = this.children.get(prefix[0]);
-		if (next) return { node: next, length: 1 };
-		// Check for shortcuts
-		for (const [k, v] of this.shortcuts) {
-			if (prefix.startsWith(k)) return { node: v, length: k.length };
-		}
-		return null;
-	}
-
-	/**
 	 * Find the DXCC entity that matches the prefix.
 	 */
 	findDxcc(prefix: string): RawDxccResult {
 		if (!prefix) {
 			const exact = this.children.get('');
-			// console.log(prefix, exact);
 			return {
 				entityId: exact?.entity ?? this.entity,
 				dxccOverrides: this.overrides.merge(exact?.overrides),
@@ -109,9 +82,21 @@ export class TrieNode {
 			};
 		}
 
-		const next = this.step(prefix);
+		// Find next node from children
+		let next = this.children.get(prefix[0]);
+		let matchLength = 1;
+		// Or shortcuts
 		if (!next) {
-			// console.log(prefix, this);
+			for (const [k, v] of this.shortcuts) {
+				if (prefix.startsWith(k)) {
+					next = v;
+					matchLength = k.length;
+					break;
+				}
+			}
+		}
+
+		if (!next) {
 			return {
 				entityId: this.entity,
 				dxccOverrides: this.overrides,
@@ -120,16 +105,14 @@ export class TrieNode {
 			};
 		}
 
-		const ret = next.node.findDxcc(prefix.slice(next.length));
-
-		// console.log(prefix, ret);
+		const ret = next.findDxcc(prefix.slice(matchLength));
 
 		const anyC = ret.dxccOverrides.toString() || ret.entityId;
 		return {
-			dxccOverrides: this.overrides.merge(ret?.dxccOverrides),
-			entityId: ret?.entityId ?? this.entity,
-			isExact: ret?.isExact ?? false,
-			matchLength: ret.matchLength + (anyC ? next.length : 0)
+			dxccOverrides: this.overrides.merge(ret.dxccOverrides),
+			entityId: ret.entityId ?? this.entity,
+			isExact: ret.isExact,
+			matchLength: ret.matchLength + (anyC ? matchLength : 0)
 		};
 	}
 
@@ -152,25 +135,24 @@ export class TrieNode {
 		currentEntity: number | null = null,
 		currentOverrides: DxccOverrides = new DxccOverrides()
 	): boolean {
-		if (currentEntity && currentEntity === this.entity) this.entity = null;
-		if (currentOverrides.cqz && currentOverrides.cqz === this.overrides.cqz)
-			this.overrides.cqz = undefined;
-		if (currentOverrides.ituz && currentOverrides.ituz === this.overrides.ituz)
-			this.overrides.ituz = undefined;
-		if (currentOverrides.cont && currentOverrides.cont === this.overrides.cont)
-			this.overrides.cont = undefined;
-		if (currentOverrides.lat && currentOverrides.lat === this.overrides.lat)
-			this.overrides.lat = undefined;
-		if (currentOverrides.long && currentOverrides.long === this.overrides.long)
-			this.overrides.long = undefined;
-		if (currentOverrides.timez && currentOverrides.timez === this.overrides.timez)
-			this.overrides.timez = undefined;
+		if (currentEntity === this.entity) this.entity = null;
+		if (currentOverrides.cqz === this.overrides.cqz) this.overrides.cqz = undefined;
+		if (currentOverrides.ituz === this.overrides.ituz) this.overrides.ituz = undefined;
+		if (currentOverrides.cont === this.overrides.cont) this.overrides.cont = undefined;
+		if (currentOverrides.lat === this.overrides.lat) this.overrides.lat = undefined;
+		if (currentOverrides.long === this.overrides.long) this.overrides.long = undefined;
+		if (currentOverrides.timez === this.overrides.timez) this.overrides.timez = undefined;
 
 		const newEntity = this.entity ?? currentEntity;
 		const newOverrides = currentOverrides.merge(this.overrides);
-		for (const [k, child] of [...this.children.entries(), ...this.shortcuts.entries()]) {
+		for (const [k, child] of this.children.entries()) {
 			if (child.collapseNodes(newEntity, newOverrides)) {
 				this.children.delete(k);
+			}
+		}
+		for (const [k, child] of this.shortcuts.entries()) {
+			if (child.collapseNodes(newEntity, newOverrides)) {
+				this.shortcuts.delete(k);
 			}
 		}
 
@@ -182,20 +164,20 @@ export class TrieNode {
 		);
 	}
 
+	/**
+	 * Build shortcuts from children.
+	 */
 	buildShortcuts(): void {
+		// For every unique child, find the longest prefix that is a shortcut
 		for (const child of new Set(this.children.values())) {
+			// Find the key for this child
 			let k: string | null = null;
 			for (const [key, value] of this.children.entries()) {
 				if (value === child) {
-					if (k) {
-						k = null;
-						break;
-					}
 					k = key;
+					break;
 				}
 			}
-			if (!k) continue;
-			if (child.children.size + child.shortcuts.size !== 1) continue;
 
 			let curr = child;
 			let stack = k;
@@ -225,7 +207,7 @@ export class TrieNode {
 			.map(([k, v]) => `${k}:${v.id}`)
 			.sort()
 			.join(',');
-		const overrides = this.overrides?.toString() ?? '';
+		const overrides = this.overrides.toString();
 		return `${this.entity ?? ''}_${children}_${overrides}`;
 	}
 
@@ -237,7 +219,7 @@ export class TrieNode {
 	}
 
 	_encodeToString(): string {
-		const overrides = this.overrides?.toString() ?? '';
+		const overrides = this.overrides.toString();
 		const s = [`${this.id}`];
 		if (this.entity) {
 			s[0] += `=${this.entity}`;

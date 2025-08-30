@@ -126,7 +126,8 @@ export function minimizeIds(root: TrieNode): void {
 		node[0].id = i++;
 	}
 
-	console.log('Minimized ids with', nodes.length, 'nodes');
+	const ids = nodes.map((n) => n[0].id);
+	console.log('Minimized ids', Math.min(...ids), '-', Math.max(...ids));
 }
 
 interface IEntity {

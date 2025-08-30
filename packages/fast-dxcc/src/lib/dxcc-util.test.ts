@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { dxccEntities, dxccTree, findDxcc } from './dxcc-util';
+import { TrieNode } from './trie';
 
 describe('dxccTree', () => {
 	test('dxccTree is not null', () => {
@@ -144,6 +145,11 @@ describe('findDxcc', () => {
 	test('unknown dxcc', () => {
 		const result = findDxcc('XX7KJ');
 		expect(result).toBe(null);
+	});
+
+	test('Custom root node', () => {
+		const result = findDxcc('S52KJ', new TrieNode({ id: 1, entity: 9999 }));
+		expect(result).toBeNull();
 	});
 });
 

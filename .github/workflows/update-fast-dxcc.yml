@@ -20,7 +20,7 @@ jobs:
       - run: pnpm install
       - name: Download and update CTY data
         working-directory: packages/fast-dxcc
-        run: npx tsx scripts/auto-update.ts
+        run: pnpm update-cty
       - name: Build package
         working-directory: packages/fast-dxcc
         run: pnpm build

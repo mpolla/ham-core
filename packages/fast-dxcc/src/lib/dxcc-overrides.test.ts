@@ -223,3 +223,47 @@ describe('isSubsetOf', () => {
 		expect(aObj.isSubsetOf(bObj)).toBe(false);
 	});
 });
+
+describe('merge', () => {
+	test.each([
+		[{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }, undefined],
+		[{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }, {}],
+		[
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 },
+			{ cqz: null, ituz: null, lat: null, long: null, cont: null, timez: null }
+		]
+	])('same as first', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.merge(bObj)).toEqual(aObj);
+	});
+
+	test('with null/undefined', () => {
+		const aObj = new DxccOverrides({
+			cqz: 56,
+			ituz: 27,
+			cont: 'AF',
+			timez: -5.5,
+			lat: 37.5,
+			long: -122.5
+		});
+		expect(aObj.merge(null)).toEqual(aObj);
+		expect(aObj.merge(undefined)).toEqual(aObj);
+	});
+
+	test.each([
+		[{}, { cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }],
+		[
+			{ cqz: null, ituz: null, lat: null, long: null, cont: null, timez: null },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		],
+		[
+			{ cqz: 1, ituz: 2, lat: 3, long: 4, cont: 'EU', timez: 6 },
+			{ cqz: 56, ituz: 27, cont: 'AF', timez: -5.5, lat: 37.5, long: -122.5 }
+		]
+	])('override all', (a, b) => {
+		const aObj = new DxccOverrides(a);
+		const bObj = new DxccOverrides(b);
+		expect(aObj.merge(bObj)).toEqual(bObj);
+	});
+});
