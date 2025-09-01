@@ -1,3 +1,5 @@
+import type { AdifRecord } from '@ham-core/adif';
+
 export function uppercaseInput(element: HTMLInputElement) {
 	function onInput() {
 		const selStart = element.selectionStart;
@@ -60,4 +62,36 @@ export function getDefaultRST(mode?: string) {
 		default:
 			return '';
 	}
+}
+
+/**
+ * Returns true if two QSOs are duplicates. For a QSO to be considered a duplicate, it must have the same:
+ * - CALL
+ * - QSO_DATE
+ * - TIME_ON (first 4 digits)
+ * - MODE
+ * - BAND or FREQ
+ */
+export function isDupe(a: AdifRecord, b: AdifRecord): boolean {
+	return (
+		a.CALL === b.CALL &&
+		a.QSO_DATE == b.QSO_DATE &&
+		a.TIME_ON?.substring(0, 4) == b.TIME_ON?.substring(0, 4) &&
+		a.MODE === b.MODE &&
+		(a.BAND === b.BAND || a.FREQ === b.FREQ)
+	);
+}
+
+/**
+ * Returns an new array of QSOs with all duplicates removed.
+ */
+export function removeDupes(qsos: AdifRecord[]): AdifRecord[] {
+	return qsos.filter((q, i) => !qsos.slice(i + 1).find((q2) => isDupe(q, q2)));
+}
+
+/**
+ * Returns all QSOs that appear more than once in the list.
+ */
+export function onlyDupes(qsos: AdifRecord[]): AdifRecord[] {
+	return qsos.filter((q, i) => qsos.slice(i + 1).find((q2) => isDupe(q, q2)));
 }
